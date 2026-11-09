@@ -1,0 +1,32 @@
+{
+  "c1|1": {
+    "verdict": "supported",
+    "confidence": 0.92,
+    "evidence_quote": "mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample",
+    "analysis": "The pooled survey data show a decline in adolescent sleep between 1990 and 2010."
+  },
+  "c2|2": {
+    "verdict": "supported",
+    "confidence": 0.9,
+    "evidence_quote": "participants recalled 30% fewer words the morning after restricted sleep in a field study",
+    "analysis": "FABRICATED on purpose to test the quote check."
+  },
+  "c3|3": {
+    "verdict": "contradicted",
+    "confidence": 0.93,
+    "evidence_quote": "In children under 12 we found no association between spindle density and overnight retention.",
+    "analysis": "The source finds no association in children and only a modest one in adults, so the claim about every age group is contradicted."
+  },
+  "c6|1": {
+    "verdict": "supported",
+    "confidence": 0.7,
+    "evidence_quote": "These findings suggest that adolescents now sleep less than previous generations",
+    "analysis": "Supports less sleep, not that sleep drives learning."
+  },
+  "c6|2": {
+    "verdict": "partially_supported",
+    "confidence": 0.8,
+    "evidence_quote": "recalled 12% fewer words the next morning than after a night of normal sleep",
+    "analysis": "Lab evidence of lower recall after restricted sleep, in one night only."
+  }
+}

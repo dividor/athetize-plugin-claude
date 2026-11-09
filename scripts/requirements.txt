@@ -1,0 +1,6 @@
+# Runtime extras for the Athetize helper scripts. Everything else is the Python standard library.
+defusedxml>=0.7.1  # needed to read Word (.docx) and XML files: parses untrusted XML safely
+pymupdf>=1.24  # optional: better PDF text extraction (pdftotext is used if absent)
+lxml>=4.9  # needed for export-docx (tracked-changes Word export)
+playwright>=1.40  # optional: headless-browser fallback (then: python -m playwright install chromium)
+# OCR for scanned PDFs uses the tesseract and pdftoppm command-line tools when installed

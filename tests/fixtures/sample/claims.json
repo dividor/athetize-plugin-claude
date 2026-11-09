@@ -1,0 +1,55 @@
+[
+  {
+    "id": "c1",
+    "para": "p5",
+    "text": "Adolescents sleep less than they did a generation ago [1].",
+    "type": "empirical",
+    "cites": [
+      "1"
+    ]
+  },
+  {
+    "id": "c2",
+    "para": "p5",
+    "text": "Short sleep is linked to poorer next-day recall of new material [2].",
+    "type": "empirical",
+    "cites": [
+      "2"
+    ]
+  },
+  {
+    "id": "c3",
+    "para": "p5",
+    "text": "Sleep spindles strongly improve memory consolidation in every age group [3].",
+    "type": "empirical",
+    "cites": [
+      "3"
+    ]
+  },
+  {
+    "id": "c4",
+    "para": "p5",
+    "text": "About 70% of high school students report insufficient sleep.",
+    "type": "numeric",
+    "cites": []
+  },
+  {
+    "id": "c5",
+    "para": "p5",
+    "text": "Later school start times raised average attendance by 9% in a large district trial [4].",
+    "type": "numeric",
+    "cites": [
+      "4"
+    ]
+  },
+  {
+    "id": "c6",
+    "para": "p7",
+    "text": "Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2].",
+    "type": "empirical",
+    "cites": [
+      "1",
+      "2"
+    ]
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "id": "n1",
+    "para": "p7",
+    "quote": "We therefore recommend delaying the first bell.",
+    "kind": "overreach",
+    "severity": "warn",
+    "message": "The recommendation leans on spindle and attendance claims that the cited sources do not support (see c3 and c5)."
+  }
+]
