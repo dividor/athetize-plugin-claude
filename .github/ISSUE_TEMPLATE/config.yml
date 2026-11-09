@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 GitHub Discussions
+    url: https://github.com/dividor/athetize-plugin/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 🔒 Report a security vulnerability
+    url: https://github.com/dividor/athetize-plugin/security/advisories/new
+    about: Please report security problems privately, not in a public issue

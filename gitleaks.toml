@@ -1,0 +1,5 @@
+title = "Gitleaks config for the Athetize plugin"
+
+# Use the full default rule set. There is no allowlist: a finding is fixed, not waived.
+[extend]
+useDefault = true

@@ -1,0 +1,9 @@
+[tool.black]
+line-length = 100
+target-version = ["py39", "py310", "py311", "py312", "py313"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+# Local modules are plain scripts imported by bare name; these folders make isort group them together.
+src_paths = ["scripts", "tools/quality", "tests"]

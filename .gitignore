@@ -1,0 +1,67 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[codz]
+*$py.class
+
+# Temporary development directory (never commit)
+tmp/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Environments
+.env
+.envrc
+.venv*/
+env/
+venv/
+ENV/
+
+# Type checkers and linters
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+desktop.ini
+__MACOSX/
+.idea/
+.vscode/
+*.bak
+*.swp
+
+# Claude Code local state (the plugin manifest lives in .claude-plugin/, which IS tracked)
+.claude/
+
+# Athetize check workspaces and local config: these hold manuscripts and downloaded sources
+*-check/
+.athetize/
+
+# CI and audit artifacts
+bandit-report.json
+sbom-*.json
+metrics.json
+
+# Logs
+*.log
+nohup.out
