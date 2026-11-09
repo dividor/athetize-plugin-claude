@@ -15,7 +15,7 @@ It is a screening aid for authors, reviewers and editors, not a judge. Every fla
 - Amber: partly supported, or the claim is stronger than the source (correlation stated as causation, "all" from "some").
 - Red: unsupported, or contradicted by the source.
 - Grey: could not be verified, usually because no full text was available.
-- Violet: a specific claim with no citation, or a note about an inconsistency inside the paper.
+- Blue: a specific claim with no citation, or a note about an inconsistency inside the paper.
 - For Word manuscripts, a copy of the paper with every suggested edit as a tracked change. Each change has a comment explaining it: the verdict, why the edit is needed, the source's analysis, evidence excerpts with page numbers, and the link. Your original file is never modified.
 - Source list with status per reference: full text, abstract only, provided by you, or missing. Retracted works and references whose metadata does not match are flagged.
 

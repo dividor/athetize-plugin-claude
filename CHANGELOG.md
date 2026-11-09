@@ -12,6 +12,13 @@ First release from the public repository. The plugin's features are unchanged fr
 - XML from Word and XML files is parsed with `defusedxml`; the Word export parses with entity resolution and network access switched off
 - The `suggestion-writer` agent is limited to the Read and Write tools
 
+### Report
+- New look for `report.html`: a clean brand row, the paper title, a sticky row of result filters and one aligned column for the paper and its sources
+- Sans-serif type, square corners and thin borders; result colours pass WCAG AA contrast in light and dark themes
+- Highlights use colour plus a line style, with no glyph badges in the text
+- New icon: a document with a check mark
+- A heading with no text after it (the reference list heading) is no longer shown; the Sources section replaces it
+
 ### Fixed
 - Building a report no longer crashes when a cited claim has no verdict yet; it shows as "Not checked"
 - `add-source` no longer deletes a file that is already in the workspace `sources/` folder under the reference's name
