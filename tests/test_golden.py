@@ -160,7 +160,9 @@ class GoldenTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.tmp = Path(tempfile.mkdtemp())
+        # Resolved, because the scripts resolve workspace paths and macOS temp folders sit
+        # behind a /private symlink; an unresolved path would leave that prefix in the output.
+        cls.tmp = Path(tempfile.mkdtemp()).resolve()
         cls.env = {k: os.environ.get(k) for k in ("ATHETIZE_HOME", "ATHETIZE_EMAIL")}
         os.environ["ATHETIZE_HOME"] = str(cls.tmp / "home")
         os.environ.pop("ATHETIZE_EMAIL", None)
