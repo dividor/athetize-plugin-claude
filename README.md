@@ -1,6 +1,6 @@
 # Athetize
 
-[![CI](https://github.com/dividor/athetize-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/dividor/athetize-plugin/actions/workflows/ci.yml)
+[![CI](https://github.com/dividor/athetize-plugin-claude/actions/workflows/ci.yml/badge.svg)](https://github.com/dividor/athetize-plugin-claude/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 *To athetize: to mark a passage as spurious or unsupported.*
@@ -24,21 +24,21 @@ It is a screening aid for authors, reviewers and editors, not a judge. Every fla
 In Claude Code, add this repository as a plugin marketplace and install the plugin:
 
 ```
-/plugin marketplace add dividor/athetize-plugin
+/plugin marketplace add dividor/athetize-plugin-claude
 /plugin install athetize@athetize-plugin
 ```
 
 The same from a terminal:
 
 ```bash
-claude plugin marketplace add dividor/athetize-plugin
+claude plugin marketplace add dividor/athetize-plugin-claude
 ```
 
 ```bash
 claude plugin install athetize@athetize-plugin
 ```
 
-To try a local clone without installing it, start Claude Code with `claude --plugin-dir /path/to/athetize-plugin`.
+To try a local clone without installing it, start Claude Code with `claude --plugin-dir /path/to/athetize-plugin-claude`.
 
 ### Requirements
 

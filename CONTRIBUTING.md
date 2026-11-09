@@ -66,12 +66,12 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 1. Fork the repository on GitHub
 2. Clone your fork locally:
    ```bash
-   git clone https://github.com/YOUR-USERNAME/athetize-plugin.git
-   cd athetize-plugin
+   git clone https://github.com/YOUR-USERNAME/athetize-plugin-claude.git
+   cd athetize-plugin-claude
    ```
 3. Add the upstream repository:
    ```bash
-   git remote add upstream https://github.com/dividor/athetize-plugin.git
+   git remote add upstream https://github.com/dividor/athetize-plugin-claude.git
    ```
 
 ### 💻 Development Setup

@@ -6,8 +6,8 @@
     "name": "Matthew Harris",
     "url": "https://github.com/dividor"
   },
-  "homepage": "https://github.com/dividor/athetize-plugin",
-  "repository": "https://github.com/dividor/athetize-plugin",
+  "homepage": "https://github.com/dividor/athetize-plugin-claude",
+  "repository": "https://github.com/dividor/athetize-plugin-claude",
   "license": "MIT",
   "keywords": ["citations", "claim-verification", "peer-review", "academic-writing", "retractions", "references"]
 }

@@ -7,7 +7,7 @@ Athetize is a Claude Code plugin: skills, subagents and local Python scripts. It
 If you discover a security vulnerability in this project, please report it responsibly:
 
 1. **Do NOT** create a public GitHub issue for security vulnerabilities
-2. Report it privately through GitHub: the repository's **Security** tab, then **Report a vulnerability** ([direct link](https://github.com/dividor/athetize-plugin/security/advisories/new))
+2. Report it privately through GitHub: the repository's **Security** tab, then **Report a vulnerability** ([direct link](https://github.com/dividor/athetize-plugin-claude/security/advisories/new))
 3. Include steps to reproduce the issue
 4. Allow reasonable time for the issue to be addressed before public disclosure
 

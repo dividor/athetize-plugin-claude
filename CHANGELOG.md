@@ -23,7 +23,7 @@ First release from the public repository. The plugin's features are unchanged fr
 - Agents refer to the helper script and reference files through `${CLAUDE_PLUGIN_ROOT}`, and the skills pass them the helper's full path
 
 ### Added
-- Marketplace manifest, so the repository installs with `/plugin marketplace add dividor/athetize-plugin`
+- Marketplace manifest, so the repository installs with `/plugin marketplace add dividor/athetize-plugin-claude`
 - Pre-commit hooks and CI: black, isort, flake8, mypy, bandit, detect-secrets, gitleaks, a complexity gate, pip-audit, SBOM, tests on Python 3.9 to 3.13 and `claude plugin validate`
 - Tests for the network module, the security hardening, the complexity gate and the plugin layout
 - CONTRIBUTING, SECURITY, CODE_OF_CONDUCT, issue and pull request templates
