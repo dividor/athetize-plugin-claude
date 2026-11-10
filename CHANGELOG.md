@@ -6,6 +6,7 @@ All notable changes to Athetize will be documented in this file.
 
 ### Changed
 - A result reached from an abstract alone is shown as provisional everywhere. In the report those claims are striped in the text, the summary bar splits each group into "read in full" and "from the abstract only", an "Abstract only" filter lists them, and each claim's card says the full text is what settles it. `build` prints how many there are, and the Word comments say so too
+- The top of the report has Results, Sources and the Word report in that order, with the page you are on highlighted
 - The report's title is the title marked in the paper when there is one, and otherwise the document's name. It is no longer guessed from the opening line
 - The wording that called abstract-only references "the quickest wins" is removed from the list of missing sources and from the skill. The skill now says never to describe abstract-only checking as a win or as the claim being partly checked
 

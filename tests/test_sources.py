@@ -491,6 +491,7 @@ class SourcesNeededTests(unittest.TestCase):
         for needed in (
             'id="sourcesView"',
             'id="back"',
+            'id="openResults"',
             'id="addSources"',
             'id="pickFiles"',
             'id="pickFolder"',

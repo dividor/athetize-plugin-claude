@@ -58,18 +58,21 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 
 /* ---------- brand row ---------- */
 .top{background:var(--surface);padding-top:env(safe-area-inset-top,0px)}
-.top .in{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.top .in{display:flex;align-items:center;gap:16px;min-height:64px}
 .brand{display:flex;align-items:center;gap:10px;color:var(--primary-dark)}
 .brand svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .brand-name{font:600 1.35rem/1 var(--font-heading)}
 .brand-tag{font-size:13px;color:var(--muted);padding-left:12px;margin-left:2px;border-left:1px solid var(--line)}
 .iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--muted);width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
 .iconbtn:hover{background:var(--hover);color:var(--ink)}
-.top-actions{display:flex;align-items:center;gap:10px}
+.topnav{display:flex;align-items:center;gap:8px;margin:0 auto 0 12px}
+.textbtn.tab[aria-current="page"]{background:var(--primary-dark);border-color:var(--primary-dark);color:var(--on-accent)}
+.textbtn.tab[aria-current="page"] .n{color:inherit;opacity:.85}
 .textbtn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13.5px/1 var(--font-heading);cursor:pointer}
 .textbtn:hover{background:var(--hover);color:var(--ink)}
 a.textbtn{text-decoration:none}
 .textbtn .n{font-weight:400;color:var(--muted)}
+.textbtn{white-space:nowrap}
 [hidden]{display:none!important}
 
 /* ---------- title band ---------- */
@@ -246,11 +249,14 @@ a.textbtn{text-decoration:none}
   body.sheet-open .nav{display:none}
   .tabs{border:0}
   .tabs .in{min-height:0}
+  .top .in{flex-wrap:wrap;gap:8px 12px;padding-top:10px;padding-bottom:10px}
+  .brand{margin-right:auto}
+  .topnav{order:3;width:100%;margin:0}
   #wordReport .lbl{display:none}
   #wordReport{padding:0 10px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.bar button{transition:none}}
-@media print{.tabs,.nav,.rail,.card,.iconbtn,.hint,.top-actions,.srcbar,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
+@media print{.tabs,.nav,.rail,.card,.iconbtn,.hint,.topnav,.srcbar,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
 </style>
 </head>
 <body>
@@ -261,11 +267,12 @@ a.textbtn{text-decoration:none}
       <span class="brand-name">Athetize</span>
       <span class="brand-tag">Citation check</span>
     </div>
-    <div class="top-actions">
+    <nav class="topnav" aria-label="Report pages">
+      <button class="textbtn tab" id="openResults" type="button" aria-current="page">Results</button>
+      <button class="textbtn tab" id="openSources" type="button">Sources <span class="n" id="srcCount"></span></button>
       <a class="textbtn" id="wordReport" hidden title="Download the Word copy with the suggested edits as tracked changes"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Word report</span></a>
-      <button class="textbtn" id="openSources" type="button">Sources <span class="n" id="srcCount"></span></button>
-      <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>
-    </div>
+    </nav>
+    <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>
   </div>
 </header>
 
@@ -950,7 +957,9 @@ function showView(sources){
   if(sources===!srcView.hidden)return;
   closeCard();
   if(sources)paperY=window.scrollY;
-  [$('.hero'),$('.tabs'),docView,rail,$('#openSources')].forEach(function(e){e.hidden=sources;});
+  [$('.hero'),$('.tabs'),docView,rail].forEach(function(e){e.hidden=sources;});
+  $(sources?'#openSources':'#openResults').setAttribute('aria-current','page');
+  $(sources?'#openResults':'#openSources').removeAttribute('aria-current');
   [$('#srcBar'),srcView].forEach(function(e){e.hidden=!sources;});
   if(sources){jumpTo(0);return;}
   cameFromDoc=false;placeRail();
@@ -969,6 +978,7 @@ function openSources(needs,refId){
 function leaveSources(){if(cameFromDoc)history.back();else location.hash='';}
 function showClaim(i){pendingClaim=i;leaveSources();}
 $('#openSources').addEventListener('click',function(){openSources();});
+$('#openResults').addEventListener('click',function(){if(!srcView.hidden)leaveSources();});
 $('#back').addEventListener('click',leaveSources);
 window.addEventListener('hashchange',syncView);
 renderSrcLead();renderSrcFilter();renderSources();renderSugSum();renderNeedSrc();syncView();
