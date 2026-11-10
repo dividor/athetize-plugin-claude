@@ -2,6 +2,11 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.1] - 2026-11-10
+
+### Changed
+- When the person chooses to give a folder of sources, Claude opens their own folder chooser, loading the session's folder tool first when it is not loaded yet. It asks for a typed path only when the session has no such tool
+
 ## [0.7.0] - 2026-11-10
 
 ### Changed

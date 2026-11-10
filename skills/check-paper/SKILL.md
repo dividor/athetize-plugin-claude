@@ -65,7 +65,12 @@ If any references need a source, do these in order:
 
    The person may answer with a folder path, or attach files, instead of choosing. Treat that as the matching answer. Never tell them to rename, number or sort files, and never give them a file name to save under.
 4. **Act on the answer.**
-   - **Choose a folder.** Get the folder. When the session has a tool that lets the person pick or grant a folder (its name contains `request_directory`, `request_cowork_directory` or `device_request_folder_access`), call it so they choose the folder in their own file chooser. Otherwise ask them to paste the folder's path. Then follow the folder route of the `add-source` skill (`import-sources`, dry run first). Say in a few lines what was matched, what was skipped as a duplicate and what was not recognised.
+   - **Choose a folder.** Open the person's own folder chooser; do not ask them to type a path when a chooser is available.
+     - Look for a folder tool by name: `request_directory` (Claude desktop), `request_cowork_directory` (Cowork) or `device_request_folder_access` (a cloud session linked to their computer). It may be listed as a deferred tool that is not loaded yet. If so, load it first with the session's tool search, then call it.
+     - Call it with no path, so the native folder chooser opens and the person picks the folder. Pass a path only when they already named one.
+     - Only when the session has no such tool, ask them to paste the folder's path.
+
+     Then follow the folder route of the `add-source` skill (`import-sources`, dry run first). Say in a few lines what was matched, what was skipped as a duplicate and what was not recognised.
    - **Pick files.** When this session's commands run on the person's own computer, start the report helper as in "Adding from the report page" of the `add-source` skill and give its address: on the Sources page, Add sources opens their file chooser for several files or a whole folder. When their browser cannot reach the helper (a cloud or sandboxed session), ask them to attach the files to their next message, then add them with the `add-source` skill.
    - **Fetch through my browser.** Run the `fetch-sources` skill. When it finishes and references still lack full text, ask this question again without the browser answer, so the person can give a folder, pick files or skip. Do not carry on silently.
    - **Skip.** Go on; those claims stay "can't verify".
