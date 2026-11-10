@@ -196,6 +196,18 @@ class HelperTests(unittest.TestCase):
         )
         self.assertEqual(list(self.work.p(pl_serve.INCOMING).iterdir()), [])
 
+    def test_word_report_is_offered_once_it_has_been_written(self):
+        status, body = self.ask("GET", "word.docx")
+        self.assertEqual(status, 404)
+        self.assertIn(b"No Word report", body)
+        self.assertNotIn(b'"word_export": "paper', self.ask("GET", "report.html")[1])
+        self.work.p("paper_athetize_suggestions.docx").write_bytes(b"PK word copy")
+        self.assertEqual(self.ask("GET", "word.docx"), (200, b"PK word copy"))
+        self.assertIn(
+            b'"word_export": "paper_athetize_suggestions.docx"',
+            self.ask("GET", "report.html")[1],
+        )
+
     def test_importing_with_nothing_waiting_adds_nothing(self):
         status, result = self.post_json("api/import")
         self.assertEqual((status, result["matched"], result["unmatched"]), (200, [], []))

@@ -230,8 +230,7 @@ def cmd_export_docx(args):
             "unmatched paragraphs will be skipped."
         )
     sugs = _chosen_suggestions(work, args.only, args.exclude)
-    stem = Path(paper.get("source_file") or src.name).stem
-    outp = Path(args.out) if args.out else work.p(stem + "_athetize_suggestions.docx")
+    outp = Path(args.out) if args.out else work.p(pl_core.word_export_name(paper, src.name))
     notes = {} if args.no_notes else pl_core.suggestion_notes(work)
     res = pl_docx.apply(src, outp, paper, sugs, author=args.author, notes=notes)
     ok = [r for r in res if r["applied"]]
@@ -243,3 +242,6 @@ def cmd_export_docx(args):
     for r in res:
         if not r["applied"]:
             print(f"  skipped {r['id']}: {r['reason']}")
+    if not args.out and work.p("report.html").exists():
+        pl_core.build_report(work)
+        print("Updated report.html so its Word report button offers this file.")

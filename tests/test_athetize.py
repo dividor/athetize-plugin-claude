@@ -245,6 +245,54 @@ class DocxExportTests(unittest.TestCase):
         self.assertEqual([o[0] for o in ops], ["=", "-", "+", "="])
 
 
+class WordReportLinkTests(unittest.TestCase):
+    """The report offers the Word copy once it has been written beside it."""
+
+    def test_export_refreshes_the_report_so_it_offers_the_word_copy(self):
+        with tempfile.TemporaryDirectory() as d:
+            src = Path(d) / "My paper.docx"
+            with zipfile.ZipFile(src, "w") as z:
+                z.writestr("word/document.xml", DocxExportTests.DOC)
+                z.writestr(
+                    "[Content_Types].xml",
+                    '<?xml version="1.0"?>'
+                    '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"/>',
+                )
+                z.writestr(
+                    "word/_rels/document.xml.rels",
+                    '<?xml version="1.0"?><Relationships '
+                    'xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>',
+                )
+            w = Work(Path(d) / "My paper-check")
+            w.root.mkdir()
+            jsave(w.p("paper.json"), pl_ingest.ingest(src))
+            shutil.copy(src, w.p("manuscript.docx"))
+            for name in ("refs.json", "claims.json"):
+                jsave(w.p(name), [])
+            self.assertEqual(
+                pl_core.word_export_name(w.paper()), "My paper_athetize_suggestions.docx"
+            )
+            self.assertIsNone(pl_core.build_data(w)["meta"]["word_export"])
+            pl_core.build_report(w)
+            args = argparse.Namespace(
+                work=str(w.root),
+                paper=None,
+                out=None,
+                only=None,
+                exclude=None,
+                author="Test",
+                no_notes=True,
+            )
+            with contextlib.redirect_stdout(io.StringIO()) as buf:
+                pl.cmd_export_docx(args)
+            self.assertIn("Updated report.html", buf.getvalue())
+            self.assertTrue(w.p("My paper_athetize_suggestions.docx").exists())
+            self.assertIn(
+                '"word_export": "My paper_athetize_suggestions.docx"',
+                w.p("report.html").read_text("utf-8"),
+            )
+
+
 class CoverageTests(unittest.TestCase):
     def test_citation_markers_detected(self):
         t = (
@@ -732,7 +780,10 @@ class SourcesNeededTests(unittest.TestCase):
         ):
             self.assertIn(needed, html)
         self.assertIn("Back to document", html)
+        self.assertIn("Review Missing Sources", html)
+        self.assertIn('id="wordReport"', html)
         self.assertNotIn("Screening aid", html)
+        self.assertNotIn("<kbd>", html)
         self.assertNotIn(".pdf' next to this report", html)
 
 

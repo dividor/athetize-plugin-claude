@@ -101,7 +101,7 @@ manuscript.docx                      private copy of a Word manuscript (used for
 <paper>_athetize_suggestions.docx    tracked changes plus an explanatory comment on each
 sources/        the sources you supplied, filed by reference
 sources/_auto/  downloaded full text and abstracts
-report.html     open in any browser; keys j and k jump between flagged claims; Sources is its own page
+report.html     open in any browser; Sources is its own page; Word report downloads the copy with suggested edits
 ```
 
 "Open local copy" links, and "Open at p. N" links on each evidence excerpt (which jump to that page of the PDF), appear only when `report.html` is opened from the check folder on your own computer (they point into `sources/`). Browsers do not let a web page open files on your computer. A hosted copy of the report never includes the source PDFs; its citation links go to the publisher or DOI instead.

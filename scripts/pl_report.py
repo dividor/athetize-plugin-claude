@@ -368,6 +368,11 @@ def _report_ref(rid: str, r: dict, e: dict, out_claims: list[dict], sugs: list[d
     }
 
 
+def word_export_name(paper: dict, fallback: str = "manuscript.docx") -> str:
+    """File name of the Word copy with suggested edits, written beside the report."""
+    return Path(paper.get("source_file") or fallback).stem + "_athetize_suggestions.docx"
+
+
 def build_data(work: Work, with_suggestions: bool = True) -> dict:
     """Everything the report page shows, as one JSON-ready dict."""
     paper = work.paper()
@@ -397,12 +402,14 @@ def build_data(work: Work, with_suggestions: bool = True) -> dict:
     for p in paper["paragraphs"]:
         if p["kind"] != "reference":
             body_paras.append({"id": p["id"], "text": p["text"], "kind": p["kind"]})
+    word = word_export_name(paper)
     return {
         "meta": {
             "title": paper.get("title") or paper.get("source_file"),
             "source_file": paper.get("source_file"),
             "generated": time.strftime("%Y-%m-%d %H:%M"),
             "version": pl_http.VERSION,
+            "word_export": word if work.p(word).exists() else None,
         },
         "paragraphs": body_paras,
         "suggestions": sugs,

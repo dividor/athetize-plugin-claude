@@ -31,6 +31,7 @@ from pl_report import (
     safe_json_for_html,
     sources_needed,
     word_diff,
+    word_export_name,
 )
 from pl_suggest import (
     _HEAD,
@@ -95,6 +96,7 @@ __all__ = [
     "suggest_prepare",
     "suggestion_notes",
     "validate",
+    "word_export_name",
     "verify",
     "verify_verdict",
     "word_diff",

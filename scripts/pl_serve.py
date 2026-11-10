@@ -36,6 +36,7 @@ INCOMING = "incoming"
 UNRECOGNISED = "not-recognised"
 _JSON = "application/json; charset=utf-8"
 _HTML = "text/html; charset=utf-8"
+_DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 _CHUNK = 64 * 1024
 # Largest list of file hashes the page may send, in bytes.
 _MAX_LIST = 1024 * 1024
@@ -103,6 +104,13 @@ class AddSources:
     def report(self) -> bytes:
         """The report, rebuilt so it shows sources added a moment ago."""
         return pl_core.build_report(self.work).read_bytes()
+
+    def word(self) -> tuple[str, bytes]:
+        """Name and content of the Word copy with suggested edits, when one has been written."""
+        path = self.work.p(pl_core.word_export_name(self.work.paper()))
+        if not path.exists():
+            raise Refused(404, "No Word report has been written for this check yet.")
+        return path.name, path.read_bytes()
 
     def save(self, name: str, length: int, stream) -> dict:
         """Save one file sent by the page into the incoming folder."""
@@ -190,9 +198,11 @@ class _Handler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):  # the base class writes to stderr; stay quiet
         return
 
-    def _answer(self, status: int, ctype: str, body: bytes) -> None:
+    def _answer(self, status: int, ctype: str, body: bytes, download: str = "") -> None:
         self.send_response(status)
         self.send_header("Content-Type", ctype)
+        if download:
+            self.send_header("Content-Disposition", f'attachment; filename="{download}"')
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
@@ -219,6 +229,7 @@ class _Handler(BaseHTTPRequestHandler):
             {
                 "report.html": lambda app, q: self._answer(200, _HTML, app.report()),
                 "api/ping": lambda app, q: self._json(200, {"ok": True}),
+                "word.docx": self._word,
             },
         )
 
@@ -232,6 +243,10 @@ class _Handler(BaseHTTPRequestHandler):
                 "api/done": self._done,
             },
         )
+
+    def _word(self, app: AddSources, query: dict) -> None:
+        name, body = app.word()
+        self._answer(200, _DOCX, body, download=safe_name(name))
 
     def _upload(self, app: AddSources, query: dict) -> None:
         length = self.headers.get("Content-Length") or ""

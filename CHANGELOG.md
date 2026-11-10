@@ -20,7 +20,9 @@ All notable changes to Athetize will be documented in this file.
 - On the Sources page a claim link such as c5 opens the claim's analysis there, with a link to show it in the document
 - Added files are scanned for duplicates before anything is sent or added: the same content twice, a second copy of one work, a work that already has its full text, and files added before. Each is named with the reason
 - The filter on the Sources page is a pair of tabs, All and Need full text, in place of the toggle button
-- The "Screening aid" box is gone
+- The "Screening aid" box and the note about the j and k keys are gone
+- The legend sits under the colour bar it explains and wraps, so no entry is hidden. Previous and next have the sticky row to themselves
+- A Word report button in the top bar downloads the Word copy with the suggested edits. `export-docx` refreshes the report so the button appears
 - The summary of suggested edits sits under the paper
 
 ### Fixed
