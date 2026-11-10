@@ -1,7 +1,7 @@
 """Text utilities for athetize: extraction, tokenising, quote location, BM25 passages.
 
 Standard library only, apart from defusedxml for reading untrusted XML. PDF extraction uses
-PyMuPDF if installed, else the `pdftotext` command line tool.
+PyMuPDF if installed, else the `pdftotext` command line tool, else pypdf.
 
 Quote location lives in `pl_quote` and passage retrieval in `pl_passages`; their names are
 re-exported here so callers can keep using `pl_text.<name>`.
@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import difflib
 import hashlib
+import importlib.util
+import logging
 import re
 import shutil
 import subprocess
@@ -47,6 +49,7 @@ __all__ = [
     "page_at",
     "parse_xml",
     "read_docx_paragraphs",
+    "pdf_extractor",
     "read_pdf_text",
     "sha256_file",
     "short_hash",
@@ -125,26 +128,55 @@ def read_docx_paragraphs(path: Path) -> list[dict]:
     return out
 
 
+def pdf_extractor() -> str | None:
+    """The PDF text extractor that will be used here, fastest first; None when there is none.
+
+    PyMuPDF is the quickest. pypdf is the one Claude's own PDF skill uses, so it is there
+    wherever that skill works, and it is the last choice because it is the slowest.
+    """
+    if importlib.util.find_spec("fitz") is not None:
+        return "pymupdf"
+    if shutil.which("pdftotext"):
+        return "pdftotext"
+    if importlib.util.find_spec("pypdf") is not None:
+        return "pypdf"
+    return None
+
+
+def _pdftotext(path: Path) -> str:
+    res = subprocess.run(
+        ["pdftotext", "-enc", "UTF-8", str(path), "-"],
+        capture_output=True,
+        timeout=180,
+    )
+    if res.returncode == 0:
+        return res.stdout.decode("utf-8", "replace")
+    raise RuntimeError("pdftotext failed: " + res.stderr.decode("utf-8", "replace")[:200])
+
+
+def _pypdf_text(path: Path) -> str:
+    import pypdf
+
+    # pypdf reports every small flaw in a file as a warning; only real errors matter here
+    logging.getLogger("pypdf").setLevel(logging.ERROR)
+    return "\f".join(page.extract_text() or "" for page in pypdf.PdfReader(str(path)).pages)
+
+
 def read_pdf_text(path: Path) -> str:
-    try:
+    """Text of a PDF, pages separated by form feeds, from the extractor found here."""
+    how = pdf_extractor()
+    if how == "pymupdf":
         import fitz
 
         with fitz.open(str(path)) as doc:
             return "\f".join(page.get_text("text") for page in doc)
-    except ImportError:
-        pass
-    if shutil.which("pdftotext"):
-        res = subprocess.run(
-            ["pdftotext", "-enc", "UTF-8", str(path), "-"],
-            capture_output=True,
-            timeout=180,
-        )
-        if res.returncode == 0:
-            return res.stdout.decode("utf-8", "replace")
-        raise RuntimeError("pdftotext failed: " + res.stderr.decode("utf-8", "replace")[:200])
+    if how == "pdftotext":
+        return _pdftotext(path)
+    if how == "pypdf":
+        return _pypdf_text(path)
     raise RuntimeError(
-        "No PDF text extractor found. Install one: pip install pymupdf "
-        "(add --break-system-packages if needed) or install poppler-utils (pdftotext)."
+        "No PDF text extractor found. Install one: pip install pymupdf or pip install pypdf "
+        "(add --break-system-packages if needed), or install poppler-utils (pdftotext)."
     )
 
 

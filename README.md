@@ -48,9 +48,11 @@ Python 3.9 or newer. The helper scripts use the standard library plus a few smal
 |---|---|---|
 | Check a Markdown, LaTeX or plain-text paper | nothing extra | |
 | Check a Word (.docx) paper, or use Word and XML sources | `defusedxml` | `pip install defusedxml` |
-| Check a PDF paper, or use PDF sources | `pymupdf`, or poppler's `pdftotext` | `pip install pymupdf` |
+| Check a PDF paper, or use PDF sources | any one of `pymupdf` (fastest), poppler's `pdftotext`, or `pypdf` | `pip install pymupdf` |
 | Export suggested edits as Word tracked changes | `lxml` | `pip install lxml` |
 | Read scanned PDFs | the `tesseract` and `pdftoppm` command-line tools | your package manager |
+
+Athetize uses the same libraries as Claude's own document skills: `defusedxml` and `lxml` for Word files and, when nothing faster is present, `pypdf` for PDFs. Where those skills already work, such as a session that runs commands in Claude's sandbox, there is nothing to install.
 
 Everything at once: `pip install -r scripts/requirements.txt` from the plugin folder. On systems that protect the system Python, use a virtual environment or add `--break-system-packages`. Claude runs `pl.py doctor` at the start of a check and tells you what is missing.
 

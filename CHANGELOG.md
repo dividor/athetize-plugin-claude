@@ -12,6 +12,7 @@ All notable changes to Athetize will be documented in this file.
 - `add-source` takes several files or a folder and works out which reference each one is
 
 ### Added
+- PDFs can be read with `pypdf`, the library Claude's own PDF skill uses, when neither PyMuPDF nor `pdftotext` is present. Nothing changes where one of those is installed. With this, Athetize needs no package beyond the ones Claude's own document skills use
 - `pl.py serve --work W`: a helper that shows the report from `127.0.0.1` and takes the files chosen on its Sources page. It listens on this computer only, puts a random token in its address, refuses requests from other pages, and stops on "Finish and recheck" or after two hours without activity, printing what was added
 
 ### Report

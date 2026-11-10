@@ -64,7 +64,7 @@ jobs:
       - name: Install test dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-cov lxml defusedxml lizard radon cognitive-complexity
+          pip install pytest pytest-cov lxml defusedxml pypdf lizard radon cognitive-complexity
 
       - name: Run unit tests
         run: |

@@ -11,6 +11,7 @@ from pathlib import Path
 import pl_core
 import pl_http
 import pl_ingest
+import pl_text
 from pl_core import Work, jsave
 
 # Services that `doctor` tries to reach, in the order they are tried and reported.
@@ -33,15 +34,6 @@ def out(obj):
     print(json.dumps(obj, ensure_ascii=False, indent=2))
 
 
-def _pdf_extractor() -> str | None:
-    """Name the PDF text extractor available here: PyMuPDF, else pdftotext, else None."""
-    if importlib.util.find_spec("fitz") is not None:
-        return "pymupdf"
-    if shutil.which("pdftotext"):
-        return "pdftotext"
-    return None
-
-
 def _check_services(email) -> dict[str, str]:
     """Try each lookup service once and record "ok" or why it could not be reached."""
     network = {}
@@ -59,8 +51,8 @@ def _doctor_notes(info: dict) -> list[str]:
     notes = []
     if not info["pdf_extractor"]:
         notes.append(
-            "No PDF text extractor: run `pip install pymupdf` (add --break-system-packages if "
-            "needed) or install poppler-utils."
+            "No PDF text extractor: run `pip install pymupdf` or `pip install pypdf` (add "
+            "--break-system-packages if needed), or install poppler-utils."
         )
     if not info["xml_parser"]:
         notes.append(
@@ -89,7 +81,7 @@ def cmd_doctor(args):
         "contact_email": cfg.get("email") or None,
         "network": {},
     }
-    info["pdf_extractor"] = _pdf_extractor()
+    info["pdf_extractor"] = pl_text.pdf_extractor()
     info["network"] = _check_services(cfg.get("email"))
     info["notes"] = _doctor_notes(info)
     out(info)
