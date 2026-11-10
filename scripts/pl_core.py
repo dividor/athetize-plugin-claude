@@ -18,7 +18,9 @@ from pl_cites import _CITE_PATTERNS, _SENT_SPLIT, _ref_keys, coverage, link_cite
 from pl_claims import append_claim_parts, carry_over, merge_claim_parts
 from pl_report import (
     KIND_LABEL,
+    NEEDS_SOURCE,
     RANK,
+    REQUEST_FILE,
     VERDICT_COLOR,
     VERDICT_LABEL,
     _clean_raw,
@@ -27,6 +29,7 @@ from pl_report import (
     build_data,
     build_report,
     safe_json_for_html,
+    sources_needed,
     word_diff,
 )
 from pl_suggest import (
@@ -55,7 +58,9 @@ __all__ = [
     "FLAGGED",
     "KIND_LABEL",
     "NEEDS_QUOTE",
+    "NEEDS_SOURCE",
     "RANK",
+    "REQUEST_FILE",
     "VERDICTS",
     "VERDICT_COLOR",
     "VERDICT_LABEL",
@@ -86,6 +91,7 @@ __all__ = [
     "prepare",
     "safe_json_for_html",
     "save_config",
+    "sources_needed",
     "suggest_prepare",
     "suggestion_notes",
     "validate",

@@ -14,7 +14,7 @@ import pl_docx
 import pl_http
 import pl_text
 from pl_verify import _evidence_text
-from pl_workspace import Work
+from pl_workspace import Work, jload
 
 # Order used to pick one verdict for a claim that cites several sources (best first).
 RANK = [
@@ -306,6 +306,46 @@ def _report_notes(notes: list[dict], paras: dict) -> list[dict]:
     return out_notes
 
 
+# Statuses of a reference whose full text is still wanted.
+NEEDS_SOURCE = ("missing", "abstract_only")
+# Name of the download list that ``request-sources`` writes next to the report.
+REQUEST_FILE = "source_request.md"
+
+
+def sources_needed(total: int, lacking: dict[str, str], claims: list[dict]) -> dict:
+    """Counts for asking the person for sources.
+
+    ``total`` is the number of references in the paper and ``lacking`` maps the id of each
+    reference without full text to its status. ``claims_relying`` counts each claim once,
+    however many of those references it cites.
+    """
+    return {
+        "references": total,
+        "need_source": len(lacking),
+        "abstract_only": sum(1 for s in lacking.values() if s == "abstract_only"),
+        "no_text": sum(1 for s in lacking.values() if s == "missing"),
+        "claims_relying": sum(1 for c in claims if any(r in lacking for r in c.get("cites", []))),
+    }
+
+
+def _report_sources_needed(work: Work, refs: dict, manifest: dict) -> dict:
+    """The report's missing-sources summary.
+
+    When a download list was written it also names that list and the folder the person was
+    asked to save papers in.
+    """
+    lacking = {}
+    for rid in refs:
+        status = manifest.get(rid, {}).get("status")
+        if status in NEEDS_SOURCE:
+            lacking[rid] = status
+    summary = sources_needed(len(refs), lacking, work.claims())
+    listed = work.p(REQUEST_FILE).exists()
+    summary["request_file"] = REQUEST_FILE if listed else None
+    summary["folder"] = (jload(work.p("source_request.json"), {}) or {}).get("folder")
+    return summary
+
+
 def _report_ref(rid: str, r: dict, e: dict, out_claims: list[dict], sugs: list[dict]) -> dict:
     """Report entry for one reference: how it was resolved and which claims cite it."""
     return {
@@ -318,7 +358,6 @@ def _report_ref(rid: str, r: dict, e: dict, out_claims: list[dict], sugs: list[d
         "link": e.get("link"),
         "retracted": bool(e.get("retracted")),
         "retraction_notes": e.get("retraction_notes", []),
-        "provide_as": e.get("provide_as", f"sources/{rid}.pdf"),
         "local_file": e.get("local_file"),
         "evidence_level": e.get("evidence_level", "none"),
         "match_score": e.get("match_score"),
@@ -370,6 +409,7 @@ def build_data(work: Work, with_suggestions: bool = True) -> dict:
         "claims": out_claims,
         "notes": out_notes,
         "refs": out_refs,
+        "sources_needed": _report_sources_needed(work, refs, manifest),
         "problems": problems,
     }
 

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 import shutil
 from pathlib import Path
 
@@ -13,6 +12,7 @@ import pl_resolve
 import pl_text
 from pl_cmd_setup import out
 from pl_core import Work, jsave
+from pl_identify import _match_file_to_ref, with_known_doi
 
 
 def _remember_email(email, cfg: dict) -> None:
@@ -84,7 +84,6 @@ def _status_data(work: Work):
                 "exists": e.get("exists", "unchecked"),
                 "retracted": e.get("retracted", False),
                 "citation": (e.get("citation") or r.get("raw") or r["id"])[:140],
-                "provide_as": e.get("provide_as", f"sources/{r['id']}.pdf"),
                 "claims_affected": len(cited_by.get(r["id"], [])),
                 "errors": e.get("errors", [])[:3],
             }
@@ -104,7 +103,7 @@ def cmd_status(args):
     result = {
         "references_by_status": summary,
         "needs_source": [
-            {k: r[k] for k in ("id", "status", "citation", "provide_as", "claims_affected")}
+            {k: r[k] for k in ("id", "status", "citation", "claims_affected")}
             | ({"why": r["errors"]} if r["errors"] else {})
             for r in needs
         ],
@@ -238,90 +237,11 @@ def cmd_add_source(args):
     print("Run the recheck step to re-verify the claims that cite it.")
 
 
-def _ref_title(ref: dict) -> str:
-    t = re.sub(r"\s*\([^)]*$", "", (ref.get("title") or "").strip())
-    if not t:
-        m = re.search(
-            r"\(\d{4}[a-z]?\)\.\s*(.+?)[.?]\s",
-            re.sub(r"\s*\((?:[^()]*?(?:Trans|Eds?|ed)\.[^()]*)\)", "", ref.get("raw") or ""),
-        )
-        t = m.group(1) if m else ""
-    return t
-
-
-def _ref_year(ref: dict) -> str:
-    if ref.get("year"):
-        return str(ref["year"])
-    m = re.search(r"\((\d{4})", ref.get("raw") or "")
-    return m.group(1) if m else ""
-
-
 def _needs_rows(work: Work, include_abstract_only: bool = True) -> list[dict]:
     wanted = ("missing", "abstract_only") if include_abstract_only else ("missing",)
     rows = [r for r in _status_data(work) if r["status"] in wanted]
     rows.sort(key=lambda r: (-r["claims_affected"], r["id"]))
     return rows
-
-
-def _match_by_filename(stem: str, targets: dict[str, dict]) -> str | None:
-    """The reference id that the file name equals, starts with or ends with; longest id first."""
-    for rid in sorted(targets, key=len, reverse=True):
-        r = rid.casefold()
-        if stem == r or re.match(re.escape(r) + r"([^a-z0-9]|$)", stem) or stem.endswith("__" + r):
-            return rid
-    return None
-
-
-def _content_score(
-    ref: dict, text: str, head: str, stem: str, fname: str
-) -> tuple[float, float] | None:
-    """Score how well a file's text and name fit one reference; None when they do not fit."""
-    title = _ref_title(ref)
-    if not title:
-        return None
-    in_text = pl_resolve.title_in_text(title, text, 12000)
-    in_name = pl_text.title_similarity(title, fname) >= 0.6
-    if not (in_text or in_name):
-        return None
-    sur = pl_resolve.first_surname(ref)
-    has_author = (not sur) or (sur in head) or (sur in stem)
-    yr = _ref_year(ref)
-    score = (
-        (2 if in_text else 0)
-        + (1 if in_name else 0)
-        + (1 if has_author else -3)
-        + (0.5 if yr and yr in head[:6000] + stem else 0)
-    )
-    if score > 0:
-        return score, pl_text.title_similarity(title, head[:400])
-    return None
-
-
-def _match_file_to_ref(
-    path: Path, text: str, targets: dict[str, dict]
-) -> tuple[str | None, str, list[str]]:
-    """Return (ref_id, how, ambiguous_ids).
-
-    Filename id wins; otherwise title and first-author surname in the text.
-    """
-    stem = path.stem.casefold()
-    by_name = _match_by_filename(stem, targets)
-    if by_name is not None:
-        return by_name, "filename", []
-    head = text[:12000].casefold()
-    fname = re.sub(r"[_\-]+", " ", stem)
-    scored = []
-    for rid, ref in targets.items():
-        fit = _content_score(ref, text, head, stem, fname)
-        if fit is not None:
-            scored.append((fit[0], fit[1], rid))
-    if not scored:
-        return None, "no match", []
-    scored.sort(reverse=True)
-    top = [x for x in scored if x[0] == scored[0][0]]
-    if len(top) > 1:
-        return None, "ambiguous", [x[2] for x in top]
-    return scored[0][2], "content", []
 
 
 def _candidate_files(folders: list, recursive: bool) -> list[Path]:
@@ -403,33 +323,51 @@ def _import_matched(work: Work, refs: dict[str, dict], src: Path, matched: list[
     jsave(work.p("manifest.json"), manifest)
 
 
-def cmd_import_sources(args):
-    """Match downloaded files in a folder to references still lacking full text, and add them."""
-    work = Work(args.work)
+def import_paths(
+    work: Work,
+    paths: list,
+    every: bool = False,
+    recursive: bool = False,
+    since=None,
+    dry_run: bool = False,
+) -> dict:
+    """Match the given files, and the files in the given folders, to references and add them.
+
+    Only references still lacking full text are considered unless ``every`` is set. Each file
+    is read and identified by what it says; see ``pl_identify``.
+    """
     refs = {r["id"]: r for r in work.refs()}
-    need = {r["id"] for r in _needs_rows(work)} if not args.all else set(refs)
-    targets = {rid: refs[rid] for rid in need}
+    need = {r["id"] for r in _needs_rows(work)} if not every else set(refs)
+    known = work.manifest().get("refs", {})
+    targets = {rid: with_known_doi(refs[rid], known.get(rid, {})) for rid in need}
     src = work.p("sources")
     src.mkdir(exist_ok=True)
     have_hashes = {pl_text.sha256_file(p) for p in src.rglob("*") if p.is_file()}
-    files = _candidate_files(args.folders, args.recursive)
-    found, taken = _sort_files(files, targets, have_hashes, args.since)
+    files = _candidate_files(paths, recursive)
+    found, taken = _sort_files(files, targets, have_hashes, since)
     matched = found["matched"]
-    if not args.dry_run:
+    if not dry_run:
         _import_matched(work, refs, src, matched)
     still = [r["id"] for r in _needs_rows(work) if r["id"] not in taken]
     for m in matched:
         m.pop("path", None)
+    return {
+        "files_seen": len(files),
+        "matched": matched,
+        "ambiguous": found["ambiguous"],
+        "unmatched": found["unmatched"],
+        "already_imported": found["skipped"],
+        "still_need_source": still,
+        "dry_run": bool(dry_run),
+    }
+
+
+def cmd_import_sources(args):
+    """Match downloaded files in a folder to references still lacking full text, and add them."""
     out(
-        {
-            "files_seen": len(files),
-            "matched": matched,
-            "ambiguous": found["ambiguous"],
-            "unmatched": found["unmatched"],
-            "already_imported": found["skipped"],
-            "still_need_source": still,
-            "dry_run": bool(args.dry_run),
-        }
+        import_paths(
+            Work(args.work), args.folders, args.all, args.recursive, args.since, args.dry_run
+        )
     )
 
 

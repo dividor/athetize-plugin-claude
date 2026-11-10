@@ -52,10 +52,7 @@ from pl_cmd_setup import (
     out,
 )
 from pl_cmd_sources import (
-    _match_file_to_ref,
     _needs_rows,
-    _ref_title,
-    _ref_year,
     _status_data,
     cmd_add_source,
     cmd_browser_queue,
@@ -63,7 +60,10 @@ from pl_cmd_sources import (
     cmd_passages,
     cmd_resolve,
     cmd_status,
+    import_paths,
 )
+from pl_identify import _match_file_to_ref, _ref_title, _ref_year
+from pl_serve import cmd_serve
 
 __all__ = [
     "_match_file_to_ref",
@@ -89,7 +89,9 @@ __all__ = [
     "cmd_prepare",
     "cmd_request_sources",
     "cmd_resolve",
+    "cmd_serve",
     "cmd_status",
+    "import_paths",
     "cmd_suggest_prepare",
     "cmd_validate",
     "cmd_verify",

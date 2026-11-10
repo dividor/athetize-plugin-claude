@@ -24,7 +24,7 @@ Remember the choice with `PL config set-folder FOLDER` so later runs reuse it. I
 ## 2. Write and send the request
 
 1. Run `PL request-sources --work W --folder FOLDER` (add `--min-claims 1` to leave out references no claim depends on, or `--missing-only` to skip ones where an abstract was found).
-2. It writes `W/source_request.md` (and `.json`): one item per reference, ordered by how many claims depend on it, each with the full citation, a suggested file name `<id>.pdf`, the number of claims affected, and links (DOI, library proxy, any link in the reference, open-access copies, Google Scholar, WorldCat).
+2. It writes `W/source_request.md` (and `.json`): one item per reference, ordered by how many claims depend on it, each with the full citation, the number of claims affected, and links (DOI, library proxy, any link in the reference, open-access copies, Google Scholar, WorldCat). It also prints a `summary`: how many of the paper's references are listed, how many have only an abstract or no text, and how many claims rely on at least one of them. Use those figures when you describe the request; the next report build shows them in a banner with a link to the list.
 3. Send it so the person can click through it. Use SendUserFile on `source_request.md`, or SendUserMessage with its content when it is short. Add one line before it: where to save, that file names do not matter, and to say "done" when finished. Report the count exactly as the script printed it.
 4. Do not wait idle. If other work remains (verifying claims that already have sources), carry on, and tell the person the report will update when the files arrive.
 
@@ -36,8 +36,8 @@ When the person says they have saved files:
    - Local: use the folder directly.
    - Linked computer: `device_list_dir` on the folder, keep files changed since the request was written (compare `mtimeMs`) with extensions pdf, html, htm, txt, md, docx, xml, then `device_stage_files` them (at most 50 per call). They land under `/mnt/user-data/uploads/<folder-name>/`.
    - Attached to the chat: they are already in the uploads folder.
-2. Run `PL import-sources FOLDER --work W --dry-run` first. It matches each file to a reference by its file name (`<id>.pdf`), or by the reference title and first author's surname in the file's text. Files already imported are skipped by content hash.
-3. Show the person anything listed under `ambiguous` or `unmatched` and ask which reference each belongs to; add those with `PL add-source --work W REF FILE`. Never guess between two references.
+2. Run `PL import-sources FOLDER --work W --dry-run` first. It reads each file and identifies its reference from the DOI or arXiv number printed on its first pages, or from the reference title together with the first author's surname. The file name is looked at only when the text does not settle it. Files already imported are skipped by content hash.
+3. Show the person anything listed under `ambiguous` or `unmatched` and ask which reference each belongs to; add those with `PL add-source --work W REF FILE`. Never guess between two references, and never ask the person to rename a file.
 4. Run `PL import-sources FOLDER --work W` without `--dry-run`. A matched file with almost no text (a scanned page or a publisher preview) is refused; say so and ask for a different copy.
 5. Hand off to the `recheck` skill so the affected claims are re-verified, and report `still_need_source` from the output.
 

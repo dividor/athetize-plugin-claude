@@ -117,6 +117,8 @@ The repository root is the plugin. Claude Code installs it straight from here (`
 | `pl_workspace.py`, `pl_validate.py`, `pl_claims.py`, `pl_cites.py` | The check workspace: JSON files, validation, claim merging, citation markers |
 | `pl_ingest.py`, `pl_text.py`, `pl_xml.py` | Reading manuscripts and sources (Word, PDF, Markdown, LaTeX, HTML, XML) |
 | `pl_resolve.py`, `pl_metadata.py`, `pl_refmatch.py`, `pl_download.py`, `pl_browser.py`, `pl_http.py` | Looking references up and fetching open-access full text. `pl_http.py` is the only module that touches the network |
+| `pl_identify.py` | Working out which reference a supplied file is, from the DOI, arXiv number or title on its first pages |
+| `pl_serve.py` | The helper on `127.0.0.1` that shows the report and takes the files chosen with its Add sources button |
 | `pl_quote.py`, `pl_passages.py`, `pl_verify.py` | Finding passages, locating quotes in sources, checking verdicts |
 | `pl_suggest.py`, `pl_docx.py`, `pl_docx_comments.py`, `pl_docx_package.py` | Suggested edits and the Word tracked-changes export |
 | `pl_report.py` | Data for `templates/report.html` |

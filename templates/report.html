@@ -65,6 +65,11 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 .brand-tag{font-size:13px;color:var(--muted);padding-left:12px;margin-left:2px;border-left:1px solid var(--line)}
 .iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--muted);width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
 .iconbtn:hover{background:var(--hover);color:var(--ink)}
+.top-actions{display:flex;align-items:center;gap:10px}
+.textbtn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13.5px/1 var(--font-heading);cursor:pointer}
+.textbtn:hover{background:var(--hover)}
+.textbtn .n{font-weight:400;color:var(--muted)}
+[hidden]{display:none!important}
 
 /* ---------- title band ---------- */
 .hero{background:var(--surface);padding:10px 0 22px}
@@ -97,6 +102,10 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 kbd{font:600 12px var(--font-mono);border:1px solid var(--line);background:var(--surface);padding:0 5px}
 .notice{margin:0 0 20px;padding:14px 18px;border:1px solid var(--note-line);background:var(--note-bg);font-size:14px}
 .notice b{font-family:var(--font-heading);font-weight:600}
+.notice.need{border-color:var(--part)}
+.notice.need .act{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.notice.need .act a,.notice.need .act button{font:400 12.5px/1.6 var(--font-body);padding:3px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none}
+.notice.need .act a:hover,.notice.need .act button:hover{background:var(--hover)}
 .sheet{background:var(--surface);border:1px solid var(--line);padding:clamp(20px,6vw,60px)}
 .sheet h2.h{font-size:1.15rem;line-height:1.35;margin:1.9em 0 .6em}
 .sheet h2.h:first-child{margin-top:0}
@@ -169,22 +178,44 @@ kbd{font:600 12px var(--font-mono);border:1px solid var(--line);background:var(-
 .sug .diff ins{color:var(--ok);text-decoration:none;background:color-mix(in srgb,var(--ok) 13%,transparent);border-bottom:1px solid var(--ok)}
 .sug .why{font-size:13px;margin:6px 0 0;color:var(--muted)}
 .sug .act{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.sug .act button,.sugsum button,.sources h2 button{font:400 12.5px/1.6 var(--font-body);padding:3px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
-.sug .act button:hover,.sugsum button:hover,.sources h2 button:hover{background:var(--hover)}
+.sug .act button,.sugsum button,.addsrc .act button{font:400 12.5px/1.6 var(--font-body);padding:3px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.sug .act button:hover,.sugsum button:hover,.addsrc .act button:hover{background:var(--hover)}
 .sug .act button[aria-pressed="true"]{border-color:var(--ok);color:var(--ok)}
-.sugsum{margin:0 0 14px;font-size:13.5px;color:var(--muted)}
+.sugsum{margin:18px 0 0;font-size:13.5px;color:var(--muted)}
 .sugsum button{margin-left:8px}
 
-/* ---------- sources ---------- */
-.sources{margin-top:36px}
-.sources h2{font-size:1.4rem;margin:0 0 12px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.sources h2 button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+/* ---------- sources page ---------- */
+.srcbar{position:sticky;top:0;z-index:30;background:var(--surface);border-top:1px solid var(--line-light);border-bottom:1px solid var(--line)}
+.srcbar .in{display:flex;align-items:center;min-height:50px}
+.back{display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:8px 12px 8px 0;margin-left:-4px;cursor:pointer;font:600 14px/1.4 var(--font-heading);color:var(--link)}
+.back:hover{color:var(--primary-dark)}
+.srchead .row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 6px}
+.srchead h1{font-size:clamp(22px,3.4vw,30px);line-height:1.25;margin:0}
+.textbtn.primary{background:var(--primary-dark);border-color:var(--primary-dark);color:var(--on-accent)}
+.textbtn.primary:hover{background:var(--primary-dark);filter:brightness(1.1)}
+.srchead p{margin:0 0 20px;font-size:14px;color:var(--muted)}
+.addsrc{background:var(--surface);border:1px solid var(--line);padding:18px 20px;margin:0 0 26px}
+.addsrc h2{font-size:1.1rem;margin:0 0 6px}
+.addsrc p{margin:0 0 14px;font-size:14px}
+.addsrc ul{margin:0 0 14px;padding-left:20px;font-size:14px}
+.addsrc li{margin:2px 0;overflow-wrap:anywhere}
+.addsrc .req{font:12.5px/1.5 var(--font-mono);background:var(--bg);border:1px solid var(--line-light);padding:8px 10px;margin:0 0 12px;color:var(--ink);overflow-wrap:anywhere}
+.addsrc .act{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.addsrc .after{margin:0;font-size:13px;color:var(--muted)}
+.addsrc > :last-child{margin-bottom:0}
+.drophint{margin:-12px 0 20px;font-size:13px;color:var(--muted)}
+#sourcesView.dropping{outline:2px dashed var(--primary);outline-offset:-6px}
+.textbtn:disabled{opacity:.55;cursor:default}
+.srcfilter{border-bottom:1px solid var(--line);margin:0 0 14px}
+.srcfilter .chip{--c:var(--primary)}
+.srcfilter .chip::before{display:none}
 .srow{background:var(--surface);border:1px solid var(--line);padding:14px 18px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
 .srow .id{font:600 12.5px/1.8 var(--font-mono);color:var(--muted)}
 .srow .cit{font-size:14.5px;overflow-wrap:anywhere}
 .srow .pills{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:6px;grid-column:2}
 .srow .used{grid-column:2;font-size:12.5px;color:var(--muted);margin-top:4px}
 .srow .used a{margin-right:6px;font:600 12px var(--font-mono)}
+.srow .more{grid-column:2;font-size:12px;color:var(--muted)}
 .srow.flag{border-left:3px solid var(--part)}
 .empty{padding:24px;text-align:center;color:var(--muted)}
 
@@ -198,7 +229,7 @@ kbd{font:600 12px var(--font-mono);border:1px solid var(--line);background:var(-
   body.sheet-open .nav{display:none}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.bar button{transition:none}}
-@media print{.tabs,.nav,.rail,.card,.iconbtn,.hint{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
+@media print{.tabs,.nav,.rail,.card,.iconbtn,.hint,.top-actions,.srcbar,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
 </style>
 </head>
 <body>
@@ -209,7 +240,10 @@ kbd{font:600 12px var(--font-mono);border:1px solid var(--line);background:var(-
       <span class="brand-name">Athetize</span>
       <span class="brand-tag">Citation check</span>
     </div>
-    <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>
+    <div class="top-actions">
+      <button class="textbtn" id="openSources" type="button">Sources <span class="n" id="srcCount"></span></button>
+      <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>
+    </div>
   </div>
 </header>
 
@@ -228,15 +262,27 @@ kbd{font:600 12px var(--font-mono);border:1px solid var(--line);background:var(-
   </div>
 </div>
 
-<main class="wrap in">
+<div class="srcbar" id="srcBar" hidden>
+  <div class="in"><button type="button" class="back" id="back"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Back to document</button></div>
+</div>
+
+<main class="wrap in" id="docView">
   <p class="hint">Hover a highlight, or tap it on a phone, to see the analysis and the source. Keys <kbd>j</kbd> and <kbd>k</kbd> jump between claims that need attention.</p>
-  <div class="notice"><b>Screening aid.</b> Verdicts come from a language model reading the cited source. A green mark means a matching passage was found and verified in the source text. Every flag still needs a human check against the original paper.</div>
+  <div class="notice need" id="needSrc" hidden></div>
   <article class="sheet" id="paper"></article>
-  <section class="sources" id="sources">
-    <h2>Sources <button type="button" id="needsOnly" aria-pressed="false">Needs a source</button></h2>
-    <div class="sugsum" id="sugSum"></div>
-    <div id="srcList"></div>
-  </section>
+  <div class="sugsum" id="sugSum"></div>
+</main>
+
+<main class="wrap in" id="sourcesView" hidden>
+  <div class="srchead">
+    <div class="row"><h1>Sources</h1><button class="textbtn primary" id="addSources" type="button">Add sources</button></div>
+    <p id="srcLead"></p>
+    <input type="file" id="srcPicker" multiple hidden accept=".pdf,.txt,.md,.html,.htm,.docx,.xml">
+  </div>
+  <p class="drophint" id="dropHint" hidden>Add sources opens your files. You can also drop files or a whole folder onto this page. File names do not matter: each file is read and matched to its reference.</p>
+  <section class="addsrc" id="addSrc" aria-live="polite" hidden></section>
+  <div class="srcfilter"><div class="chips" id="srcFilter" role="group" aria-label="Filter sources"></div></div>
+  <div id="srcList"></div>
 </main>
 
 <div class="rail" id="rail" aria-hidden="true"></div>
@@ -454,9 +500,10 @@ function refBlock(r,multi){
   b.append(src);
   if(r.evidence_level!=='full_text'){
     var h=el('div','help');
-    h.append(document.createTextNode('Have the full text? Save it as '));
-    h.append(el('code',null,'sources/'+r.ref_id+'.pdf'));
-    h.append(document.createTextNode(' next to this report, then run the recheck step.'));
+    h.append(document.createTextNode('Have the full text? '));
+    var add=el('a',null,'Add it on the Sources page');add.href='#sources';
+    add.addEventListener('click',function(ev){ev.preventDefault();openSources(null,r.ref_id);});
+    h.append(add);h.append(document.createTextNode('.'));
     b.append(h);
   }
   return b;
@@ -567,6 +614,7 @@ document.addEventListener('keydown',function(e){
   var tag=(e.target&&e.target.tagName)||'';
   if(e.key==='Escape'){closeCard();return;}
   if(/INPUT|TEXTAREA|SELECT/.test(tag)||e.metaKey||e.ctrlKey||e.altKey)return;
+  if(!srcView.hidden)return;
   if(e.key==='j')go(1);else if(e.key==='k')go(-1);
 });
 
@@ -586,13 +634,16 @@ function placeRail(){
 window.addEventListener('resize',function(){placeRail();if(openIdx>=0&&!sheetMode()&&!pinned)closeCard();});
 window.addEventListener('load',placeRail);
 
-/* ---------- sources ---------- */
+/* ---------- sources page ---------- */
 var srcList=$('#srcList'), needsOnly=false;
+function count(n,one,many){return n+' '+(n===1?one:many);}
+function needsSource(r){return r.status==='missing'||r.status==='abstract_only'||r.status==='unresolved';}
+function needCount(){return DATA.refs.filter(needsSource).length;}
 function renderSources(){
   srcList.textContent='';
   var shown=0;
   DATA.refs.forEach(function(r){
-    var needs=r.status==='missing'||r.status==='abstract_only'||r.status==='unresolved';
+    var needs=needsSource(r);
     if(needsOnly&&!needs)return;
     shown++;
     var row=el('div','srow'+((needs||r.retracted)?' flag':''));
@@ -610,32 +661,195 @@ function renderSources(){
     var lh=localHref(r.local_file);
     if(lh){var la=el('a',null,'Open local copy');la.href=lh;la.target='_blank';la.rel='noopener';la.style.fontSize='12px';pills.append(la);}
     row.append(pills);
-    if(r.matched_title&&(r.exists==='partial_match'||r.exists==='mismatch')){var mt=el('div',null,'Closest database record: \u201c'+r.matched_title+'\u201d. Not used: the citation and link above are the paper\u2019s own.');mt.style.fontSize='12px';mt.style.opacity='.75';row.append(mt);}
+    if(r.matched_title&&(r.exists==='partial_match'||r.exists==='mismatch')){row.append(el('div','more','Closest database record: \u201c'+r.matched_title+'\u201d. Not used: the citation and link above are the paper\u2019s own.'));}
     if(r.cited_by&&r.cited_by.length){
       var used=el('div','used','Supports ');
       r.cited_by.forEach(function(cid){
         var idx=items.findIndex(function(it){return it.kind==='claim'&&it.d.id===cid;});
         if(idx<0)return;
         var a=el('a',null,cid);a.href='#';
-        a.addEventListener('click',function(ev){ev.preventDefault();focusItem(idx,true);});
+        a.addEventListener('click',function(ev){ev.preventDefault();showClaim(idx);});
         used.append(a);
       });
       row.append(used);
     }
     if(r.suggestions&&r.suggestions.length){r.suggestions.forEach(function(id){if(SUG[id]){var sb=sugBlock(SUG[id]);sb.style.gridColumn='2';row.append(sb);}});}
-    if(needs){
-      var h=el('div','help');h.style.gridColumn='2';
-      h.append(document.createTextNode('To improve the check, save the full text as '));
-      h.append(el('code',null,r.provide_as||('sources/'+r.id+'.pdf')));
-      h.append(document.createTextNode(' next to this report, then run the recheck step.'));
-      row.append(h);
-    }
     srcList.append(row);
   });
   if(!shown)srcList.append(el('div','empty',needsOnly?'Every source has its full text.':'No references were extracted.'));
 }
-$('#needsOnly').addEventListener('click',function(){needsOnly=!needsOnly;this.setAttribute('aria-pressed',needsOnly?'true':'false');renderSources();});
-renderSources();renderSugSum();
+function renderSrcFilter(){
+  var box=$('#srcFilter');box.textContent='';
+  [['All',false,DATA.refs.length],['Need full text',true,needCount()]].forEach(function(x){
+    var b=el('button','chip',x[0]+' ');b.type='button';b.setAttribute('aria-pressed',needsOnly===x[1]?'true':'false');
+    b.append(el('b',null,x[2]));
+    b.addEventListener('click',function(){setNeedsOnly(x[1]);});
+    box.append(b);
+  });
+}
+function setNeedsOnly(on){needsOnly=on;renderSrcFilter();renderSources();}
+$('#srcCount').textContent=DATA.refs.length;
+function renderSrcLead(){
+  var n=needCount();
+  $('#srcLead').textContent=count(DATA.refs.length,'reference','references')+' cited in '+(DATA.meta.source_file||'this paper')+'. '+(n?count(n,'still needs its','still need their')+' full text.':'Every one has its full text.');
+}
+
+/* ---------- add sources ----------
+   The page can take files only when the plugin's helper on this computer is showing it
+   (pl.py serve). Opened as a plain file, the button says how to get that. */
+var paperName=DATA.meta.source_file||DATA.meta.title||'this paper';
+var addBtn=$('#addSources'),picker=$('#srcPicker'),addBox=$('#addSrc'),helper=false,adding=false;
+var READS=/\.(pdf|txt|md|html?|docx|xml)$/i, MAX_MB=300;
+function api(route,opts){
+  return fetch('api/'+route,opts).then(function(r){
+    return r.json().then(function(j){if(!r.ok)throw new Error(j.error||'The request failed.');return j;});
+  });
+}
+function addNote(title,lines){
+  addBox.hidden=false;addBox.textContent='';addBox.append(el('h2',null,title));
+  (lines||[]).forEach(function(t){addBox.append(el('p',null,t));});
+}
+function addList(lines){var ul=el('ul');lines.forEach(function(t){ul.append(el('li',null,t));});addBox.append(ul);}
+function showHowToAdd(){
+  var req='Open the Athetize report for '+paperName+' so I can add sources.';
+  addNote('Add sources',['This page can take your files once Claude has opened the report for you. Ask Claude:']);
+  addBox.append(el('div','req',req));
+  var c=el('button',null,'Copy request');c.type='button';c.addEventListener('click',function(){copyText(req,c);});
+  var act=el('div','act');act.append(c);addBox.append(act);
+  addBox.append(el('p','after','Claude replies with a link to this report where Add sources opens your files. You can also attach the papers to a message to Claude, or tell it which folder they are in. File names do not matter.'));
+}
+function showAdded(res){
+  var n=res.matched.length;
+  addNote(n?count(n,'source','sources')+' added':'No sources added');
+  if(n)addList(res.matched.map(function(m){return '['+m.ref+'] '+m.title+', from '+m.file;}));
+  var left=res.ambiguous.map(function(a){return a.file+': could be '+a.could_be.map(function(id){return '['+id+']';}).join(' or ');})
+    .concat(res.unmatched.map(function(u){return u.file+': '+u.why;}));
+  if(left.length){
+    addBox.append(el('p',null,'Not recognised, so not added:'));addList(left);
+    addBox.append(el('p',null,'Tell Claude which reference each of these is and it will add them.'));
+  }
+  if(res.already_imported.length)addBox.append(el('p',null,'Already added before: '+res.already_imported.join(', ')+'.'));
+  if(!n)return;
+  addBox.append(el('p',null,'The claims that cite '+(n===1?'this source have':'these sources have')+' not been rechecked yet. Add more, or finish.'));
+  var fin=el('button',null,'Finish and recheck');fin.type='button';
+  fin.addEventListener('click',function(){
+    api('done',{method:'POST'}).then(function(){
+      addBtn.disabled=true;helper=false;$('#dropHint').hidden=true;
+      addNote('Handed to Claude',['Claude now has the list of what you added and rechecks the claims that cite it. If it does not start by itself, tell it \u201crecheck\u201d. Open the report again when Claude says it is ready.']);
+    }).catch(function(e){addNote('Could not finish',[e.message]);});
+  });
+  var act=el('div','act');act.append(fin);addBox.append(act);
+}
+function markAdded(res){
+  res.matched.forEach(function(m){
+    DATA.refs.forEach(function(r){if(r.id===m.ref)r.status=m.status;});
+  });
+  renderSrcLead();renderSrcFilter();renderSources();
+}
+function addFiles(list){
+  if(adding)return;
+  var files=Array.prototype.filter.call(list,function(f){return READS.test(f.name)&&f.name.charAt(0)!=='.';});
+  if(!files.length){addNote('Nothing to add',['None of those files is a type Athetize reads: PDF, Word, web page or text.']);return;}
+  var big=files.filter(function(f){return f.size>MAX_MB*1024*1024;});
+  if(big.length){addNote('Too large to add',[big.map(function(f){return f.name;}).join(', ')+' '+(big.length===1?'is':'are')+' over '+MAX_MB+' MB. Choose the other files again without '+(big.length===1?'it':'them')+'.']);return;}
+  adding=true;addBtn.disabled=true;
+  var i=0;
+  function next(){
+    if(i>=files.length){
+      addNote('Adding sources',['Reading '+count(files.length,'file','files')+' and matching to the references.']);
+      return api('import',{method:'POST'});
+    }
+    var f=files[i++];
+    addNote('Adding sources',['Sending '+i+' of '+files.length+': '+f.name]);
+    return api('upload?name='+encodeURIComponent(f.name),{method:'POST',body:f}).then(next);
+  }
+  next().then(function(res){markAdded(res);showAdded(res);},function(e){addNote('Could not add the files',[e.message]);})
+    .then(function(){adding=false;addBtn.disabled=false;});
+}
+function entryFiles(entry){
+  if(entry.isFile)return new Promise(function(done,fail){entry.file(function(f){done([f]);},fail);});
+  if(!entry.isDirectory)return Promise.resolve([]);
+  var reader=entry.createReader(),all=[];
+  function more(){
+    return new Promise(function(done,fail){reader.readEntries(done,fail);}).then(function(batch){
+      if(!batch.length)return all;
+      return Promise.all(batch.map(entryFiles)).then(function(lists){lists.forEach(function(l){all=all.concat(l);});return more();});
+    });
+  }
+  return more();
+}
+addBtn.addEventListener('click',function(){
+  if(helper)picker.click();
+  else if(addBox.hidden)showHowToAdd();
+  else addBox.hidden=true;
+});
+picker.addEventListener('change',function(){addFiles(picker.files);picker.value='';});
+function overPage(e){if(!helper)return;e.preventDefault();$('#sourcesView').classList.add('dropping');}
+$('#sourcesView').addEventListener('dragenter',overPage);
+$('#sourcesView').addEventListener('dragover',overPage);
+$('#sourcesView').addEventListener('dragleave',function(e){if(!this.contains(e.relatedTarget))this.classList.remove('dropping');});
+$('#sourcesView').addEventListener('drop',function(e){
+  this.classList.remove('dropping');
+  if(!helper)return;
+  e.preventDefault();
+  var reads=Array.prototype.map.call(e.dataTransfer.items||[],function(it){
+    var entry=it.webkitGetAsEntry?it.webkitGetAsEntry():null,file=it.getAsFile();
+    return entry?entryFiles(entry):Promise.resolve(file?[file]:[]);
+  });
+  Promise.all(reads).then(function(lists){addFiles([].concat.apply([],lists));},function(err){addNote('Could not read what was dropped',[err.message]);});
+});
+if(location.protocol==='http:'&&/^(127\.0\.0\.1|localhost)$/.test(location.hostname)){
+  addBtn.disabled=true;
+  api('ping').then(function(j){helper=j.ok===true;},function(){helper=false;})
+    .then(function(){addBtn.disabled=false;$('#dropHint').hidden=!helper;});
+}
+
+/* ---------- missing-sources notice ---------- */
+function renderNeedSrc(){
+  var n=DATA.sources_needed,box=$('#needSrc');
+  if(!box||!n||!n.need_source)return;
+  box.hidden=false;
+  box.append(el('b',null,n.need_source+' of '+count(n.references,'source has','sources have')+' no full text.'));
+  var kinds=[];
+  if(n.abstract_only)kinds.push(count(n.abstract_only,'has','have')+' only an abstract');
+  if(n.no_text)kinds.push(count(n.no_text,'has','have')+' no text at all');
+  box.append(document.createTextNode(' '+kinds.join(' and ')+'. '+count(n.claims_relying,'claim relies','claims rely')+' on at least one of them, so '+(n.claims_relying===1?'it is':'they are')+' marked \u201ccan\u2019t verify\u201d or judged from an abstract alone. Add the papers on the Sources page and the affected claims are rechecked.'));
+  var act=el('div','act');
+  var b=el('button',null,'See and add these sources');b.type='button';
+  b.addEventListener('click',function(){openSources(true);});
+  act.append(b);
+  if(n.request_file&&location.protocol==='file:'&&/^[\w.-]+$/.test(n.request_file)){var a=el('a',null,'Open the download list');a.href=encodeURI(n.request_file);a.target='_blank';a.rel='noopener';act.append(a);}
+  box.append(act);
+}
+
+/* ---------- document and sources views ---------- */
+var docView=$('#docView'),srcView=$('#sourcesView'),paperY=0,cameFromDoc=false,pendingClaim=null;
+function jumpTo(y){window.scrollTo({top:y,behavior:'instant'});}
+function showView(sources){
+  if(sources===!srcView.hidden)return;
+  if(sources){paperY=window.scrollY;closeCard();}
+  [$('.hero'),$('.tabs'),docView,rail,$('#openSources')].forEach(function(e){e.hidden=sources;});
+  [$('#srcBar'),srcView].forEach(function(e){e.hidden=!sources;});
+  if(sources){jumpTo(0);return;}
+  cameFromDoc=false;placeRail();
+  if(pendingClaim===null){jumpTo(paperY);return;}
+  var i=pendingClaim;pendingClaim=null;
+  items[i].el.scrollIntoView({block:'center',behavior:'instant'});focusItem(i,false);
+}
+function syncView(){showView(location.hash==='#sources');}
+function openSources(needs,refId){
+  if(needs!==null&&needs!==undefined)setNeedsOnly(needs);
+  if(location.hash!=='#sources'){cameFromDoc=true;location.hash='sources';}
+  showView(true);
+  var row=refId&&document.getElementById('ref-'+refId);
+  if(row)row.scrollIntoView({block:'center',behavior:'instant'});
+}
+function leaveSources(){if(cameFromDoc)history.back();else location.hash='';}
+function showClaim(i){pendingClaim=i;leaveSources();}
+$('#openSources').addEventListener('click',function(){openSources();});
+$('#back').addEventListener('click',leaveSources);
+window.addEventListener('hashchange',syncView);
+renderSrcLead();renderSrcFilter();renderSources();renderSugSum();renderNeedSrc();syncView();
 
 /* ---------- theme ---------- */
 $('#theme').addEventListener('click',function(){

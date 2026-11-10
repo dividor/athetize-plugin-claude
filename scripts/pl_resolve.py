@@ -394,8 +394,6 @@ def resolve_one(
     else:
         cand = _fresh_metadata(ref, doi, email, entry, errors)
 
-    entry["provide_as"] = f"sources/{rid}.pdf"
-
     # 2. Evidence: user-provided file wins
     user_file = find_user_file(work, ref, entry.get("doi"))
     if user_file is not None and _use_user_file(work, rid, user_file, entry, errors):
@@ -448,7 +446,6 @@ def resolve_all(
                 "evidence_hash": "none",
                 "exists": "unchecked",
                 "errors": [f"unexpected error: {e}"],
-                "provide_as": f"sources/{ref['id']}.pdf",
                 "citation": ref.get("raw") or ref["id"],
                 "retracted": False,
                 "retraction_notes": [],

@@ -60,10 +60,10 @@ Everything at once: `pip install -r scripts/requirements.txt` from the plugin fo
 | Type | Name | Purpose |
 |---|---|---|
 | Skill | `check-paper` | Full pipeline from manuscript to report |
-| Skill | `add-source` | Attach a PDF, file or URL to a reference |
+| Skill | `add-source` | Add files, a folder of files or a URL as sources; each file is read and matched to its reference |
 | Skill | `recheck` | Re-verify only what changed and rebuild the report |
 | Skill | `suggest-edits` | Draft minimal rewordings for flagged claims and reference-list fixes, show them in the report, export a tracked-changes .docx |
-| Skill | `request-sources` | Write a download list (links, library proxy, suggested file names) for references still lacking full text; import whatever you save into a folder, matched by title and author |
+| Skill | `request-sources` | Write a download list (links, library proxy) for references still lacking full text; import whatever you save into a folder, under any file names |
 | Skill | `fetch-sources` | Open still-missing references in your own browser (your sign-ins), save the full text, then recheck |
 | Agent | `claim-extractor` | Finds claims in a range of paragraphs (parallel, for long papers) |
 | Agent | `claim-verifier` | Compares claims with source passages for one batch (parallel) |
@@ -71,7 +71,7 @@ Everything at once: `pip install -r scripts/requirements.txt` from the plugin fo
 | Scripts | `scripts/pl.py` and `pl_*.py` modules | Ingest, reference lookup, downloads, passage retrieval, quote verification, report build |
 | Template | `templates/report.html` | The report: one file, no external requests |
 
-The plugin has no hooks, no MCP servers and no background processes. Nothing runs until you ask Claude to check a paper.
+The plugin has no hooks and no MCP servers. Nothing runs until you ask Claude to check a paper. The one background process is the local helper described under Privacy and safety, which runs only while you add sources from the report.
 
 ## Setup
 
@@ -85,10 +85,12 @@ Say, for example:
 
 - "Check the citations in `draft.docx`." Claude runs `check-paper`.
 - "Here is the PDF for reference 4." Claude runs `add-source`, then offers `recheck`.
+- "Add the sources in `~/Papers`." or "Add the attached files as sources." Claude runs `add-source`. You do not name or number the files: each one is read and matched to its reference.
+- "Open the report so I can add sources." Claude runs `pl.py serve` and gives you an address on your own computer. On the report's Sources page, **Add sources** then opens your file chooser; you can also drop files or a whole folder on the page. Each file is matched to its reference straight away, and **Finish and recheck** hands the list back to Claude. This works where Claude's commands run on your own computer.
 - "Update the report." Claude runs `recheck`.
 - "Run it on the new draft." Claude starts a new workspace and runs `pl.py carry-over` from the old one. Unchanged claims keep their sources and verdicts, so only new or edited text is checked again.
 - "Get the missing sources through my browser." Claude runs `fetch-sources`.
-- "Which papers do I need to download?" Claude runs `pl.py request-sources`, which writes `source_request.md` with links for each missing reference and where to save it (set once with `pl.py config set-folder ~/Downloads/MyPaper`; add `pl.py config set-proxy https://doi-org.<library>.idm.oclc.org` for library links). "I saved them" then runs `pl.py import-sources FOLDER`, which matches files to references by file name, or by title and first author in the text, and skips anything already imported.
+- "Which papers do I need to download?" Claude runs `pl.py request-sources`, which writes `source_request.md` with links for each missing reference and where to save it (set once with `pl.py config set-folder ~/Downloads/MyPaper`; add `pl.py config set-proxy https://doi-org.<library>.idm.oclc.org` for library links). "I saved them" then runs `pl.py import-sources FOLDER`, which reads each file, identifies its reference from the DOI or arXiv number on its first pages or from the title and first author, and skips anything already imported. File names do not matter.
 - "Suggest fixes and give me a Word version with tracked changes." Claude runs `suggest-edits`.
 
 Results live in a folder next to the paper called `<paper>-check/`:
@@ -97,14 +99,14 @@ Results live in a folder next to the paper called `<paper>-check/`:
 paper.json  refs.json  claims.json  notes.json  manifest.json  verdicts.json  suggestions.json
 manuscript.docx                      private copy of a Word manuscript (used for the export)
 <paper>_athetize_suggestions.docx    tracked changes plus an explanatory comment on each
-sources/        your drop zone: name files <refid>.pdf (or .txt .md .html .docx .xml)
+sources/        the sources you supplied, filed by reference
 sources/_auto/  downloaded full text and abstracts
-report.html     open in any browser; keys j and k jump between flagged claims
+report.html     open in any browser; keys j and k jump between flagged claims; Sources is its own page
 ```
 
 "Open local copy" links, and "Open at p. N" links on each evidence excerpt (which jump to that page of the PDF), appear only when `report.html` is opened from the check folder on your own computer (they point into `sources/`). Browsers do not let a web page open files on your computer. A hosted copy of the report never includes the source PDFs; its citation links go to the publisher or DOI instead.
 
-You can drop a file into `sources/` yourself at any time. A source you provide always wins over a downloaded one.
+A source you provide always wins over a downloaded one.
 
 ## How the checks stay honest
 
@@ -128,6 +130,7 @@ What the plugin runs, sends, fetches and writes:
 - **Checked before use.** A downloaded PDF or page is kept only if its text matches the reference title, and links from a doubtful metadata match are not used.
 - **Network hardening.** The scripts fetch `http` and `https` URLs only, verify TLS certificates, cap response sizes, and parse XML from Word and XML files with `defusedxml`.
 - **Report.** The report builds all text with `textContent`, loads nothing from the network and only follows `http` and `https` links. Text from papers is treated as data, never as instructions.
+- **Local helper for adding sources.** `pl.py serve` shows the report from `127.0.0.1` so the page can hand over the files you choose. It listens on your own computer only, puts a random token in its address, refuses requests whose Host or Origin is not the helper itself, accepts only the file types Athetize reads (up to 300 MB each) and stops when you finish or after two hours without activity. The files you choose are copied into the check folder and go nowhere else. The report page talks to this helper and to nothing else.
 - **Links for you to click.** The report and the download list link each reference to its DOI (`doi.org`), your library proxy if you set one, and, for references without a link, Google Scholar (`scholar.google.com`) and WorldCat (`search.worldcat.org`) searches. They are plain links: nothing is sent until you click one.
 - No keys or credentials are bundled, and the plugin asks for none.
 

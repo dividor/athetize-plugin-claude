@@ -7,6 +7,7 @@ import argparse
 import pl_cmd_report
 import pl_cmd_setup
 import pl_cmd_sources
+import pl_serve
 
 
 def _add_setup_commands(sub) -> None:
@@ -118,6 +119,20 @@ def _add_supply_commands(sub) -> None:
     )
     c.add_argument("--since", type=float, help="Only files modified after this Unix time")
     c.set_defaults(fn=pl_cmd_sources.cmd_import_sources)
+
+    c = sub.add_parser(
+        "serve",
+        help="Show the report from this computer so its Add sources button can take files",
+    )
+    c.add_argument("--work", required=True)
+    c.add_argument("--port", type=int, default=0, help="Port on 127.0.0.1 (default: any free)")
+    c.add_argument(
+        "--idle-minutes",
+        type=float,
+        default=120,
+        help="Stop when the page has not asked for anything for this long",
+    )
+    c.set_defaults(fn=pl_serve.cmd_serve)
 
     c = sub.add_parser("passages")
     c.add_argument("--work", required=True)
