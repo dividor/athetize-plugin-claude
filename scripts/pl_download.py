@@ -1,8 +1,8 @@
 """Open-access full text for one reference: gather legal links, fetch them, check the result.
 
 Looks in arXiv, OpenAlex, Unpaywall, Semantic Scholar, ERIC, Europe PMC and any URL printed
-in the reference. An optional headless browser (pl_browser) retries links that plain HTTP
-could not read; it stops at bot checks instead of trying to pass them.
+in the reference, over plain HTTP. Nothing here drives a browser: a page that needs one is
+left for the person, or for Claude's own browser tools through the fetch-sources skill.
 """
 
 from __future__ import annotations
@@ -12,7 +12,6 @@ import urllib.parse
 from dataclasses import dataclass
 from pathlib import Path
 
-import pl_browser
 import pl_http
 import pl_text
 from pl_refmatch import eric_id, normalize_doi, strip_tags, title_in_text
@@ -242,16 +241,16 @@ def _save_pdf(job: _Job, data: bytes, how: str):
 
 
 def _fetch_url(job: _Job, url: str, how: str):
-    """Fetch one link over HTTP. Returns (result or None, whether a browser should retry it)."""
+    """Fetch one link over HTTP. Returns (text, how, file), or None when it gave no full text."""
     try:
         data, _, _ = pl_http.http_get(
             url, job.email, accept="application/pdf,text/html;q=0.9,*/*;q=0.8"
         )
     except pl_http.HttpError as e:
         job.errors.append(f"{how} download: {e}")
-        return None, True
+        return None
     if data[:5] == b"%PDF-":
-        return _save_pdf(job, data, how), False
+        return _save_pdf(job, data, how)
     if how in _HTML_ROUTES and b"<html" in data[:4000].lower():
         text = _accept_html(
             pl_text.html_to_text(data.decode("utf-8", "replace")), job.title, job.errors, how
@@ -259,58 +258,24 @@ def _fetch_url(job: _Job, url: str, how: str):
         if text:
             f = job.dest_dir / f"{job.ref['id']}.html"
             f.write_bytes(data)
-            return (text, f"{how}-html", f), False
+            return text, f"{how}-html", f
     job.errors.append(f"{how}: link did not return a PDF")
-    return None, True
+    return None
 
 
 def _fetch_direct(job: _Job, urls: list[tuple[str, str]]):
-    """Try up to eight distinct links over HTTP. Returns (result or None, links for a browser)."""
+    """Try up to eight distinct links over HTTP. Returns (text, how, file) or None."""
     seen = set()
     tried = 0
-    browser_queue: list[tuple[str, str]] = []
     for url, how in urls:
         if url in seen or tried >= 8:
             continue
         seen.add(url)
         tried += 1
-        got, retry = _fetch_url(job, url, how)
-        if got:
-            return got, browser_queue
-        if retry:
-            browser_queue.append((url, how))
-    return None, browser_queue
-
-
-def _browser_fetch_url(job: _Job, url: str, how: str):
-    """Fetch one link with the browser. Returns (result or None, whether to stop trying)."""
-    res = pl_browser.fetch(url)
-    kind = res.get("kind")
-    if kind == "pdf":
-        return _save_pdf(job, res["data"], f"browser:{how}"), False
-    if kind == "html":
-        text = _accept_html(res.get("text", ""), job.title, job.errors, f"browser:{how}")
-        if text:
-            f = job.dest_dir / f"{job.ref['id']}.html.txt"
-            f.write_text(text, "utf-8")
-            return (text, f"browser:{how}", f), False
-        return None, False
-    job.errors.append(f"browser:{how}: {res.get('reason')}")
-    return None, kind == "blocked"
-
-
-def _fetch_with_browser(job: _Job, browser_queue: list[tuple[str, str]]):
-    """Retry the first three failed links in a headless browser, stopping at a bot check."""
-    if not pl_browser.available():
-        job.errors.append("browser fallback skipped: playwright not installed")
-        return None, None, None
-    for url, how in browser_queue[:3]:
-        got, stop = _browser_fetch_url(job, url, how)
+        got = _fetch_url(job, url, how)
         if got:
             return got
-        if stop:
-            break
-    return None, None, None
+    return None
 
 
 def try_download_fulltext(
@@ -320,7 +285,6 @@ def try_download_fulltext(
     email: str | None,
     errors: list[str],
     trusted: bool = True,
-    browser: bool = False,
 ):
     """Try legal open-access routes. Returns (text, how, original_file) or (None, None, None).
 
@@ -335,9 +299,4 @@ def try_download_fulltext(
     got = _europe_pmc_fulltext(job, cand, doi, trusted)
     if got:
         return got
-    got, browser_queue = _fetch_direct(job, urls)
-    if got:
-        return got
-    if browser and browser_queue:
-        return _fetch_with_browser(job, browser_queue)
-    return None, None, None
+    return _fetch_direct(job, urls) or (None, None, None)

@@ -29,7 +29,8 @@ Only the latest released version receives security fixes.
 | Risk | Protection |
 |---|---|
 | A reference or redirect pointing at a local file or another protocol | `scripts/pl_http.py` is the only network path. It fetches `http` and `https` only and has no file, ftp or data handlers. |
-| Interception of downloads | TLS certificates are verified, including in the optional headless browser. |
+| Interception of downloads | TLS certificates are verified. |
+| Automated browsing | The scripts drive no browser and bundle no browser automation. Pages that need one are opened by Claude's own browser tools in the person's browser, through the `fetch-sources` skill. |
 | Oversized downloads | Responses are capped at 60 MB. |
 | Malicious XML in a Word or XML file (entity expansion, external entities) | Parsed with `defusedxml`; the Word export parses with entity resolution and network access switched off. |
 | Shell injection through file names | External tools (`pdftotext`, `pdftoppm`, `tesseract`) are called with argument lists, never through a shell. |

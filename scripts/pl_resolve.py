@@ -1,11 +1,9 @@
 """Reference resolution and open-access source download for athetize.
 
 Uses Crossref, OpenAlex, Europe PMC, arXiv, ERIC, Semantic Scholar and (with a
-contact email) Unpaywall, plus any URL printed in the reference itself. An optional
-headless browser (pl_browser, Playwright) renders pages that need JavaScript; it
-stops at bot checks instead of trying to pass them. Only legal open-access copies
-are downloaded. Network failures are recorded, never
-retried in loops.
+contact email) Unpaywall, plus any URL printed in the reference itself, over plain
+HTTP. No browser is driven from here. Only legal open-access copies are downloaded.
+Network failures are recorded, never retried in loops.
 
 The work is split across modules: pl_refmatch (matching helpers), pl_metadata
 (Crossref and OpenAlex lookup) and pl_download (open-access download). Their public
@@ -287,7 +285,6 @@ def _download_evidence(
     entry: dict,
     email: str | None,
     errors: list[str],
-    browser: bool,
 ) -> bool:
     """Try to download open-access full text. True when the entry now has full text."""
     rid = ref["id"]
@@ -302,7 +299,7 @@ def _download_evidence(
             "links from the matched record were not used"
         )
     text, how, original = try_download_fulltext(
-        ref, cand, auto_dir, email, errors, trusted=bool(trusted), browser=browser
+        ref, cand, auto_dir, email, errors, trusted=bool(trusted)
     )
     if not text:
         return False
@@ -377,7 +374,6 @@ def resolve_one(
     email: str | None,
     refresh: bool,
     download: bool,
-    browser: bool = False,
 ) -> dict:
     """Resolve one reference: check it exists, then find the best evidence text for it."""
     rid = ref["id"]
@@ -407,7 +403,7 @@ def resolve_one(
     if (
         download
         and entry.get("exists") != "unchecked"
-        and _download_evidence(work, ref, cand, entry, email, errors, browser)
+        and _download_evidence(work, ref, cand, entry, email, errors)
     ):
         return entry
 
@@ -426,7 +422,6 @@ def resolve_all(
     refresh: bool = False,
     download: bool = True,
     workers: int = 4,
-    browser: bool = False,
 ):
     """Resolve every reference in parallel and store the results in the manifest."""
     prior_entries = manifest.get("refs", {})
@@ -435,7 +430,7 @@ def resolve_all(
     def job(ref):
         try:
             return ref["id"], resolve_one(
-                work, ref, prior_entries.get(ref["id"]), email, refresh, download, browser
+                work, ref, prior_entries.get(ref["id"]), email, refresh, download
             )
         except Exception as e:  # never let one reference abort the run
             return ref["id"], {

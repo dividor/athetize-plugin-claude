@@ -1000,9 +1000,9 @@ class GoldenTest(unittest.TestCase):
         with contextlib.redirect_stdout(buf):
             pl.cmd_doctor(argparse.Namespace())
         doctor = json.loads(buf.getvalue())
-        for k in ("python", "pdf_extractor", "headless_browser"):
+        for k in ("python", "pdf_extractor"):
             doctor.pop(k, None)
-        doctor["notes"] = [n for n in doctor["notes"] if "PDF" not in n and "playwright" not in n]
+        doctor["notes"] = [n for n in doctor["notes"] if "PDF" not in n]
         out["doctor"] = doctor
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):

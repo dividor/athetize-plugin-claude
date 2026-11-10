@@ -1,13 +1,11 @@
-"""Tests for the security hardening: safe XML parsing and certificate checks in the browser."""
+"""Tests for the security hardening: safe XML parsing and no browser automation."""
 
 import argparse
 import contextlib
-import importlib.machinery
 import io
 import json
 import sys
 import tempfile
-import types
 import unittest
 import zipfile
 from pathlib import Path
@@ -17,12 +15,13 @@ import defusedxml
 from lxml import etree
 
 import pl
-import pl_browser
+import pl_cli
 import pl_docx_package
 import pl_http
 import pl_text
 import pl_xml
 
+ROOT = Path(__file__).resolve().parent.parent
 INTERNAL_ENTITY = b'<?xml version="1.0"?><!DOCTYPE d [<!ENTITY e "expanded">]><d>x &e; y</d>'
 W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
@@ -102,67 +101,32 @@ class DoctorTests(unittest.TestCase):
         self.assertTrue(any("pip install defusedxml" in note for note in info["notes"]))
 
 
-class _FakePage:
-    url = "https://example.org/article"
+class NoBrowserAutomationTests(unittest.TestCase):
+    """The scripts never drive a browser; pages that need one go to Claude's own tools."""
 
-    def goto(self, url, timeout, wait_until):
-        return types.SimpleNamespace(headers={"content-type": "text/html"}, status=200)
+    DRIVERS = ("playwright", "selenium", "pyppeteer", "puppeteer", "webdriver")
 
-    def wait_for_timeout(self, ms):
-        return None
+    def test_no_script_or_requirement_names_a_browser_driver(self):
+        files = sorted((ROOT / "scripts").glob("*.py")) + [ROOT / "scripts" / "requirements.txt"]
+        self.assertGreater(len(files), 20)
+        for path in files:
+            text = path.read_text("utf-8").casefold()
+            for driver in self.DRIVERS:
+                self.assertNotIn(driver, text, f"{path.name} mentions {driver}")
 
-    def inner_text(self, selector):
-        return "Full article text. " * 400
+    def test_resolve_has_no_browser_option(self):
+        parser = pl_cli.build_parser("test")
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            parser.parse_args(["resolve", "--work", "x", "--browser"])
+        self.assertFalse(hasattr(parser.parse_args(["resolve", "--work", "x"]), "browser"))
 
-    def evaluate(self, script):
-        return None
-
-
-class _FakeChromium:
-    """Stands in for Playwright's Chromium and records how it was started."""
-
-    def __init__(self, calls):
-        self.calls = calls
-
-    def launch(self, **kwargs):
-        self.calls["launch"] = kwargs
-        return self
-
-    def new_context(self, **kwargs):
-        self.calls["new_context"] = kwargs
-        return types.SimpleNamespace(new_page=_FakePage)
-
-    def close(self):
-        self.calls["closed"] = True
-
-
-class BrowserTlsTests(unittest.TestCase):
-    def _fake_playwright(self, calls) -> dict:
-        package = types.ModuleType("playwright")
-        package.__spec__ = importlib.machinery.ModuleSpec("playwright", None)
-        sync_api = types.ModuleType("playwright.sync_api")
-
-        @contextlib.contextmanager
-        def sync_playwright():
-            yield types.SimpleNamespace(chromium=_FakeChromium(calls))
-
-        setattr(sync_api, "sync_playwright", sync_playwright)
-        return {"playwright": package, "playwright.sync_api": sync_api}
-
-    def test_browser_is_started_with_certificate_checks_on(self):
-        calls: dict = {}
-        with mock.patch.dict(sys.modules, self._fake_playwright(calls)):
-            self.assertTrue(pl_browser.available())
-            result = pl_browser.fetch("https://example.org/article")
-        self.assertEqual(result["kind"], "html")
-        self.assertEqual(calls["launch"], {})
-        self.assertEqual(calls["new_context"], {"accept_downloads": True})
-        self.assertTrue(calls["closed"])
-
-    def test_fetch_reports_a_missing_browser(self):
-        with mock.patch.dict(sys.modules, {"playwright": None}):
-            self.assertFalse(pl_browser.available())
-            self.assertEqual(pl_browser.fetch("https://example.org")["kind"], "error")
+    def test_doctor_does_not_report_or_suggest_a_headless_browser(self):
+        with mock.patch.object(pl_http, "http_get", return_value=(b"{}", "application/json", "")):
+            with contextlib.redirect_stdout(io.StringIO()) as buf:
+                pl.cmd_doctor(argparse.Namespace())
+        report = json.loads(buf.getvalue())
+        self.assertNotIn("headless_browser", report)
+        self.assertNotIn("browser", " ".join(report["notes"]).casefold())
 
 
 if __name__ == "__main__":

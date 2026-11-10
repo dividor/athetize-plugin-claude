@@ -48,7 +48,7 @@ Then run `PL coverage --work W`. Every citation marker in the body should sit in
 
 ### 6. Resolve and download sources
 
-Run `PL resolve --work W` (add `--browser` when `PL doctor` shows a `headless_browser`). It looks each reference up, flags retractions and metadata mismatches, and downloads open-access full text where it can: Unpaywall, OpenAlex, Europe PMC, arXiv, ERIC, Semantic Scholar, and any URL printed in the reference. Links from a doubtful metadata match are not used, so a wrong paper is not downloaded. Then read the `needs_source` list from the output.
+Run `PL resolve --work W`. It looks each reference up, flags retractions and metadata mismatches, and downloads open-access full text where it can: Unpaywall, OpenAlex, Europe PMC, arXiv, ERIC, Semantic Scholar, and any URL printed in the reference. Links from a doubtful metadata match are not used, so a wrong paper is not downloaded. Then read the `needs_source` list from the output.
 
 If any references need a source, do these in order:
 

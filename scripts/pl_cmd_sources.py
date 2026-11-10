@@ -5,7 +5,6 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
-import pl_browser
 import pl_core
 import pl_http
 import pl_resolve
@@ -41,11 +40,6 @@ def cmd_resolve(args):
         + ("" if email else " (no contact email: Unpaywall will be skipped)")
         + "..."
     )
-    if args.browser and not pl_browser.available():
-        print(
-            "Note: --browser needs Playwright (pip install playwright && python -m playwright "
-            "install chromium); continuing without it."
-        )
     if args.only:
         keep = manifest.get("refs", {})
     else:
@@ -57,7 +51,6 @@ def cmd_resolve(args):
         email,
         refresh=args.refresh,
         download=not args.no_download,
-        browser=args.browser and pl_browser.available(),
     )
     if keep is not None:
         keep.update(manifest["refs"])

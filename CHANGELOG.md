@@ -31,6 +31,7 @@ All notable changes to Athetize will be documented in this file.
 - On the Sources page a "Closest database record" note no longer squeezes the citation into a narrow column
 
 ### Removed
+- The optional headless browser (Playwright) and `pl.py resolve --browser`. The scripts no longer drive a browser at all. Pages that plain downloads cannot read go to the `fetch-sources` skill, which uses Claude's own browser tools in the person's browser
 - `provide_as` in the manifest, `pl.py status` and the report data, and `save_as` in the download list
 
 ## [0.6.0] - 2026-11-09

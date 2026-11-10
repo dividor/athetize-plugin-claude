@@ -8,7 +8,6 @@ import shutil
 import sys
 from pathlib import Path
 
-import pl_browser
 import pl_core
 import pl_http
 import pl_ingest
@@ -78,11 +77,6 @@ def _doctor_notes(info: dict) -> list[str]:
             "Some services are unreachable from this environment. Sources from those hosts "
             "will be marked missing; ask the user to supply them."
         )
-    if not info["headless_browser"]:
-        notes.append(
-            "Optional: `pip install playwright && python -m playwright install chromium` "
-            "enables `resolve --browser` for open-access pages that need JavaScript."
-        )
     return notes
 
 
@@ -94,7 +88,6 @@ def cmd_doctor(args):
         "xml_parser": "defusedxml" if importlib.util.find_spec("defusedxml") else None,
         "contact_email": cfg.get("email") or None,
         "network": {},
-        "headless_browser": "playwright" if pl_browser.available() else None,
     }
     info["pdf_extractor"] = _pdf_extractor()
     info["network"] = _check_services(cfg.get("email"))

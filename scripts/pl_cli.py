@@ -55,11 +55,6 @@ def _add_lookup_commands(sub) -> None:
     c.add_argument("--email")
     c.add_argument("--refresh", action="store_true")
     c.add_argument("--no-download", action="store_true")
-    c.add_argument(
-        "--browser",
-        action="store_true",
-        help="headless-browser fallback for open-access pages (needs Playwright)",
-    )
     c.add_argument("--only", help="comma-separated reference ids to resolve")
     c.set_defaults(fn=pl_cmd_sources.cmd_resolve)
 

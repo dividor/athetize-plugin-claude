@@ -10,7 +10,7 @@ Python 3.9+, standard library only (PyMuPDF optional for PDF text).
   pl.py paragraphs --work DIR [--from p1 --to p40] [--kind body|heading|reference]
   pl.py validate --work DIR [--fix]
   pl.py merge-claims --work DIR [--append 'add-*.json']
-  pl.py resolve --work DIR [--email E] [--refresh] [--no-download] [--browser]
+  pl.py resolve --work DIR [--email E] [--refresh] [--no-download]
   pl.py status --work DIR
   pl.py browser-queue --work DIR [--min-claims 1]
   pl.py add-source --work DIR REF FILE_OR_URL

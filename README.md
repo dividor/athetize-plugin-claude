@@ -51,7 +51,6 @@ Python 3.9 or newer. The helper scripts use the standard library plus a few smal
 | Check a PDF paper, or use PDF sources | `pymupdf`, or poppler's `pdftotext` | `pip install pymupdf` |
 | Export suggested edits as Word tracked changes | `lxml` | `pip install lxml` |
 | Read scanned PDFs | the `tesseract` and `pdftoppm` command-line tools | your package manager |
-| Render open-access pages that need JavaScript (optional) | `playwright` and Chromium | `pip install playwright`, then `python -m playwright install chromium` |
 
 Everything at once: `pip install -r scripts/requirements.txt` from the plugin folder. On systems that protect the system Python, use a virtual environment or add `--break-system-packages`. Claude runs `pl.py doctor` at the start of a check and tells you what is missing.
 
@@ -77,7 +76,7 @@ The plugin has no hooks and no MCP servers. Nothing runs until you ask Claude to
 
 1. Install the plugin and the Python packages you need (see Requirements).
 2. Optional but recommended: a contact email for open-access lookups through Unpaywall. Tell Claude when asked, and it runs `pl.py config set-email you@example.org` for you. The address is stored in `~/.athetize/config.json` (readable only by you) and sent only to the lookup services as their polite-use identifier. Set `ATHETIZE_EMAIL` instead to avoid storing it. `ATHETIZE_HOME` moves the config folder.
-3. Optional: a headless browser for open-access pages that need JavaScript (see Requirements), then `pl.py resolve --work DIR --browser`. It stops at bot checks rather than trying to pass them; those references go to `fetch-sources`, which uses your own browser.
+3. Nothing to set up for pages that need a real browser. The scripts do not drive one. Those references go to `fetch-sources`, where Claude uses its own browser tools (Claude in Chrome, or the desktop app's browser) in your browser, with your sign-ins.
 
 ## Use
 
@@ -123,7 +122,7 @@ A source you provide always wins over a downloaded one.
 
 What the plugin runs, sends, fetches and writes:
 
-- **Runs on your machine.** Python scripts in `scripts/`. If installed, they call the `pdftotext`, `pdftoppm` and `tesseract` command-line tools to read PDFs, and a headless Chromium through Playwright when you pass `--browser`. The subagents are instructed to run only the `pl.py` helper.
+- **Runs on your machine.** Python scripts in `scripts/`. If installed, they call the `pdftotext`, `pdftoppm` and `tesseract` command-line tools to read PDFs. They do not drive a browser and bundle no browser automation. The subagents are instructed to run only the `pl.py` helper.
 - **Stays on your machine.** The manuscript and your sources. Results are written to the `<paper>-check/` folder next to the paper; settings go to `~/.athetize/config.json`.
 - **Sent out.** Only reference metadata (titles, authors, DOIs) and, if you set one, your contact email as the polite-use identifier. It goes to Crossref (`api.crossref.org`), OpenAlex (`api.openalex.org`), Europe PMC (`www.ebi.ac.uk`), arXiv (`arxiv.org`, `export.arxiv.org`), ERIC (`api.ies.ed.gov`, `files.eric.ed.gov`), Semantic Scholar (`api.semanticscholar.org`) and Unpaywall (`api.unpaywall.org`). `pl.py doctor` sends one test query to each service to see whether it is reachable.
 - **Fetched.** Full text only from open-access routes (arXiv, Europe PMC, ERIC full text, publisher-declared open links via OpenAlex, Unpaywall and Semantic Scholar, URLs printed in the reference), from files and URLs you provide, or through your own browser session with `fetch-sources`. Nothing goes through paywall workarounds, mirrors or bot-check evasion, and Claude never enters credentials, solves captchas or buys access for you.
