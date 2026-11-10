@@ -2,6 +2,16 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.3] - 2026-11-10
+
+### Changed
+- On a Mac, Add sources opens one system chooser that takes files and folders together, in place of the menu with two choices. A web page can only offer one kind of dialog at a time, so elsewhere the menu stays. Files are read where they are and are never moved or renamed
+- The three buttons at the top are right-aligned and the same width
+
+### Fixed
+- A scanned paper whose title is not word for word the reference's, such as "LYMAN-a" for "Lyman-alpha", is now identified when the first author is there too. On 31 real papers the right reference scored 0.98 or more on this comparison and a wrong one 0.86 or less
+- A file with almost no text, such as a saved sign-in page, is reported as that and not as "no match"
+
 ## [0.7.2] - 2026-11-10
 
 ### Changed

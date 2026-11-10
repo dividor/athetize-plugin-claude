@@ -273,6 +273,9 @@ def _place_file(
     if rid is None:
         if how == "ambiguous":
             found["ambiguous"].append({"file": f.name, "could_be": amb})
+        elif len((text or "").strip()) < 500:
+            why = "has almost no text (a scan, or a saved sign-in page?)"
+            found["unmatched"].append({"file": f.name, "why": why})
         else:
             found["unmatched"].append({"file": f.name, "why": how})
     elif rid in taken:

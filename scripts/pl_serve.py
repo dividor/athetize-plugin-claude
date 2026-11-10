@@ -15,6 +15,9 @@ import hmac
 import json
 import re
 import secrets
+import shutil
+import subprocess
+import sys
 import time
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -41,6 +44,48 @@ _CHUNK = 64 * 1024
 # Largest list of file hashes the page may send, in bytes.
 _MAX_LIST = 1024 * 1024
 _RESULT_LISTS = ("matched", "ambiguous", "unmatched", "duplicates", "already_imported")
+
+
+# The Mac's own open panel, asked to accept files and folders together. A web page can only
+# offer a files dialog or a folder dialog, never one for both; the helper runs on the
+# person's own computer, so it can show the system's.
+_MAC_CHOOSER = """
+ObjC.import('AppKit');
+var app = $.NSApplication.sharedApplication;
+app.setActivationPolicy($.NSApplicationActivationPolicyAccessory);
+var panel = $.NSOpenPanel.openPanel;
+panel.canChooseFiles = true;
+panel.canChooseDirectories = true;
+panel.allowsMultipleSelection = true;
+panel.message = $('Choose the papers, or a folder that holds them');
+panel.prompt = $('Add');
+app.activateIgnoringOtherApps(true);
+var chosen = [];
+if (panel.runModal == $.NSModalResponseOK) {
+  var urls = panel.URLs;
+  for (var i = 0; i < urls.count; i++) chosen.push(ObjC.unwrap(urls.objectAtIndex(i).path));
+}
+JSON.stringify(chosen);
+"""
+# How long the system chooser may stay open before the request is given up, in seconds.
+_CHOOSER_WAIT = 900
+
+
+def has_system_chooser() -> bool:
+    """True where the helper can open one system chooser for files and folders (a Mac)."""
+    return sys.platform == "darwin" and shutil.which("osascript") is not None
+
+
+def choose_paths() -> list[str]:
+    """Open the system chooser and return the files and folders picked; [] when cancelled."""
+    res = subprocess.run(
+        ["osascript", "-l", "JavaScript", "-e", _MAC_CHOOSER],
+        capture_output=True,
+        timeout=_CHOOSER_WAIT,
+    )
+    if res.returncode != 0:
+        raise Refused(500, "The system chooser could not be opened.")
+    return [str(p) for p in json.loads(res.stdout.decode("utf-8") or "[]")]
 
 
 class Refused(Exception):
@@ -77,6 +122,7 @@ class AddSources:
         self.token = secrets.token_urlsafe(16)
         self.added: list[dict] = []
         self.left: dict[str, str] = {}
+        self.chosen: list[str] = []
         self.finished = False
         self.last_seen = time.monotonic()
 
@@ -144,10 +190,7 @@ class AddSources:
         if not folder.is_dir():
             return {key: [] for key in _RESULT_LISTS}
         result = import_paths(self.work, [folder])
-        refs = {r["id"]: r for r in self.work.refs()}
-        for m in result["matched"]:
-            m["title"] = _ref_title(refs[m["ref"]]) or pl_core._clean_raw(refs[m["ref"]]["raw"])
-            self.added.append({k: m[k] for k in ("file", "ref", "status")})
+        self._note_added(result)
         filed = [m["file"] for m in result["matched"]] + result["already_imported"]
         for name in filed + [d["file"] for d in result["duplicates"]]:
             (folder / name).unlink()
@@ -157,6 +200,38 @@ class AddSources:
             self._set_aside(item, item["why"])
         result.pop("dry_run")
         return result
+
+    def choose(self) -> dict:
+        """Let the person pick files or folders in the system chooser, then add what matches.
+
+        The files are read where they are and copied into the check; the person's own
+        files and folders are never moved, renamed or deleted.
+        """
+        if not has_system_chooser():
+            raise Refused(404, "This computer has no single chooser for files and folders.")
+        picked = [Path(p) for p in choose_paths()]
+        if not picked:
+            return {"cancelled": True}
+        readable = [
+            p for p in picked if p.is_dir() or p.suffix.lower() in pl_resolve.USER_FILE_EXTS
+        ]
+        result = import_paths(self.work, readable, recursive=True)
+        self._note_added(result)
+        for item in result["ambiguous"]:
+            self.left[item["file"]] = "could be " + " or ".join(item["could_be"])
+        for item in result["unmatched"]:
+            self.left[item["file"]] = item["why"]
+        self.chosen += [str(p) for p in picked]
+        result.pop("dry_run")
+        result["other_files"] = len(picked) - len(readable)
+        return result
+
+    def _note_added(self, result: dict) -> None:
+        """Give each added file its reference's title and remember it for the summary."""
+        refs = {r["id"]: r for r in self.work.refs()}
+        for m in result["matched"]:
+            m["title"] = _ref_title(refs[m["ref"]]) or pl_core._clean_raw(refs[m["ref"]]["raw"])
+            self.added.append({k: m[k] for k in ("file", "ref", "status")})
 
     def known(self, body: bytes) -> dict:
         """Which of the content hashes the page asks about are already among the sources."""
@@ -184,7 +259,8 @@ class AddSources:
             "stopped": reason,
             "added": self.added,
             "not_recognised": [{"file": f, "why": why} for f, why in sorted(self.left.items())],
-            "not_recognised_folder": str(waiting) if self.left else None,
+            "not_recognised_folder": str(waiting) if waiting.is_dir() else None,
+            "chosen_in_system_chooser": self.chosen,
             "next": "Run the recheck step." if self.added else "Nothing was added.",
         }
 
@@ -228,7 +304,9 @@ class _Handler(BaseHTTPRequestHandler):
             "GET",
             {
                 "report.html": lambda app, q: self._answer(200, _HTML, app.report()),
-                "api/ping": lambda app, q: self._json(200, {"ok": True}),
+                "api/ping": lambda app, q: self._json(
+                    200, {"ok": True, "chooser": has_system_chooser()}
+                ),
                 "word.docx": self._word,
             },
         )
@@ -239,6 +317,7 @@ class _Handler(BaseHTTPRequestHandler):
             {
                 "api/upload": self._upload,
                 "api/known": self._known,
+                "api/choose": lambda app, q: self._json(200, app.choose()),
                 "api/import": lambda app, q: self._json(200, app.take_in()),
                 "api/done": self._done,
             },

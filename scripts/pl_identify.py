@@ -21,6 +21,12 @@ _FRONT = 6000
 _TITLE_RUN = 0.85
 # Titles shorter than this (after normalising) are too common to identify a file on their own.
 _MIN_TITLE = 12
+# How alike a stretch of the opening must be to the title when it is not word for word:
+# a scanned paper reads "LYMAN-a" where the reference says "Lyman-alpha". Measured on 31 real
+# papers, the right reference scored 0.98 or more and a wrong one 0.86 or less.
+_TITLE_NEAR = 0.92
+# The slower comparison looks only this far in, where a title page puts its title.
+_NEAR_WITHIN = 2500
 
 
 def _ref_title(ref: dict) -> str:
@@ -55,6 +61,7 @@ class _Front:
         opening = text[:_FRONT]
         self.text = pl_refmatch._fold(opening)
         self._words = pl_text.norm_title(opening)
+        self._word_list = pl_text.norm_title(opening[:_NEAR_WITHIN]).split()
         self._matcher = difflib.SequenceMatcher(None, autojunk=False)
         self._matcher.set_seq2(self._words)
 
@@ -66,6 +73,25 @@ class _Front:
         self._matcher.set_seq1(wanted)
         block = self._matcher.find_longest_match(0, len(wanted), 0, len(self._words))
         return block.size / len(wanted)
+
+    def title_near(self, title: str) -> float:
+        """How alike the title is to the closest stretch of the opening of the same length.
+
+        For titles that are not there word for word: a scan with misread letters, or a
+        symbol spelled out. Slower than ``title_run``, so it is asked only when that fails.
+        """
+        wanted = pl_text.norm_title(title)
+        if len(wanted) < _MIN_TITLE:
+            return 0.0
+        span = len(wanted.split())
+        best = 0.0
+        matcher = difflib.SequenceMatcher(None, autojunk=False)
+        matcher.set_seq2(wanted)
+        for i in range(max(1, len(self._word_list) - span + 1)):
+            matcher.set_seq1(" ".join(self._word_list[i : i + span]))
+            if matcher.real_quick_ratio() > best and matcher.quick_ratio() > best:
+                best = max(best, matcher.ratio())
+        return best
 
     def has_identifier(self, ref: dict) -> bool:
         """True when the reference's DOI or arXiv number is printed in the opening."""
@@ -88,10 +114,14 @@ def _content_score(ref: dict, front: _Front, stem: str, fname: str) -> float | N
     """
     title = _ref_title(ref)
     identified = front.has_identifier(ref)
-    titled = front.title_run(title) >= _TITLE_RUN
     named = bool(title) and pl_text.title_similarity(title, fname) >= 0.6
     sur = pl_refmatch.first_surname(ref)
     has_author = (not sur) or (sur in front.text) or (sur in stem)
+    titled = front.title_run(title) >= _TITLE_RUN
+    if not titled and has_author and not identified:
+        # the slower look, only when most of the title's words are in the opening at all
+        if pl_refmatch.title_in_text(title, front.text, _FRONT):
+            titled = front.title_near(title) >= _TITLE_NEAR
     if not (identified or ((titled or named) and has_author)):
         return None
     yr = _ref_year(ref)

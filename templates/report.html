@@ -65,7 +65,8 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 .brand-tag{font-size:13px;color:var(--muted);padding-left:12px;margin-left:2px;border-left:1px solid var(--line)}
 .iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--muted);width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
 .iconbtn:hover{background:var(--hover);color:var(--ink)}
-.topnav{display:flex;align-items:center;gap:8px;margin:0 auto 0 12px}
+.topnav{display:flex;align-items:center;gap:8px;margin:0 0 0 auto}
+.topnav .textbtn{width:136px;justify-content:center}
 .textbtn.tab[aria-current="page"]{background:var(--primary-dark);border-color:var(--primary-dark);color:var(--on-accent)}
 .textbtn.tab[aria-current="page"] .n{color:inherit;opacity:.85}
 .textbtn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13.5px/1 var(--font-heading);cursor:pointer}
@@ -252,8 +253,8 @@ a.textbtn{text-decoration:none}
   .top .in{flex-wrap:wrap;gap:8px 12px;padding-top:10px;padding-bottom:10px}
   .brand{margin-right:auto}
   .topnav{order:3;width:100%;margin:0}
-  #wordReport .lbl{display:none}
-  #wordReport{padding:0 10px}
+  .topnav .textbtn{flex:1;width:auto;min-width:0;padding:0 8px}
+  #wordReport svg{display:none}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.bar button{transition:none}}
 @media print{.tabs,.nav,.rail,.card,.iconbtn,.hint,.topnav,.srcbar,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
@@ -310,7 +311,7 @@ a.textbtn{text-decoration:none}
     <input type="file" id="srcPicker" multiple hidden accept=".pdf,.txt,.md,.html,.htm,.docx,.xml">
     <input type="file" id="dirPicker" webkitdirectory hidden>
   </div>
-  <p class="drophint" id="dropHint" hidden>Add sources lets you choose files or a whole folder, or drop them on this page. Each file is read and matched to its reference, and duplicates are skipped. File names do not matter.</p>
+  <p class="drophint" id="dropHint" hidden>Add sources lets you choose files or a whole folder. You can also drop them on this page. Each file is read and matched to its reference, and duplicates are skipped. File names do not matter.</p>
   <section class="addsrc" id="addSrc" aria-live="polite" hidden></section>
   <div class="srcfilter"><div class="chips" id="srcFilter" role="group" aria-label="Filter sources"></div></div>
   <div id="srcList"></div>
@@ -782,7 +783,7 @@ if(wordName&&location.protocol==='file:'&&/^[^\/\\]+\.docx$/.test(wordName))offe
    The page can take files only when the plugin's helper on this computer is showing it
    (pl.py serve). Opened as a plain file, the button says how to get that. */
 var paperName=DATA.meta.source_file||DATA.meta.title||'this paper';
-var addBtn=$('#addSources'),picker=$('#srcPicker'),addBox=$('#addSrc'),helper=false,adding=false;
+var addBtn=$('#addSources'),picker=$('#srcPicker'),addBox=$('#addSrc'),helper=false,adding=false,oneChooser=false;
 var READS=/\.(pdf|txt|md|html?|docx|xml)$/i, MAX_MB=300;
 function api(route,opts){
   return fetch('api/'+route,opts).then(function(r){
@@ -901,8 +902,22 @@ function entryFiles(entry){
 }
 var addMenu=$('#addMenu'),dirPicker=$('#dirPicker');
 function showAddMenu(open){addMenu.hidden=!open;addBtn.setAttribute('aria-expanded',open?'true':'false');if(open)$('#pickFiles').focus();}
+/* On a Mac the helper opens the system's own chooser, which takes files and folders
+   together. Elsewhere the browser's two dialogs are offered, since a page cannot do both. */
+function chooseOnThisComputer(){
+  if(adding)return;
+  adding=true;addBtn.disabled=true;
+  addNote('Adding sources',['Choose the papers, or a folder that holds them, in the window that has opened. Each file is read and matched to its reference.']);
+  api('choose',{method:'POST'}).then(function(res){
+    if(res.cancelled){addBox.hidden=true;return;}
+    res.skipped={other:res.other_files||0,same:[],known:[]};
+    markAdded(res);showAdded(res);
+  },function(e){addNote('Could not add the files',[e.message]);})
+    .then(function(){adding=false;addBtn.disabled=false;});
+}
 addBtn.addEventListener('click',function(){
-  if(helper)showAddMenu(addMenu.hidden);
+  if(helper&&oneChooser)chooseOnThisComputer();
+  else if(helper)showAddMenu(addMenu.hidden);
   else if(addBox.hidden)showHowToAdd();
   else addBox.hidden=true;
 });
@@ -928,7 +943,7 @@ $('#sourcesView').addEventListener('drop',function(e){
 });
 if(location.protocol==='http:'&&/^(127\.0\.0\.1|localhost)$/.test(location.hostname)){
   addBtn.disabled=true;
-  api('ping').then(function(j){helper=j.ok===true;},function(){helper=false;})
+  api('ping').then(function(j){helper=j.ok===true;oneChooser=j.chooser===true;},function(){helper=false;})
     .then(function(){addBtn.disabled=false;$('#dropHint').hidden=!helper;if(helper&&wordName)offerWord('word.docx');});
 }
 

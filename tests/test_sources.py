@@ -235,6 +235,31 @@ class IdentifyFileTests(unittest.TestCase):
         text = self.erwin.replace("Erwin", "Someone")
         self.assertEqual(self.match("download.pdf", text)[0], None)
 
+    def test_a_scanned_title_that_is_nearly_word_for_word_is_accepted(self):
+        refs = {
+            "38": {
+                "id": "38",
+                "title": (
+                    "Solar Lyman-alpha latitude variation at solar maximum from "
+                    "interplanetary Lyman-alpha observations"
+                ),
+                "authors": ["Pryor, W. R."],
+                "year": 1992,
+            },
+            "4": {"id": "4", "title": "The Archean atmosphere", "authors": ["Catling, D."]},
+        }
+        scan = (
+            "The Astrophysical Journal, 394:363-377, 1992 July 20\n"
+            "SOLAR LYMAN-a LATITUDE VARIATION AT SOLAR MAXIMUM FROM\n"
+            "INTERPLANETARY LYMAN-a OBSERVATIONS\nW. R. Pryor, J. M. Ajello, C. A. Barth\n"
+        ) + "Interplanetary observations were made with two spectrometers. " * 30
+        self.assertEqual(
+            pl._match_file_to_ref(Path("1992ApJ.pdf"), scan, refs), ("38", "content", [])
+        )
+        # the same title without the author is not enough
+        nameless = scan.replace("Pryor", "Someone")
+        self.assertIsNone(pl._match_file_to_ref(Path("1992ApJ.pdf"), nameless, refs)[0])
+
     def test_confirmed_doi_is_used_when_the_paper_gave_none(self):
         entry = {"exists": "verified", "doi": "10.1016/j.icarus.2007.08.014"}
         self.assertEqual(pl_identify.with_known_doi(self.refs["9"], entry)["doi"], entry["doi"])
@@ -297,6 +322,19 @@ class DuplicateSourcesTests(unittest.TestCase):
             ],
         )
         self.assertEqual((res["unmatched"], res["ambiguous"]), ([], []))
+
+    def test_a_file_with_almost_no_text_says_so(self):
+        self.put("saved page.txt", "Enable JavaScript and cookies to continue")
+        res = pl.import_paths(self.work, [self.papers], dry_run=True)
+        self.assertEqual(
+            res["unmatched"],
+            [
+                {
+                    "file": "saved page.txt",
+                    "why": "has almost no text (a scan, or a saved sign-in page?)",
+                }
+            ],
+        )
 
     def test_a_file_may_replace_full_text_when_every_reference_is_open(self):
         self.put("d.txt", self.ALVAREZ + "Sleep duration fell across cohorts. " * 40)

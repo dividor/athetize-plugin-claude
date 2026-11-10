@@ -14,6 +14,7 @@ import tempfile
 import threading
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import pl_http
 import pl_ingest
@@ -99,7 +100,7 @@ class HelperTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertIn(b'id="sourcesView"', body)
         self.assertTrue(self.app.url.startswith(f"http://127.0.0.1:{self.app.port}/"))
-        self.assertEqual(self.ask("GET", "api/ping"), (200, b'{"ok": true}'))
+        self.assertTrue(json.loads(self.ask("GET", "api/ping")[1])["ok"])
 
     def test_wrong_token_and_unknown_pages_are_not_found(self):
         self.assertEqual(self.ask("GET", "report.html", token="guess")[0], 404)
@@ -149,7 +150,7 @@ class HelperTests(unittest.TestCase):
             ("download (4).txt", "3", "content", "user_provided"),
         )
         self.assertEqual(got["title"], "Sleep spindles and overnight retention across the lifespan")
-        self.assertEqual(result["unmatched"], [{"file": "notes.txt", "why": "no match"}])
+        self.assertEqual([u["file"] for u in result["unmatched"]], ["notes.txt"])
         self.assertEqual(self.work.manifest()["refs"]["3"]["status"], "user_provided")
         self.assertEqual(self.work.p("sources", "3.txt").read_text("utf-8"), BRANDT)
         # the matched copy is filed; the unrecognised one is set aside until the person says
@@ -172,7 +173,7 @@ class HelperTests(unittest.TestCase):
             self.summary["added"],
             [{"file": "download (4).txt", "ref": "3", "status": "user_provided"}],
         )
-        self.assertEqual(self.summary["not_recognised"], [{"file": "notes.txt", "why": "no match"}])
+        self.assertEqual([n["file"] for n in self.summary["not_recognised"]], ["notes.txt"])
         self.assertEqual(self.summary["not_recognised_folder"], str(aside))
         self.assertEqual(self.summary["next"], "Run the recheck step.")
 
@@ -207,6 +208,47 @@ class HelperTests(unittest.TestCase):
             b'"word_export": "paper_athetize_suggestions.docx"',
             self.ask("GET", "report.html")[1],
         )
+
+    def _pick(self, paths):
+        """Stand in for the system chooser: the person picks these files and folders."""
+        seen = mock.patch.object(pl_serve, "has_system_chooser", return_value=True)
+        picked = mock.patch.object(pl_serve, "choose_paths", return_value=[str(p) for p in paths])
+        with seen, picked:
+            return self.post_json("api/choose")
+
+    def test_one_chooser_takes_a_folder_and_files_together(self):
+        papers = self.tmp / "My papers"
+        (papers / "older").mkdir(parents=True)
+        (papers / "older" / "S0019103511.txt").write_text(BRANDT, "utf-8")
+        (papers / "holiday.png").write_bytes(b"not a paper")
+        loose = self.tmp / "notes.txt"
+        loose.write_text("milk, eggs, bread", "utf-8")
+        photo = self.tmp / "scan.png"
+        photo.write_bytes(b"not a paper")
+        status, result = self._pick([papers, loose, photo])
+        self.assertEqual(status, 200)
+        got = result["matched"][0]
+        self.assertEqual(
+            (got["file"], got["ref"], got["how"], got["status"]),
+            ("S0019103511.txt", "3", "content", "user_provided"),
+        )
+        self.assertEqual([u["file"] for u in result["unmatched"]], ["notes.txt"])
+        self.assertEqual(result["other_files"], 1)
+        # the person's own files stay exactly where they were
+        self.assertTrue((papers / "older" / "S0019103511.txt").exists())
+        self.assertTrue(loose.exists())
+        self.assertEqual(self.app.chosen, [str(papers), str(loose), str(photo)])
+
+    def test_closing_the_chooser_adds_nothing(self):
+        self.assertEqual(self._pick([]), (200, {"cancelled": True}))
+        self.assertEqual(self.app.added, [])
+
+    def test_page_is_told_whether_one_chooser_is_available(self):
+        for there in (True, False):
+            with mock.patch.object(pl_serve, "has_system_chooser", return_value=there):
+                self.assertEqual(json.loads(self.ask("GET", "api/ping")[1])["chooser"], there)
+        with mock.patch.object(pl_serve, "has_system_chooser", return_value=False):
+            self.assertEqual(self.post_json("api/choose")[0], 404)
 
     def test_importing_with_nothing_waiting_adds_nothing(self):
         status, result = self.post_json("api/import")
