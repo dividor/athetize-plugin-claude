@@ -174,6 +174,8 @@ def cmd_build(args):
             f"Provisional: {_plural(provisional, 'result rests', 'results rest')} on an abstract "
             "only. The full text is what settles them."
         )
+    else:
+        print("Provisional: none. No result rests on an abstract only.")
     for p in data["problems"]:
         print("warning:", p)
 

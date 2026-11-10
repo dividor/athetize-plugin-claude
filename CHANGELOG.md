@@ -2,6 +2,14 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.4] - 2026-11-10
+
+### Fixed
+- The Word copy was invalid when an edit added text inside an insertion that another person had already tracked in the manuscript: the new insertion was nested inside theirs. Their insertion is now cut in two around the new text. On the test paper the Word copy went from failing the docx validator to passing it, with all 24 edits applied
+- After a recheck, a rewording drafted for a claim that is no longer flagged is removed by `suggest-prepare`, from the list and from its part file, and named under `dropped_outdated`
+- `build` always prints the `Provisional:` line, saying "none" when no result rests on an abstract only
+- The recheck skill writes the list of missing sources again, so it does not name references that now have full text
+
 ## [0.7.3] - 2026-11-10
 
 ### Changed

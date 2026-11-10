@@ -276,6 +276,32 @@ def _insertion_el(new_text: str, rpr_src, author: str, date: str, ids: _Ids, etr
     return ins
 
 
+# Tracked insertions. Word does not allow one of these inside another.
+_INSERTIONS = (W + "ins", W + "moveTo")
+
+
+def _lift_out_of_insertions(el, ids: _Ids, etree) -> None:
+    """Move a new insertion out of any insertion it landed in, cutting that one around it.
+
+    A manuscript can already hold another person's tracked insertions. Text they inserted
+    stays theirs: their insertion is cut in two, one part before the new text and one after.
+    """
+    parent = el.getparent()
+    while parent is not None and parent.tag in _INSERTIONS:
+        later = list(parent)[parent.index(el) + 1 :]
+        outer = parent.getparent()
+        at = outer.index(parent)
+        outer.insert(at + 1, el)
+        if later:
+            rest = etree.Element(parent.tag, attrib=dict(parent.attrib), nsmap=parent.nsmap)
+            rest.set(W + "id", ids.next())
+            rest.extend(later)
+            outer.insert(at + 2, rest)
+        if len(parent) == 0:
+            outer.remove(parent)
+        parent = el.getparent()
+
+
 def _place_insertion(p, ins, anchor_after, before, after) -> None:
     """Put ins after the deleted text, else next to its neighbour, else at the paragraph end."""
     if anchor_after is not None:
@@ -309,6 +335,7 @@ def _edit(p, start: int, end: int, new_text: str, author: str, date: str, ids: _
         before, after, rpr_src = _insertion_neighbours(segs, start)
     ins = _insertion_el(new_text, rpr_src, author, date, ids, etree)
     _place_insertion(p, ins, anchor_after, before, after)
+    _lift_out_of_insertions(ins, ids, etree)
     made.append(ins)
     return made
 

@@ -76,11 +76,51 @@ def _write_suggest_batches(work: Work, todo: list[dict], batch_size: int) -> int
     return n
 
 
+def _outdated(sg: dict, verdicts: dict[str, str]) -> bool:
+    """True for a rewording whose claim is no longer flagged, or no longer exists."""
+    claim = sg.get("claim_id")
+    if not claim:
+        return False
+    return verdicts.get(str(claim), "") not in FLAGGED
+
+
+def drop_outdated_suggestions(work: Work, verdicts: dict[str, str]) -> list[dict]:
+    """Remove rewordings for claims that are no longer flagged, and say which went.
+
+    After new sources are added a claim can come back supported; the edit drafted for it no
+    longer applies. They are removed from suggestions.json and from the part files, so a
+    later merge does not bring them back.
+    """
+    kept, dropped = [], []
+    for sg in work.suggestions():
+        if _outdated(sg, verdicts):
+            dropped.append(
+                {
+                    "id": sg.get("id"),
+                    "claim_id": sg["claim_id"],
+                    "now": verdicts.get(sg["claim_id"]),
+                }
+            )
+        else:
+            kept.append(sg)
+    if not dropped:
+        return []
+    jsave(work.p("suggestions.json"), kept)
+    parts = work.p("suggest_parts")
+    for f in sorted(parts.glob("*.json")) if parts.is_dir() else []:
+        entries = jload(f, []) or []
+        still = [sg for sg in entries if not _outdated(sg, verdicts)]
+        if len(still) != len(entries):
+            jsave(f, still)
+    return dropped
+
+
 def suggest_prepare(work: Work, batch_size: int = 8) -> dict:
     """Write suggest_batches/*.json: flagged claims with verdicts and evidence, for suggestion
-    writers."""
+    writers. Rewordings for claims that are no longer flagged are removed first."""
     data = build_data(work, with_suggestions=False)
     paras = {p["id"]: p for p in work.paper()["paragraphs"]}
+    dropped = drop_outdated_suggestions(work, {c["id"]: c["verdict"] for c in data["claims"]})
     existing = {sg.get("claim_id") for sg in work.suggestions() if sg.get("claim_id")}
     todo = []
     for c in data["claims"]:
@@ -88,7 +128,12 @@ def suggest_prepare(work: Work, batch_size: int = 8) -> dict:
             continue
         todo.append(_suggest_task(c, paras))
     n = _write_suggest_batches(work, todo, batch_size)
-    return {"flagged_claims": len(todo), "batches": n, "already_have_suggestions": len(existing)}
+    return {
+        "flagged_claims": len(todo),
+        "batches": n,
+        "already_have_suggestions": len(existing),
+        "dropped_outdated": dropped,
+    }
 
 
 def merge_suggestions(work: Work, replace: bool = False) -> int:

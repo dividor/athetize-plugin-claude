@@ -428,6 +428,54 @@ class DocxNormalisedTextTests(unittest.TestCase):
         self.assertEqual(pl_docx._raw_range(spans, norm, 6, 7, "X"), (7, 8, "fX"))
 
 
+class TrackedChangesInManuscriptTests(unittest.TestCase):
+    """A manuscript that already holds another person's tracked insertion stays valid."""
+
+    W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    # the middle of the sentence was inserted by someone else and is still tracked
+    BODY = (
+        '<w:p><w:r><w:t xml:space="preserve">Profiles </w:t></w:r>'
+        '<w:ins w:id="7" w:author="Koskinen" w:date="2026-01-01T00:00:00Z">'
+        '<w:r><w:t xml:space="preserve">often cannot be fitted by diffusive models</w:t></w:r>'
+        "</w:ins>"
+        '<w:r><w:t xml:space="preserve"> (Lee, 2020).</w:t></w:r></w:p>'
+    )
+
+    def test_new_insertion_is_not_placed_inside_the_other_persons_insertion(self):
+        d = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, d, ignore_errors=True)
+        src, out = Path(d) / "in.docx", Path(d) / "out.docx"
+        _docx_with(src, self.BODY)
+        paper = pl_ingest.ingest(src)
+        original = "Profiles often cannot be fitted by diffusive models (Lee, 2020)."
+        self.assertEqual(paper["paragraphs"][0]["text"], original)
+        sug = {
+            "id": "s1",
+            "para": "p1",
+            "original": "often cannot be fitted by diffusive models",
+            "suggested": "cannot both be fitted by a single diffusive model",
+        }
+        res = pl_docx.apply(src, out, paper, [sug], author="Athetize")
+        self.assertEqual(res, [{"id": "s1", "applied": True}])
+        self.assertEqual(
+            _accepted_text(out),
+            "Profiles cannot both be fitted by a single diffusive model (Lee, 2020).",
+        )
+        from lxml import etree
+
+        root = etree.fromstring(zipfile.ZipFile(out).read("word/document.xml"))
+        ins = "{%s}ins" % self.W_NS
+        nested = [e for e in root.iter(ins) if any(a.tag == ins for a in e.iterancestors())]
+        self.assertEqual(nested, [])
+        authors = [e.get("{%s}author" % self.W_NS) for e in root.iter(ins)]
+        self.assertIn("Athetize", authors)
+        # their text is still theirs, now in more than one piece, each with its own id
+        theirs = [e for e in root.iter(ins) if e.get("{%s}author" % self.W_NS) == "Koskinen"]
+        self.assertGreater(len(theirs), 1)
+        ids = [e.get("{%s}id" % self.W_NS) for e in root.iter(ins)]
+        self.assertEqual(len(ids), len(set(ids)))
+
+
 class WordReportLinkTests(unittest.TestCase):
     """The report offers the Word copy once it has been written beside it."""
 
@@ -754,6 +802,52 @@ class ProvisionalResultTests(unittest.TestCase):
             html = w.p("report.html").read_text("utf-8")
             self.assertIn('id="provLine"', html)
             self.assertIn("this result is provisional until the full text is added", html)
+
+
+class OutdatedSuggestionTests(unittest.TestCase):
+    """A rewording drafted for a claim that is no longer flagged is removed."""
+
+    def test_suggestion_for_a_claim_now_supported_is_dropped_everywhere(self):
+        with tempfile.TemporaryDirectory() as d:
+            w = Work(d)
+            jsave(w.p("paper.json"), pl_ingest.ingest(FIX / "paper.md"))
+            for f in ("refs.json", "claims.json"):
+                shutil.copy(FIX / f, w.p(f))
+            para = w.paper()["paragraphs"][4]
+            keep = {"claim_id": "c2", "para": para["id"], "original": "x", "suggested": "y"}
+            gone = {"claim_id": "c1", "para": para["id"], "original": "a", "suggested": "b"}
+            fix = {"kind": "reference", "para": "p9", "original": "r", "suggested": "s"}
+            w.p("suggest_parts").mkdir()
+            jsave(w.p("suggest_parts", "part-01.json"), [keep, gone])
+            jsave(w.p("suggest_parts", "references.json"), [fix])
+            pl_core.merge_suggestions(w)
+            rows = [("c1", "1", "supported"), ("c2", "2", "overstated")]
+            jsave(
+                w.p("verdicts.json"),
+                {
+                    "items": [
+                        {
+                            "claim_id": c,
+                            "ref_id": r,
+                            "verdict": v,
+                            "analysis": "x",
+                            "confidence": 0.9,
+                            "evidence_level": "full_text",
+                        }
+                        for c, r, v in rows
+                    ]
+                },
+            )
+            out = pl_core.suggest_prepare(w)
+            self.assertEqual(
+                [(x["claim_id"], x["now"]) for x in out["dropped_outdated"]], [("c1", "supported")]
+            )
+            left = [(s.get("claim_id"), s["kind"]) for s in w.suggestions()]
+            self.assertEqual(left, [("c2", "rewrite"), (None, "reference")])
+            # a later merge does not bring it back
+            pl_core.merge_suggestions(w)
+            self.assertEqual(len(w.suggestions()), 2)
+            self.assertEqual(pl_core.suggest_prepare(w)["dropped_outdated"], [])
 
 
 class PipelineTests(unittest.TestCase):
