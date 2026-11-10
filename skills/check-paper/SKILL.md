@@ -52,24 +52,28 @@ Run `PL resolve --work W`. It looks each reference up, flags retractions and met
 
 If any references need a source, do these in order:
 
-1. **Write and send the download list first, every time.** Run `PL request-sources --work W` and send `W/source_request.md` with SendUserFile (without that tool, give its full path). The list is not one of the choices below; the person gets it whatever they answer. Keep what the command prints: the `summary` (`need_source`, `references`, `abstract_only`, `no_text`, `claims_relying`) and `items`, which is ordered most-cited first.
+1. **Write the short list first, every time.** Run `PL request-sources --work W`. It writes `W/source_request.md`: one table row per reference, most-cited first, with a link to each. Send it as a file with SendUserFile (without that tool, give its full path). Do not paste its rows into the chat. Keep what the command prints: the `summary` (`need_source`, `references`, `abstract_only`, `no_text`, `claims_relying`) and `items`, which is ordered most-cited first.
 2. **Write one short message to go with the question** (plain text, before the question tool is called). It holds, in this order:
-   - The situation, filled from `summary` with the numbers copied: "`need_source` of `references` references have no full text: `abstract_only` have only an abstract and `no_text` have nothing. `claims_relying` claims rely on them and will be marked "can't verify", or judged from the abstract alone, never guessed. The download list is attached, most-cited first." (If the file could not be sent, give its path instead of "attached".)
-   - The ones that matter most: the first five entries of `items` (fewer if the list is shorter), each with its `citation` shortened to first author ("et al." when there are more), year and title, without the leading reference number, its own `claims_affected`, and "abstract only" for status `abstract_only` or "no text" for status `missing`. Add that abstract-only ones are the quickest wins: the claim is already partly checked.
-   - Only when no contact email is configured and the `resolve` output shows `unpaywall skipped` under `why`: one line saying that with a contact email, open-access copies can be tried for every reference before they download anything, and that they can reply with an address instead of choosing an answer (the question tool's free-text answer). This repeats the preflight offer on purpose: they can now see what it would save.
-3. **Ask one question** that stands on its own, because the person may see only the question: "`need_source` of `references` references have no full text, and `claims_relying` claims rely on them. How do you want to handle the missing sources?" Use the session's question tool when it has one (AskUserQuestion, header "Sources"); otherwise end the message with the question and the answers. Offer at most three answers, worded like this:
-   - **I'll download them**: "Save the files into the folder named in the list, under any file names, then say done."
+   - The situation, filled from `summary` with the numbers copied: "`need_source` of `references` references have no full text: `abstract_only` have only an abstract and `no_text` have nothing. `claims_relying` claims rely on them and will be marked "can't verify", or judged from the abstract alone, never guessed. The list is attached, most-cited first." (If the file could not be sent, give its path instead of "attached".)
+   - The ones that matter most: the first five entries of `items` (fewer if the list is shorter), each as its `short` citation with its own `claims_affected`, and "abstract only" for status `abstract_only` or "no text" for status `missing`. Add that abstract-only ones are the quickest wins: the claim is already partly checked.
+   - Only when no contact email is configured and the `resolve` output shows `unpaywall skipped` under `why`: one line saying that with a contact email, open-access copies can be tried for every reference before they download anything, and that they can reply with an address instead of choosing an answer.
+3. **Ask one question** that stands on its own, because the person may see only the question: "`need_source` of `references` references have no full text, and `claims_relying` claims rely on them. How do you want to add them?" Use the session's question tool when it has one (AskUserQuestion, header "Sources"); otherwise end the message with the question and the answers. Offer these answers, worded like this, leaving out any that cannot work in this session:
+   - **Choose a folder**: "Point Claude at the folder that holds the papers. Any file names: each file is read and matched to its reference."
+   - **Pick files**: "Select the papers yourself, several at once."
    - **Fetch through my browser**: "Claude opens each one in your browser, using your sign-ins." Offer this only when a browser tool is connected (the `fetch-sources` skill).
-   - **Continue without them**: "Those claims stay marked can't verify."
+   - **Skip**: "Those claims stay marked can't verify."
 
-   Do not list other routes. Handing over files, a folder or a URL at any time (the `add-source` skill) still works, and the report's Sources page shows the person how; mention it only if the person asks.
-4. **Act on the answer, and keep working.** Do not wait for files. Go on to step 7 for the claims that already have source text.
-   - "I'll download them": when they say "done", follow step 3 of the `request-sources` skill (import), then the `recheck` skill.
-   - "Fetch through my browser": run the `fetch-sources` skill, then `recheck`.
-   - "Continue without them": go on; those claims stay "can't verify".
+   The person may answer with a folder path, or attach files, instead of choosing. Treat that as the matching answer. Never tell them to rename, number or sort files, and never give them a file name to save under.
+4. **Act on the answer.**
+   - **Choose a folder.** Get the folder. When the session has a tool that lets the person pick or grant a folder (its name contains `request_directory`, `request_cowork_directory` or `device_request_folder_access`), call it so they choose the folder in their own file chooser. Otherwise ask them to paste the folder's path. Then follow the folder route of the `add-source` skill (`import-sources`, dry run first). Say in a few lines what was matched, what was skipped as a duplicate and what was not recognised.
+   - **Pick files.** When this session's commands run on the person's own computer, start the report helper as in "Adding from the report page" of the `add-source` skill and give its address: on the Sources page, Add sources opens their file chooser for several files or a whole folder. When their browser cannot reach the helper (a cloud or sandboxed session), ask them to attach the files to their next message, then add them with the `add-source` skill.
+   - **Fetch through my browser.** Run the `fetch-sources` skill. When it finishes and references still lack full text, ask this question again without the browser answer, so the person can give a folder, pick files or skip. Do not carry on silently.
+   - **Skip.** Go on; those claims stay "can't verify".
    - They give an email address: run `PL config set-email ADDRESS`, then `PL resolve --work W` and `PL request-sources --work W` again. If references still need a source, send the new list and ask the question again.
+
+   While files are still on their way (the helper is open, or the person is downloading), go on to step 7 for the claims that already have source text. When the files are in, run the `recheck` skill.
 5. **Nobody to ask** (an unattended run, or the person said not to be interrupted): do item 1 only, sending the file anyway so the list is waiting for them, then continue and open the final summary with the missing sources (step 9).
-6. **The question is dismissed or goes unanswered:** do not ask again. Continue as for "Continue without them" and open the final summary with the missing sources (step 9).
+6. **The question is dismissed or goes unanswered:** do not ask again. Continue as for "Skip" and open the final summary with the missing sources (step 9).
 
 ### 7. Prepare and verify
 
@@ -91,7 +95,7 @@ The deliverables are the HTML report and, for a Word manuscript, a Word copy wit
 3. Send both files to the user with SendUserFile, each as an attachment. Do not ask for the report to be shown inline: it needs its own scripts, and an inline preview can come up blank. Also mention the folder path.
    - When references still lack full text, a person is there to act on it, and this session's commands run on their own computer: also start the report helper (`PL serve --work W` as a background command; see "Adding from the report page" in the `add-source` skill) and give its address. On that copy of the report, Add sources on the Sources page opens their file chooser.
 4. Summarise in under 120 words, in this order. Use only numbers printed by the scripts.
-   - If references still lack full text and the person has not already answered the question in step 6, start with that: how many, where the download list is, and that saving the papers and saying "done" gets a recheck. The report shows the same figures in a banner above the paper.
+   - If references still lack full text and the person has not already answered the question in step 6, start with that: how many, where the list is, and that pointing Claude at a folder of the papers, or picking the files, gets them added and rechecked. The report shows the same figures in a banner above the paper.
    - The most important flags (contradicted, unsupported, retracted source).
    - The one next step.
 

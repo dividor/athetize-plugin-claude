@@ -24,7 +24,7 @@ Helper: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/pl.py"` (fallback `<skill base d
    - Write the text to a local file, then run `PL add-source --work W REF FILE.txt`. Start the file with a first line naming where it came from: `Source: <final URL> (fetched in the user's browser, <date>)`. Copy the text as returned. Do not summarise, trim or reformat it, because verdict quotes are matched against it character for character.
    - If nothing works, record why in one line (paywalled with no access, book, page refused) and move on.
 4. **Recheck.** When the queue is done, or after about 15 items, run the `recheck` skill so the new sources are verified and the report rebuilt.
-5. **Report.** Give the user the counts the scripts printed, list what is still missing grouped by reason, and give one next step (usually: upload PDFs or scans for the books).
+5. **Report, then ask about the rest.** Give the user the counts the scripts printed and list what is still missing, grouped by reason. If references still lack full text, do not stop there: ask the question from step 6 of the `check-paper` skill again, without the browser answer, so the person can choose a folder that holds the papers, pick the files, or skip.
 
 ## Rules
 

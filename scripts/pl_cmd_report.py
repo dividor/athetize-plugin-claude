@@ -42,6 +42,7 @@ def _request_item(n: int, row: dict, ref: dict, e: dict, proxy: str) -> dict:
         "status": row["status"],
         "claims_affected": row["claims_affected"],
         "citation": pl_core._clean_raw(ref.get("raw") or row["citation"]),
+        "short": row["citation"],
         "title": _ref_title(ref),
         "year": _ref_year(ref),
         "links": [{"label": a, "url": b} for a, b in dict.fromkeys(links)],
@@ -77,32 +78,40 @@ def _request_overview(summary: dict) -> str:
     return text
 
 
-def _request_markdown(items: list[dict], folder: str, proxy: str, summary: dict) -> str:
-    """The download request as a Markdown page for the person to read."""
+# Links that go straight to the work, as opposed to a search for it.
+_DIRECT_LINKS = ("DOI", "Library", "Link", "Open access")
+
+
+def _request_row(it: dict) -> str:
+    """One table row of the download request: the work, what depends on it and where to get it."""
+    direct = [link for link in it["links"] if link["label"] in _DIRECT_LINKS]
+    links = " · ".join(f"[{link['label']}]({link['url']})" for link in direct or it["links"])
+    has = "abstract" if it["status"] == "abstract_only" else "nothing"
+    short = it["short"]
+    if len(short) >= 140:  # cut by the status listing: end on a whole word
+        short = short.rsplit(" ", 1)[0] + "\u2026"
+    work = f"[{it['id']}] {short}".replace("|", "\\|")
+    return f"| {work} | {it['claims_affected']} | {has} | {links} |"
+
+
+def _request_markdown(items: list[dict], proxy: str, summary: dict) -> str:
+    """The download request as a short Markdown page: one table row for each work."""
     lines = [
         "# Sources needed: " + _plural(len(items), "reference", "references"),
         "",
         _request_overview(summary),
         "",
-        f"Please download the full text of the works below and save them in **{folder}**.",
-        "",
-        "- Keep whatever file names you get. Athetize reads each file and works out which "
-        "reference it is from its title page.",
-        "- PDF is best. A saved web page (.html), Word file or text file also works. "
-        "Book chapters: the pages that are cited are enough.",
-        "- Use your library sign-in for paywalled items"
-        + (" (the Library links go through your library proxy)." if proxy else "."),
-        '- Skip anything you cannot get; those claims stay marked "can\'t verify".',
-        "- When you are done, say so and the check will pick the files up and re-verify the "
-        "affected claims.",
+        "Get what you can, in any order. Keep whatever file names you get. Then point Claude at "
+        "the folder they are in, or pick the files, and each one is read and matched to its "
+        "reference. PDF is best; a saved web page, Word file or text file also works, and for a "
+        "book the cited pages are enough. Skip anything you cannot get: those claims stay "
+        'marked "can\'t verify".'
+        + (" The Library links go through your library sign-in." if proxy else ""),
         "",
     ]
-    for it in items:
-        what = "only the abstract was found" if it["status"] == "abstract_only" else "no text found"
-        lines.append(f"## {it['n']}. {it['citation']}")
-        lines.append("")
-        lines.append(f"- Claims affected: {it['claims_affected']} · {what}")
-        lines.append("- " + " · ".join(f"[{link['label']}]({link['url']})" for link in it["links"]))
+    if items:
+        lines += ["| Reference | Claims | Text so far | Get it |", "|---|---|---|---|"]
+        lines += [_request_row(it) for it in items]
         lines.append("")
     return "\n".join(lines)
 
@@ -128,7 +137,7 @@ def cmd_request_sources(args):
         for n, r in enumerate(rows, 1)
     ]
     summary = pl_core.sources_needed(len(refs), {r["id"]: r["status"] for r in rows}, work.claims())
-    md = _request_markdown(items, folder, proxy, summary)
+    md = _request_markdown(items, proxy, summary)
     work.p(pl_core.REQUEST_FILE).write_text(md, encoding="utf-8")
     jsave(work.p("source_request.json"), {"folder": folder, "summary": summary, "items": items})
     out(
@@ -138,7 +147,7 @@ def cmd_request_sources(args):
             "count": len(items),
             "summary": summary,
             "items": [
-                {k: it[k] for k in ("n", "id", "claims_affected", "status", "citation")}
+                {k: it[k] for k in ("n", "id", "claims_affected", "status", "short", "citation")}
                 for it in items
             ],
         }

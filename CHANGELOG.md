@@ -2,10 +2,11 @@
 
 All notable changes to Athetize will be documented in this file.
 
-## [Unreleased]
+## [0.7.0] - 2026-11-10
 
 ### Changed
-- Asking for sources that could not be downloaded is now one question with three answers (download them, fetch through the browser, continue without), asked after the download list has been sent. Work continues on the claims that already have source text, and an unattended run opens its final summary with the request
+- Asking for sources that could not be downloaded is now one question: choose a folder that holds the papers, pick the files, fetch them through the browser, or skip. Claude opens the folder chooser when the session has one, and the report's Add sources page for picking files. After the browser route it asks again for whatever is still missing, in place of carrying on silently. An unattended run opens its final summary with the request
+- The list of missing sources is one short table, a row per reference with a direct link, in place of a block for every reference. It no longer names a folder to save into
 - `pl.py request-sources` prints and saves a `summary`: how many of the paper's references are listed, how many have only an abstract or no text, and how many claims rely on at least one of them. The download list opens with the same figures
 - `report.html` shows a banner above the paper when sources lack full text, with those figures, a link to the download list and a button that opens the Sources page filtered to them
 - Supplied files are identified from what they say, not from their names: the DOI or arXiv number printed on the first pages, or the reference title as one run of words together with the first author's surname. The file name is looked at only when the text does not settle it. The download list, the report and the skills no longer suggest file names

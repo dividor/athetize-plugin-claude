@@ -457,6 +457,17 @@ class SourcesNeededTests(unittest.TestCase):
         self.assertIn('id="needSrc"', html)
         self.assertIn('"sources_needed": {"references": 4, "need_source": 3', html)
 
+    def test_the_list_is_one_short_table_with_a_direct_link_per_work(self):
+        self._request()
+        md = self.work.p("source_request.md").read_text("utf-8")
+        rows = [line for line in md.splitlines() if line.startswith("| [")]
+        self.assertEqual(len(rows), 3)
+        self.assertTrue(rows[0].startswith("| [2] Okafor"), rows[0])
+        self.assertIn("| 2 | abstract |", rows[0])
+        self.assertIn("| nothing |", rows[1])
+        self.assertNotIn("##", md)
+        self.assertLess(len(md.splitlines()), 15)
+
     def test_nothing_tells_the_person_how_to_name_a_file(self):
         res = self._request()
         md = self.work.p("source_request.md").read_text("utf-8")

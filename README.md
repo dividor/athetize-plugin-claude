@@ -91,7 +91,8 @@ Say, for example:
 - "Update the report." Claude runs `recheck`.
 - "Run it on the new draft." Claude starts a new workspace and runs `pl.py carry-over` from the old one. Unchanged claims keep their sources and verdicts, so only new or edited text is checked again.
 - "Get the missing sources through my browser." Claude runs `fetch-sources`.
-- "Which papers do I need to download?" Claude runs `pl.py request-sources`, which writes `source_request.md` with links for each missing reference and where to save it (set once with `pl.py config set-folder ~/Downloads/MyPaper`; add `pl.py config set-proxy https://doi-org.<library>.idm.oclc.org` for library links). "I saved them" then runs `pl.py import-sources FOLDER`, which reads each file, identifies its reference from the DOI or arXiv number on its first pages or from the title and first author, and skips anything already imported. File names do not matter.
+- When sources are missing, Claude asks how you want to add them: choose a folder that holds the papers, pick the files, fetch them through your browser, or skip. You never rename or sort anything.
+- "Which papers do I need to download?" Claude runs `pl.py request-sources`, which writes `source_request.md`: one short table with a link for each missing reference (add `pl.py config set-proxy https://doi-org.<library>.idm.oclc.org` for library links). "I saved them" then runs `pl.py import-sources FOLDER`, which reads each file, identifies its reference from the DOI or arXiv number on its first pages or from the title and first author, and skips anything already imported. File names do not matter.
 - "Suggest fixes and give me a Word version with tracked changes." Claude runs `suggest-edits`.
 
 Results live in a folder next to the paper called `<paper>-check/`:
