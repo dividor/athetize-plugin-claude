@@ -28,6 +28,21 @@ RANK = [
 
 # Verdicts that mean a cited source does not back the claim.
 FAILING = ("unsupported", "contradicted")
+# Verdicts that say something about the claim, as opposed to "could not be checked".
+JUDGED = ("supported", "partially_supported", "overstated", "unsupported", "contradicted")
+
+
+def evidence_basis(verdict: str, items: list[dict]) -> str:
+    """How much of the source the claim's verdict rests on: full_text, abstract or none.
+
+    Looks at the sources that gave the claim its verdict. One of them read in full is
+    enough; an abstract alone is partial text, and the full paper is what settles it.
+    """
+    levels = {i["evidence_level"] for i in items if i["verdict"] == verdict}
+    if "full_text" in levels:
+        return "full_text"
+    return "abstract" if "abstract" in levels else "none"
+
 
 VERDICT_LABEL = {
     "supported": "Supported",
@@ -221,6 +236,8 @@ def _report_claim(src: _Sources, c: dict, para: dict, span: tuple[int, int]) -> 
         if item["retracted"]:
             flagged_retracted = True
         items.append(item)
+    verdict = _claim_verdict(cites, items)
+    basis = evidence_basis(verdict, items)
     return {
         "id": c["id"],
         "para": c["para"],
@@ -229,7 +246,10 @@ def _report_claim(src: _Sources, c: dict, para: dict, span: tuple[int, int]) -> 
         "text": para["text"][span[0] : span[1]],
         "type": c.get("type", "empirical"),
         "cites": cites,
-        "verdict": _claim_verdict(cites, items),
+        "verdict": verdict,
+        "evidence_basis": basis,
+        # a result reached from an abstract alone stands only until the full text is read
+        "provisional": verdict in JUDGED and basis == "abstract",
         # sources that do not back the claim, kept visible when another source does better
         "failing_refs": [i["ref_id"] for i in items if i["verdict"] in FAILING],
         "items": items,

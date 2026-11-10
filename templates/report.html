@@ -120,6 +120,14 @@ a.textbtn{text-decoration:none}
 .claim:hover,.claim.active{background:color-mix(in srgb,var(--c) 24%,transparent)}
 .claim.dim{opacity:.3}
 .claim.has-bad{border-bottom-color:var(--bad)}
+/* judged from an abstract only: striped, because only part of the source was read */
+.claim.prov{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--c) 20%,transparent) 0 4px,transparent 4px 8px)}
+.claim.prov:hover,.claim.prov.active{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--c) 34%,transparent) 0 4px,color-mix(in srgb,var(--c) 10%,transparent) 4px 8px)}
+.bar button.prov{background:repeating-linear-gradient(135deg,var(--c) 0 3px,color-mix(in srgb,var(--c) 30%,var(--surface)) 3px 6px)}
+.chip.g-prov{--c:var(--muted)}
+.chip.g-prov::before{background:repeating-linear-gradient(135deg,var(--muted) 0 2px,transparent 2px 4px);outline:1px solid var(--muted)}
+.provline{margin:6px 0 2px;font-size:13px;color:var(--muted)}
+.provnote{margin:0 0 12px;padding:8px 12px;font-size:13.5px;border:1px solid var(--note-line);background:var(--note-bg)}
 .failnote{margin:0 0 12px;font-size:13.5px;font-weight:600;color:var(--bad)}
 .v-supported{--c:var(--ok)}
 .v-partially_supported,.v-overstated{--c:var(--part);border-bottom-style:dashed}
@@ -267,6 +275,7 @@ a.textbtn{text-decoration:none}
     <div class="meta" id="meta"></div>
     <div class="bar" id="bar" aria-hidden="true"></div>
     <div class="chips" id="chips" role="group" aria-label="Filter claims by result"></div>
+    <p class="provline" id="provLine" hidden></p>
   </div>
 </section>
 
@@ -313,6 +322,7 @@ var LABEL={supported:'Supported',partially_supported:'Partly supported',overstat
 var GROUP={supported:'ok',partially_supported:'part',overstated:'part',unsupported:'bad',contradicted:'bad',unverifiable:'unv',pending:'unv',uncited:'unc',note:'unc'};
 var GLABEL={ok:'Supported',part:'Partial',bad:'Not supported',unv:"Can't verify",unc:'Uncited and notes'};
 var FAILING_NOTE='A cited source does not support this';
+var PROV_LABEL='from the abstract only';
 var GVAR={ok:'--ok',part:'--part',bad:'--bad',unv:'--unv',unc:'--unc'};
 var STATUS={full_text:'Full text',abstract_only:'Abstract only',user_provided:'Provided by you',missing:'No source',unresolved:'Not resolved'};
 var EXISTS={verified:'Located',partial_match:'Partial metadata match',mismatch:'Metadata mismatch',not_found:'Not in citation databases',unchecked:'Unchecked'};
@@ -357,12 +367,13 @@ DATA.paragraphs.forEach(function(p,pi){
     if(s.start>pos)node.append(document.createTextNode(p.text.slice(pos,s.start)));
     var verdict=s.kind==='claim'?s.d.verdict:'note';
     var failing=s.kind==='claim'&&GROUP[verdict]!=='bad'&&(s.d.failing_refs||[]).length>0;
-    var m=el('span','claim v-'+verdict+(failing?' has-bad':''),p.text.slice(s.start,s.end));
+    var prov=s.kind==='claim'&&s.d.provisional===true;
+    var m=el('span','claim v-'+verdict+(failing?' has-bad':'')+(prov?' prov':''),p.text.slice(s.start,s.end));
     m.tabIndex=0;m.setAttribute('role','button');
-    m.setAttribute('aria-label',LABEL[verdict]+(failing?', and '+FAILING_NOTE.toLowerCase():'')+': '+p.text.slice(s.start,s.end));
+    m.setAttribute('aria-label',LABEL[verdict]+(prov?', '+PROV_LABEL+', provisional':'')+(failing?', and '+FAILING_NOTE.toLowerCase():'')+': '+p.text.slice(s.start,s.end));
     var idx=items.length;
     m.dataset.idx=idx;
-    items.push({kind:s.kind,d:s.d,verdict:verdict,group:GROUP[verdict],failing:failing,el:m});
+    items.push({kind:s.kind,d:s.d,verdict:verdict,group:GROUP[verdict],failing:failing,prov:prov,el:m});
     node.append(m);pos=s.end;
   });
   if(pos<p.text.length)node.append(document.createTextNode(p.text.slice(pos)));
@@ -383,7 +394,7 @@ if(!DATA.claims.length&&!DATA.notes.length){paper.append(el('div','empty','No ch
 var active={};
 var counts={ok:0,part:0,bad:0,unv:0,unc:0};
 items.forEach(function(it){counts[it.group]++;});
-function inGroup(it,g){return it.group===g||(g==='bad'&&it.failing);}
+function inGroup(it,g){return it.group===g||(g==='bad'&&it.failing)||(g==='prov'&&it.prov);}
 function shown(it){return Object.keys(active).some(function(g){return active[g]&&inGroup(it,g);});}
 var alsoFailing=items.filter(function(it){return it.failing;}).length;
 var chips=$('#chips'), bar=$('#bar');
@@ -394,13 +405,29 @@ Object.keys(GLABEL).forEach(function(g){
   if(g==='bad'&&alsoFailing)b.title='Includes '+alsoFailing+(alsoFailing===1?' claim that another source supports in part, but one':' claims that another source supports in part, but one')+' cited source does not support';
   b.addEventListener('click',function(){active[g]=!active[g];applyFilter();});
   chips.append(b);
-  if(counts[g]){
-    var s=el('button','g-'+g);s.type='button';s.style.flexGrow=counts[g];s.title=GLABEL[g]+': '+counts[g];
-    s.style.background='var('+GVAR[g]+')';
-    s.addEventListener('click',function(){active[g]=!active[g];applyFilter();});
+  /* The bar shows each group in two parts: read in full (solid), and judged from an
+     abstract only (striped), which is provisional. */
+  var part=items.filter(function(it){return it.group===g&&it.prov;}).length;
+  [[counts[g]-part,''],[part,' prov']].forEach(function(x){
+    if(!x[0])return;
+    var s=el('button','g-'+g+x[1]);s.type='button';s.style.flexGrow=x[0];
+    s.title=GLABEL[g]+(x[1]?', '+PROV_LABEL:'')+': '+x[0];
+    if(!x[1])s.style.background='var('+GVAR[g]+')';
+    s.addEventListener('click',function(){active[x[1]?'prov':g]=!active[x[1]?'prov':g];applyFilter();});
     bar.append(s);
-  }
+  });
 });
+var provCount=items.filter(function(it){return it.prov;}).length;
+var judgedCount=items.filter(function(it){return it.group==='ok'||it.group==='part'||it.group==='bad';}).length;
+if(provCount){
+  var pc=el('button','chip g-prov');pc.type='button';pc.setAttribute('aria-pressed','false');pc.dataset.g='prov';
+  pc.append(document.createTextNode('Abstract only '));pc.append(el('b',null,String(provCount)));
+  pc.title='Results judged from an abstract only. They are provisional.';
+  pc.addEventListener('click',function(){active.prov=!active.prov;applyFilter();});
+  chips.append(pc);
+  var pl=$('#provLine');pl.hidden=false;
+  pl.textContent=provCount+' of '+count(judgedCount,'result rests','results rest')+' on an abstract only (striped). '+(provCount===1?'It is':'They are')+' provisional: the full text is what settles '+(provCount===1?'it.':'them.');
+}
 bar.removeAttribute('aria-hidden');
 function anyActive(){return Object.keys(active).some(function(k){return active[k];});}
 function applyFilter(){
@@ -539,7 +566,7 @@ function buildCard(i){
   card.textContent='';
   card.append(el('div','grab'));
   var head=el('div','c-head');
-  var badge=el('span','badge',LABEL[it.verdict]);badge.style.setProperty('--c',colorFor(it.verdict));
+  var badge=el('span','badge',LABEL[it.verdict]+(it.prov?' \u00b7 abstract only':''));badge.style.setProperty('--c',colorFor(it.verdict));
   head.append(badge);
   if(it.kind==='claim'&&d.type)head.append(pill(d.type,'var(--muted)'));
   if(it.kind==='claim'&&d.retracted)head.append(pill('Retracted source','var(--bad)',true));
@@ -553,6 +580,7 @@ function buildCard(i){
   if(it.kind==='claim'){
     var t=d.text.length>260?d.text.slice(0,257)+'…':d.text;
     body.append(el('div','claimtxt',t));
+    if(it.prov)body.append(el('p','provnote','Judged from the abstract only. The full paper may say more, or something different, so this result is provisional until the full text is added.'));
     if(it.failing){
       var fr=d.failing_refs;
       body.append(el('p','failnote',count(fr.length,'cited source does','cited sources do')+' not support this claim: '+fr.map(function(r){return '['+r+']';}).join(', ')+'.'));
@@ -906,7 +934,7 @@ function renderNeedSrc(){
   var kinds=[];
   if(n.abstract_only)kinds.push(count(n.abstract_only,'has','have')+' only an abstract');
   if(n.no_text)kinds.push(count(n.no_text,'has','have')+' no text at all');
-  box.append(document.createTextNode(' '+kinds.join(' and ')+'. '+count(n.claims_relying,'claim relies','claims rely')+' on at least one of them, so '+(n.claims_relying===1?'it is':'they are')+' marked \u201ccan\u2019t verify\u201d or judged from an abstract alone. Add the papers on the Sources page and the affected claims are rechecked.'));
+  box.append(document.createTextNode(' '+kinds.join(' and ')+'. '+count(n.claims_relying,'claim relies','claims rely')+' on at least one of them. A claim with no text to read is marked \u201ccan\u2019t verify\u201d. A claim judged from an abstract alone has only a provisional result, because the abstract is part of the paper and the full text is what settles it. Add the papers on the Sources page and the affected claims are rechecked.'));
   var act=el('div','act');
   var b=el('button',null,'Review Missing Sources');b.type='button';
   b.addEventListener('click',function(){openSources(true);});

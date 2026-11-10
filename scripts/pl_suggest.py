@@ -203,7 +203,7 @@ def _source_paras(it: dict, blank: list, max_excerpts: int, excerpt_chars: int) 
         else ""
     )
     level_notes: dict[str | None, str] = {
-        "abstract": " \u00b7 abstract only",
+        "abstract": " \u00b7 abstract only, so provisional until the full text is read",
         "none": " \u00b7 no source text",
     }
     level = level_notes.get(it.get("evidence_level"), "")

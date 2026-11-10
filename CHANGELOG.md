@@ -2,6 +2,13 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.2] - 2026-11-10
+
+### Changed
+- A result reached from an abstract alone is shown as provisional everywhere. In the report those claims are striped in the text, the summary bar splits each group into "read in full" and "from the abstract only", an "Abstract only" filter lists them, and each claim's card says the full text is what settles it. `build` prints how many there are, and the Word comments say so too
+- The report's title is the title marked in the paper when there is one, and otherwise the document's name. It is no longer guessed from the opening line
+- The wording that called abstract-only references "the quickest wins" is removed from the list of missing sources and from the skill. The skill now says never to describe abstract-only checking as a win or as the claim being partly checked
+
 ## [0.7.1] - 2026-11-10
 
 ### Changed
@@ -39,7 +46,7 @@ All notable changes to Athetize will be documented in this file.
 - A claim with one cited source that does not support it, and another that does better, no longer hides that finding. It is counted and filtered under "Not supported" too, underlined in red in the text, and named in the claim's card
 - A database record whose title is only the start of the reference's title, or carries a footnote after it, is no longer called a mismatch. Stored records are judged again with this rule
 - Markup such as `<sub>` and `<i>` is removed from record titles, and a record's capitals or footnote no longer replace the paper's own title in the citation shown
-- The paper title is no longer taken from a numbered section heading or a heading far down the paper. A paper with no marked title uses its opening line, or its file name
+- The paper title is no longer taken from a numbered section heading or a heading far down the paper. A paper with no marked title uses the document's name
 - Table marks and other paragraphs without words are kept in the report but no longer sent to claim extraction
 - A file from the same field as several references could be matched to the wrong one, or reported as ambiguous, because any text that used the words of a title counted as carrying that title
 - A file with a publisher's name such as `1-s2.0-S0019103508.pdf` is no longer taken for reference 1

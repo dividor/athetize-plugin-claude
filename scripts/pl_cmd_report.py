@@ -72,8 +72,8 @@ def _request_overview(summary: dict) -> str:
     )
     if summary["abstract_only"]:
         text += (
-            " Works with only an abstract are the quickest wins: "
-            "the claim is already partly checked."
+            " A claim checked against an abstract alone has only a provisional result: "
+            "the full text is what settles it."
         )
     return text
 
@@ -168,6 +168,12 @@ def cmd_build(args):
     path = pl_core.build_report(work, Path(args.out) if args.out else None)
     data = pl_core.build_data(work)
     print(f"Wrote {path} ({path.stat().st_size // 1024} KB)")
+    provisional = sum(1 for c in data["claims"] if c["provisional"])
+    if provisional:
+        print(
+            f"Provisional: {_plural(provisional, 'result rests', 'results rest')} on an abstract "
+            "only. The full text is what settles them."
+        )
     for p in data["problems"]:
         print("warning:", p)
 

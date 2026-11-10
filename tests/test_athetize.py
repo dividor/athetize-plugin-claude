@@ -569,23 +569,31 @@ class IngestTests(unittest.TestCase):
     def _p(text):
         return f"<w:p><w:r><w:t>{text}</w:t></w:r></w:p>"
 
-    def test_a_numbered_section_or_a_late_heading_is_not_the_title(self):
+    def test_document_name_is_the_title_when_the_paper_marks_none(self):
+        # an opening line, a numbered section and a heading far down are not a title
         paper = self._ingest_docx(
             self._p("Science/Technical/Management Plan")
             + self._p("1. Introduction")
             + self._p("We propose to characterize the escape of hydrogen from Titan.") * 5
             + self._p("TASKS / TIMELINE")
         )
-        self.assertEqual(paper["title"], "Science/Technical/Management Plan")
+        self.assertEqual(paper["title"], "Titan_escape-plan")
         self.assertEqual(paper["paragraphs"][1]["kind"], "heading")
         self.assertEqual(paper["paragraphs"][-1]["kind"], "heading")
 
-    def test_file_name_is_the_title_when_the_paper_opens_with_a_sentence(self):
-        paper = self._ingest_docx(
-            self._p("We propose to characterize the escape of hydrogen from Titan.")
-            + self._p("Introduction")
+    def test_a_title_marked_in_the_paper_is_used(self):
+        styled = (
+            '<w:p><w:pPr><w:pStyle w:val="Title"/></w:pPr>'
+            "<w:r><w:t>Escape of hydrogen from Titan</w:t></w:r></w:p>"
         )
-        self.assertEqual(paper["title"], "Titan escape plan")
+        paper = self._ingest_docx(
+            self._p("Draft for comment") + styled + self._p("1. Introduction")
+        )
+        self.assertEqual(paper["title"], "Escape of hydrogen from Titan")
+        self.assertEqual(
+            pl_ingest.ingest(FIX / "paper.md")["title"],
+            "Sleep Duration and Memory Consolidation in Adolescents",
+        )
 
     def test_marks_without_words_are_kept_but_not_sent_for_checking(self):
         paper = self._ingest_docx(
@@ -689,6 +697,63 @@ class MergeSuggestionsTests(unittest.TestCase):
             self.assertIn("Merged 0 new suggestions (2 total)", self._merge(w))
             self.assertIn("Rebuilt suggestions.json", self._merge(w, replace=True))
             self.assertEqual([(s["id"], s["suggested"]) for s in w.suggestions()], [("s1", "C.")])
+
+
+class ProvisionalResultTests(unittest.TestCase):
+    """A verdict reached from an abstract alone is marked provisional."""
+
+    def _item(self, verdict, level):
+        return {"verdict": verdict, "evidence_level": level}
+
+    def test_basis_is_the_fullest_text_behind_the_claims_own_verdict(self):
+        basis = pl_core.evidence_basis
+        items = [self._item("supported", "abstract"), self._item("unverifiable", "none")]
+        self.assertEqual(basis("supported", items), "abstract")
+        items.append(self._item("supported", "full_text"))
+        self.assertEqual(basis("supported", items), "full_text")
+        # full text behind a different verdict does not vouch for this one
+        mixed = [self._item("supported", "abstract"), self._item("unverifiable", "full_text")]
+        self.assertEqual(basis("supported", mixed), "abstract")
+        self.assertEqual(basis("unverifiable", [self._item("unverifiable", "none")]), "none")
+
+    def test_report_marks_only_judged_abstract_results_as_provisional(self):
+        with tempfile.TemporaryDirectory() as d:
+            w = Work(d)
+            jsave(w.p("paper.json"), pl_ingest.ingest(FIX / "paper.md"))
+            for f in ("refs.json", "claims.json"):
+                shutil.copy(FIX / f, w.p(f))
+            rows = [
+                ("c1", "1", "supported", "full_text"),
+                ("c2", "2", "supported", "abstract"),
+                ("c3", "3", "unverifiable", "abstract"),
+            ]
+            jsave(
+                w.p("verdicts.json"),
+                {
+                    "items": [
+                        {
+                            "claim_id": c,
+                            "ref_id": r,
+                            "verdict": v,
+                            "analysis": "x",
+                            "confidence": 0.9,
+                            "evidence_level": level,
+                        }
+                        for c, r, v, level in rows
+                    ]
+                },
+            )
+            by_id = {c["id"]: c for c in pl_core.build_data(w)["claims"]}
+            self.assertEqual(
+                [(by_id[c]["evidence_basis"], by_id[c]["provisional"]) for c in ("c1", "c2", "c3")],
+                [("full_text", False), ("abstract", True), ("abstract", False)],
+            )
+            with contextlib.redirect_stdout(io.StringIO()) as buf:
+                pl.cmd_build(argparse.Namespace(work=str(w.root), out=None))
+            self.assertIn("Provisional: 1 result rests on an abstract only.", buf.getvalue())
+            html = w.p("report.html").read_text("utf-8")
+            self.assertIn('id="provLine"', html)
+            self.assertIn("this result is provisional until the full text is added", html)
 
 
 class PipelineTests(unittest.TestCase):

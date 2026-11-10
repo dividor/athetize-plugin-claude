@@ -281,15 +281,9 @@ def _is_title(style: str, kind: str, text: str, position: int):
     return not NUMBERED_HEAD.match(text) and not SECTION_NAME.match(text)
 
 
-def _fallback_title(path: Path, paragraphs: list[dict]) -> str:
-    """A title for a paper that marks none.
-
-    Its opening line if that reads like a title, else its file name.
-    """
-    first = paragraphs[0]["text"] if paragraphs else ""
-    if first and len(first) <= 150 and not first.endswith("."):
-        return first
-    return re.sub(r"[_\-]+", " ", path.stem).strip()
+def _document_name(path: Path) -> str:
+    """The document's own name, used as the title of a paper that marks none."""
+    return path.stem
 
 
 def ingest(path: Path) -> dict:
@@ -307,7 +301,8 @@ def ingest(path: Path) -> dict:
             title = text
         paragraphs.append({"id": f"p{len(paragraphs) + 1}", "text": text, "kind": kind})
     if not title:
-        title = _fallback_title(path, paragraphs)
+        # no guessing from the opening line: an unmarked first line is often not the title
+        title = _document_name(path)
     return {
         "source_file": path.name,
         "sha256": pl_text.sha256_file(path),

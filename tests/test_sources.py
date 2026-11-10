@@ -424,6 +424,9 @@ class SourcesNeededTests(unittest.TestCase):
             "2 have no text at all. 4 claims rely on at least one of them",
             md,
         )
+        self.assertIn("has only a provisional result: the full text is what settles it", md)
+        self.assertNotIn("quickest", md)
+        self.assertNotIn("partly checked", md)
 
     def test_request_totals_follow_the_missing_only_filter(self):
         res = self._request(missing_only=True)
@@ -432,7 +435,7 @@ class SourcesNeededTests(unittest.TestCase):
         self.assertEqual(res["summary"]["claims_relying"], 2)
         md = self.work.p("source_request.md").read_text("utf-8")
         self.assertIn("4 references: 2 have no text at all. 2 claims rely", md)
-        self.assertNotIn("quickest wins", md)
+        self.assertNotIn("provisional", md)
 
     def test_request_says_so_when_nothing_is_lacking(self):
         statuses = {k: {"status": "full_text"} for k in ("1", "2", "3", "4")}
