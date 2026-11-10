@@ -305,17 +305,22 @@ def _reuse_prior_evidence(
         return True
 
     # Without downloads, keep a previously fetched abstract rather than losing it
-    prior_abs = (
-        prior
-        and prior.get("status") == "abstract_only"
-        and prior.get("evidence_file")
-        and (work / prior["evidence_file"]).exists()
-    )
-    if prior_abs and not download and not refresh and entry.get("exists") == "verified":
+    if not download and not refresh and _has_prior_abstract(work, prior, entry):
         _copy_keys(entry, prior, _ABSTRACT_KEYS)
         entry["errors"] = prior.get("errors", [])
         return True
     return False
+
+
+def _has_prior_abstract(work: Path, prior: dict, entry: dict) -> bool:
+    """True when an earlier run saved an abstract for this reference and it is still on disk."""
+    return bool(
+        prior
+        and prior.get("status") == "abstract_only"
+        and prior.get("evidence_file")
+        and (work / prior["evidence_file"]).exists()
+        and entry.get("exists") == "verified"
+    )
 
 
 def _download_evidence(
@@ -449,7 +454,15 @@ def resolve_one(
 
     # 5. Abstract fallback
     abstract = _pick_abstract(ref, cand, entry, email, errors, download)
-    _record_abstract(work, ref, entry, abstract)
+    if not abstract and not refresh and _has_prior_abstract(work, earlier, entry):
+        # the record's abstract is only fetched with fresh metadata; a failed download on a
+        # later run must not turn "abstract only" into "nothing"
+        _copy_keys(entry, earlier, _ABSTRACT_KEYS)
+    else:
+        _record_abstract(work, ref, entry, abstract)
+    if not download and not errors:
+        # nothing was tried this time: keep why the last attempt failed, so the report can say
+        errors = list(earlier.get("errors") or [])
     entry["errors"] = errors
     return entry
 

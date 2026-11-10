@@ -2,6 +2,16 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.5] - 2026-11-10
+
+### Changed
+- The top of the report is simpler. The bar holds only the name and the light and dark switch; Results and Sources are tabs under the title; the Word report button sits with previous and next on the Results page. The "Back to document" bar is gone, since the Results tab does that
+- Source labels say what they mean. "Located" is now "Found in Crossref" or "Found in OpenAlex", with a note on hover. "No source" is now "No full text found", followed by why: no open-access copy listed, a site that refused the download, Unpaywall not tried for want of a contact email, and so on
+
+### Fixed
+- Running `resolve` again with downloads on no longer turns "abstract only" into "nothing" when the download fails. The abstract saved earlier is kept
+- A run with `--no-download` keeps the reasons the last download attempt failed
+
 ## [0.7.4] - 2026-11-10
 
 ### Fixed

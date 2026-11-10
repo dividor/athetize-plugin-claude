@@ -211,6 +211,7 @@ def _claim_item(src: _Sources, claim_id: str, rid: str) -> dict:
         "flags": (v or {}).get("flags", []),
         "retracted": bool(entry.get("retracted")),
         "exists": entry.get("exists"),
+        "why_missing": missing_reasons(entry) if entry.get("status") in NEEDS_SOURCE else [],
     }
 
 
@@ -371,6 +372,46 @@ def _report_sources_needed(work: Work, refs: dict, manifest: dict) -> dict:
     return summary
 
 
+# What a recorded download error means, in words for the person. First match wins per error.
+_WHY_PATTERNS = (
+    (
+        r"unpaywall skipped",
+        "open-access copies were not looked up on Unpaywall (no contact email set)",
+    ),
+    (r"HTTP 40[13] for (\S+)", "{0} refused an automatic download"),
+    (r"HTTP 404 for (\S+)", "{0} had no such page"),
+    (r"HTTP 429 for (\S+)", "{0} was too busy to answer"),
+    (r"HTTP 5\d\d for (\S+)", "{0} had an error"),
+    (r"network error for (\S+)", "{0} could not be reached"),
+    (r"did not return a PDF|too little text", "an open link did not lead to the full text"),
+    (r"did not match|not the cited work", "a copy that was found did not match the reference"),
+    (
+        r"links from the matched record were not used",
+        "the database record was doubtful, so its links were not used",
+    ),
+)
+
+
+def missing_reasons(entry: dict) -> list[str]:
+    """Why a reference has no full text, from what its download attempt recorded.
+
+    Returns short phrases, most telling first, without repeats. With nothing recorded and no
+    open copy listed, the plain fact is that no open-access copy was found.
+    """
+    reasons: list[str] = []
+    for error in entry.get("errors") or []:
+        for pattern, wording in _WHY_PATTERNS:
+            found = re.search(pattern, error)
+            if found:
+                text = wording.format(*found.groups())
+                if text not in reasons:
+                    reasons.append(text)
+                break
+    if not entry.get("oa_urls"):
+        reasons.insert(0, "no open-access copy is listed for it")
+    return reasons[:4]
+
+
 def _report_ref(rid: str, r: dict, e: dict, out_claims: list[dict], sugs: list[dict]) -> dict:
     """Report entry for one reference: how it was resolved and which claims cite it."""
     return {
@@ -384,6 +425,8 @@ def _report_ref(rid: str, r: dict, e: dict, out_claims: list[dict], sugs: list[d
         "retracted": bool(e.get("retracted")),
         "retraction_notes": e.get("retraction_notes", []),
         "discrepancies": e.get("discrepancies", []),
+        "matched_source": (e.get("matched") or {}).get("source"),
+        "why_missing": missing_reasons(e) if e.get("status") in NEEDS_SOURCE else [],
         "local_file": e.get("local_file"),
         "evidence_level": e.get("evidence_level", "none"),
         "match_score": e.get("match_score"),

@@ -58,17 +58,23 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 
 /* ---------- brand row ---------- */
 .top{background:var(--surface);padding-top:env(safe-area-inset-top,0px)}
-.top .in{display:flex;align-items:center;gap:16px;min-height:64px}
-.brand{display:flex;align-items:center;gap:10px;color:var(--primary-dark)}
-.brand svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.brand-name{font:600 1.35rem/1 var(--font-heading)}
-.brand-tag{font-size:13px;color:var(--muted);padding-left:12px;margin-left:2px;border-left:1px solid var(--line)}
+.top .in{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px}
+.brand{display:flex;align-items:center;gap:9px;color:var(--primary-dark)}
+/* the mark is drawn 18px tall inside its 24px box; 26px type has capitals of the same height */
+.brand svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.brand-name{font:600 26px/1 var(--font-heading);letter-spacing:-.01em}
+.brand-tag{font-size:13px;color:var(--muted);padding-left:12px;margin-left:4px;border-left:1px solid var(--line)}
 .iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--muted);width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
 .iconbtn:hover{background:var(--hover);color:var(--ink)}
-.topnav{display:flex;align-items:center;gap:8px;margin:0 0 0 auto}
-.topnav .textbtn{width:136px;justify-content:center}
-.textbtn.tab[aria-current="page"]{background:var(--primary-dark);border-color:var(--primary-dark);color:var(--on-accent)}
-.textbtn.tab[aria-current="page"] .n{color:inherit;opacity:.85}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* ---------- page tabs ---------- */
+.pagetabs{background:var(--surface);border-bottom:1px solid var(--line)}
+.pagetabs .in{display:flex;gap:6px}
+.ptab{display:inline-flex;align-items:center;gap:8px;border:0;border-bottom:3px solid transparent;background:none;padding:11px 16px 8px;cursor:pointer;font:600 15px/1.4 var(--font-heading);color:var(--muted)}
+.ptab:first-child{margin-left:-16px}
+.ptab:hover{color:var(--ink);background:var(--hover)}
+.ptab[aria-current="page"]{color:var(--ink);border-bottom-color:var(--primary-dark)}
+.ptab .n{font-weight:400;color:var(--muted)}
 .textbtn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13.5px/1 var(--font-heading);cursor:pointer}
 .textbtn:hover{background:var(--hover);color:var(--ink)}
 a.textbtn{text-decoration:none}
@@ -77,19 +83,20 @@ a.textbtn{text-decoration:none}
 [hidden]{display:none!important}
 
 /* ---------- title band ---------- */
-.hero{background:var(--surface);padding:10px 0 8px}
-.hero h1{font-size:clamp(22px,3.4vw,30px);line-height:1.25;margin:0 0 8px;text-wrap:balance}
+.hero{background:var(--surface);padding:6px 0 14px}
+.summary{background:var(--surface);padding:18px 0 6px}
+.hero h1{font-size:clamp(22px,3.4vw,30px);line-height:1.25;margin:0 0 6px;text-wrap:balance}
 .meta{font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap}
 .meta span:not(:last-child)::after{content:"\2022";margin:0 .55em;color:var(--faint)}
-.bar{display:flex;height:6px;background:var(--line-light);margin:18px 0 0;gap:2px}
+.bar{display:flex;height:6px;background:var(--line-light);margin:0;gap:2px}
 .bar button{border:0;padding:0;cursor:pointer;background:var(--c);min-width:6px;transition:flex-grow .4s}
 .bar button:hover{filter:brightness(1.12)}
 
 /* ---------- sticky filter row ---------- */
 .tabs{position:sticky;top:0;z-index:30;background:var(--surface);border-top:1px solid var(--line-light);border-bottom:1px solid var(--line)}
-.tabs .in{display:flex;align-items:center;gap:8px;min-height:50px}
-.hero .chips{flex-wrap:wrap;overflow:visible;margin-top:8px}
-.hero .chip{padding:6px 10px 5px}
+.tabs .in{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:50px}
+.summary .chips{flex-wrap:wrap;overflow:visible;margin-top:8px}
+.summary .chip{padding:6px 10px 5px}
 .chips{display:flex;overflow-x:auto;scrollbar-width:none;flex:1;margin-left:-10px}
 .chips::-webkit-scrollbar{display:none}
 .chip{--c:var(--unv);display:inline-flex;align-items:center;gap:7px;border:0;border-bottom:3px solid transparent;background:none;padding:13px 10px 10px;cursor:pointer;white-space:nowrap;font:400 14px/1.4 var(--font-heading);color:var(--muted)}
@@ -201,15 +208,10 @@ a.textbtn{text-decoration:none}
 .sugsum button{margin-left:8px}
 
 /* ---------- sources page ---------- */
-.srcbar{position:sticky;top:0;z-index:30;background:var(--surface);border-top:1px solid var(--line-light);border-bottom:1px solid var(--line)}
-.srcbar .in{display:flex;align-items:center;min-height:50px}
-.back{display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:8px 12px 8px 0;margin-left:-4px;cursor:pointer;font:600 14px/1.4 var(--font-heading);color:var(--link)}
-.back:hover{color:var(--primary-dark)}
-.srchead .row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 6px}
-.srchead h1{font-size:clamp(22px,3.4vw,30px);line-height:1.25;margin:0}
+.srchead .row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 16px;margin:0 0 16px}
 .textbtn.primary{background:var(--primary-dark);border-color:var(--primary-dark);color:var(--on-accent)}
 .textbtn.primary:hover{background:var(--primary-dark);filter:brightness(1.1)}
-.srchead p{margin:0 0 20px;font-size:14px;color:var(--muted)}
+.srchead p{margin:0;font-size:14px;color:var(--muted);flex:1 1 240px;min-width:0;overflow-wrap:anywhere}
 .addsrc{background:var(--surface);border:1px solid var(--line);padding:18px 20px;margin:0 0 26px}
 .addsrc h2{font-size:1.1rem;margin:0 0 6px}
 .addsrc p{margin:0 0 14px;font-size:14px}
@@ -219,7 +221,7 @@ a.textbtn{text-decoration:none}
 .addsrc .act{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
 .addsrc .after{margin:0;font-size:13px;color:var(--muted)}
 .addsrc > :last-child{margin-bottom:0}
-.drophint{margin:-12px 0 20px;font-size:13px;color:var(--muted)}
+.drophint{margin:-6px 0 20px;font-size:13px;color:var(--muted)}
 #sourcesView.dropping{outline:2px dashed var(--primary);outline-offset:-6px}
 .textbtn:disabled{opacity:.55;cursor:default}
 .addwrap{position:relative;flex:none}
@@ -236,6 +238,7 @@ a.textbtn{text-decoration:none}
 .srow .used{grid-column:2;font-size:12.5px;color:var(--muted);margin-top:4px}
 .srow .used a{margin-right:6px;font:600 12px var(--font-mono)}
 .srow .more{grid-column:2;font-size:12px;color:var(--muted)}
+.srow .why{grid-column:2;font-size:12.5px;color:var(--muted)}
 .srow .differs{color:var(--part);font-weight:600}
 .srow.flag{border-left:3px solid var(--part)}
 .empty{padding:24px;text-align:center;color:var(--muted)}
@@ -248,16 +251,13 @@ a.textbtn{text-decoration:none}
     padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px))}
   .nav button{width:44px;height:40px}
   body.sheet-open .nav{display:none}
-  .tabs{border:0}
-  .tabs .in{min-height:0}
-  .top .in{flex-wrap:wrap;gap:8px 12px;padding-top:10px;padding-bottom:10px}
-  .brand{margin-right:auto}
-  .topnav{order:3;width:100%;margin:0}
-  .topnav .textbtn{flex:1;width:auto;min-width:0;padding:0 8px}
-  #wordReport svg{display:none}
+  .tabs{position:static}
+  .tabs .in{min-height:0;justify-content:flex-end;padding-top:8px;padding-bottom:8px}
+  .ptab{flex:1;justify-content:center}
+  .ptab:first-child{margin-left:0}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.bar button{transition:none}}
-@media print{.tabs,.nav,.rail,.card,.iconbtn,.hint,.topnav,.srcbar,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
+@media print{.tabs,.nav,.rail,.card,.iconbtn,.hint,.pagetabs,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
 </style>
 </head>
 <body>
@@ -268,11 +268,6 @@ a.textbtn{text-decoration:none}
       <span class="brand-name">Athetize</span>
       <span class="brand-tag">Citation check</span>
     </div>
-    <nav class="topnav" aria-label="Report pages">
-      <button class="textbtn tab" id="openResults" type="button" aria-current="page">Results</button>
-      <button class="textbtn tab" id="openSources" type="button">Sources <span class="n" id="srcCount"></span></button>
-      <a class="textbtn" id="wordReport" hidden title="Download the Word copy with the suggested edits as tracked changes"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Word report</span></a>
-    </nav>
     <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>
   </div>
 </header>
@@ -281,6 +276,18 @@ a.textbtn{text-decoration:none}
   <div class="in">
     <h1 id="title"></h1>
     <div class="meta" id="meta"></div>
+  </div>
+</section>
+
+<nav class="pagetabs" aria-label="Report pages">
+  <div class="in">
+    <button class="ptab" id="openResults" type="button" aria-current="page">Results</button>
+    <button class="ptab" id="openSources" type="button">Sources <span class="n" id="srcCount"></span></button>
+  </div>
+</nav>
+
+<section class="summary" id="summary">
+  <div class="in">
     <div class="bar" id="bar" aria-hidden="true"></div>
     <div class="chips" id="chips" role="group" aria-label="Filter claims by result"></div>
     <p class="provline" id="provLine" hidden></p>
@@ -290,11 +297,8 @@ a.textbtn{text-decoration:none}
 <div class="tabs">
   <div class="in">
     <div class="nav" id="nav"><button type="button" id="prev" aria-label="Previous claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span id="navLabel"></span><button type="button" id="next" aria-label="Next claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
+    <a class="textbtn" id="wordReport" hidden title="Download the Word copy with the suggested edits as tracked changes"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Word report</span></a>
   </div>
-</div>
-
-<div class="srcbar" id="srcBar" hidden>
-  <div class="in"><button type="button" class="back" id="back"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Back to document</button></div>
 </div>
 
 <main class="wrap in" id="docView">
@@ -305,9 +309,9 @@ a.textbtn{text-decoration:none}
 </main>
 
 <main class="wrap in" id="sourcesView" hidden>
+  <h2 class="vh">Sources</h2>
   <div class="srchead">
-    <div class="row"><h1>Sources</h1><div class="addwrap"><button class="textbtn primary" id="addSources" type="button">Add sources</button><div class="addmenu" id="addMenu" role="menu" hidden><button type="button" role="menuitem" id="pickFiles">Files…</button><button type="button" role="menuitem" id="pickFolder">A folder…</button></div></div></div>
-    <p id="srcLead"></p>
+    <div class="row"><p id="srcLead"></p><div class="addwrap"><button class="textbtn primary" id="addSources" type="button">Add sources</button><div class="addmenu" id="addMenu" role="menu" hidden><button type="button" role="menuitem" id="pickFiles">Files…</button><button type="button" role="menuitem" id="pickFolder">A folder…</button></div></div></div>
     <input type="file" id="srcPicker" multiple hidden accept=".pdf,.txt,.md,.html,.htm,.docx,.xml">
     <input type="file" id="dirPicker" webkitdirectory hidden>
   </div>
@@ -332,8 +336,15 @@ var GLABEL={ok:'Supported',part:'Partial',bad:'Not supported',unv:"Can't verify"
 var FAILING_NOTE='A cited source does not support this';
 var PROV_LABEL='from the abstract only';
 var GVAR={ok:'--ok',part:'--part',bad:'--bad',unv:'--unv',unc:'--unc'};
-var STATUS={full_text:'Full text',abstract_only:'Abstract only',user_provided:'Provided by you',missing:'No source',unresolved:'Not resolved'};
-var EXISTS={verified:'Located',partial_match:'Partial metadata match',mismatch:'Metadata mismatch',not_found:'Not in citation databases',unchecked:'Unchecked'};
+var STATUS={full_text:'Full text',abstract_only:'Abstract only',user_provided:'Provided by you',missing:'No full text found',unresolved:'Not looked up'};
+var DATABASE={crossref:'Crossref',openalex:'OpenAlex'};
+var EXISTS={verified:'Found in a citation database',partial_match:'Database record differs in part',mismatch:'Database record does not match',not_found:'Not found in citation databases',unchecked:'Not looked up'};
+var EXISTS_MEANS={verified:'A record matching this reference was found, so the work exists as cited.',partial_match:'The closest record differs from the reference in part, so it was not relied on.',mismatch:'The record behind the printed DOI is a different work.',not_found:'No record of this work was found in Crossref or OpenAlex.'};
+function existsPill(r){
+  var text=r.exists==='verified'&&DATABASE[r.matched_source]?'Found in '+DATABASE[r.matched_source]:(EXISTS[r.exists]||r.exists);
+  var p=pill(text,r.exists==='verified'?'var(--ok)':'var(--part)');if(EXISTS_MEANS[r.exists])p.title=EXISTS_MEANS[r.exists];return p;
+}
+function whyLine(reasons,cls){return el('div',cls,'Why there is no full text: '+reasons.join('; ')+'.');}
 
 function $(s,r){return (r||document).querySelector(s);}
 function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
@@ -552,7 +563,7 @@ function refBlock(r,multi){
   if(r.retracted)row2.append(pill('Retracted or corrected','var(--bad)',true));
   if(r.exists&&r.exists!=='verified'&&r.exists!=='unchecked')row2.append(pill(EXISTS[r.exists]||r.exists,'var(--part)'));
   if(r.evidence_level==='abstract')row2.append(pill('Abstract only','var(--part)'));
-  if(r.evidence_level==='none')row2.append(pill('No source text','var(--unv)'));
+  if(r.evidence_level==='none')row2.append(pill('No full text found','var(--unv)'));
   var lh=localHref(r.local_file);
   if(lh){var la=el('a',null,'Open local copy');la.href=lh;la.target='_blank';la.rel='noopener';row2.append(la);}
   else if(r.local_file&&location.protocol!=='file:'){var nt=el('span',null,'Local copy available when report.html is opened from its folder');nt.style.fontSize='11.5px';nt.style.opacity='.7';row2.append(nt);}
@@ -560,6 +571,7 @@ function refBlock(r,multi){
   b.append(src);
   if(r.evidence_level!=='full_text'){
     var h=el('div','help');
+    if(r.why_missing&&r.why_missing.length)b.append(whyLine(r.why_missing,'help'));
     h.append(document.createTextNode('Have the full text? '));
     var add=el('a',null,'Add it on the Sources page');add.href='#sources';
     add.addEventListener('click',function(ev){ev.preventDefault();openSources(null,r.ref_id);});
@@ -730,12 +742,13 @@ function renderSources(){
     var pills=el('div','pills');
     var sc=r.status==='full_text'||r.status==='user_provided'?'var(--ok)':(r.status==='abstract_only'?'var(--part)':'var(--unv)');
     pills.append(pill(STATUS[r.status]||r.status,sc,r.status==='full_text'||r.status==='user_provided'));
-    if(r.exists&&r.exists!=='unchecked')pills.append(pill(EXISTS[r.exists]||r.exists,r.exists==='verified'?'var(--ok)':'var(--part)'));
+    if(r.exists&&r.exists!=='unchecked')pills.append(existsPill(r));
     if(r.retracted)pills.append(pill('Retracted or corrected','var(--bad)',true));
     var lh=localHref(r.local_file);
     if(lh){var la=el('a',null,'Open local copy');la.href=lh;la.target='_blank';la.rel='noopener';la.style.fontSize='12px';pills.append(la);}
     row.append(pills);
     if(r.matched_title&&(r.exists==='partial_match'||r.exists==='mismatch')){row.append(el('div','more','Closest database record: \u201c'+r.matched_title+'\u201d. Not used: the citation and link above are the paper\u2019s own.'));}
+    if(r.why_missing&&r.why_missing.length)row.append(whyLine(r.why_missing,'why'));
     if(r.discrepancies&&r.discrepancies.length)row.append(el('div','more differs','Differs from the database record. '+r.discrepancies.map(function(t){return t.charAt(0).toUpperCase()+t.slice(1);}).join('. ')+'.'));
     if(r.cited_by&&r.cited_by.length){
       var used=el('div','used','Supports ');
@@ -972,10 +985,10 @@ function showView(sources){
   if(sources===!srcView.hidden)return;
   closeCard();
   if(sources)paperY=window.scrollY;
-  [$('.hero'),$('.tabs'),docView,rail].forEach(function(e){e.hidden=sources;});
+  [$('#summary'),$('.tabs'),docView,rail].forEach(function(e){e.hidden=sources;});
   $(sources?'#openSources':'#openResults').setAttribute('aria-current','page');
   $(sources?'#openResults':'#openSources').removeAttribute('aria-current');
-  [$('#srcBar'),srcView].forEach(function(e){e.hidden=!sources;});
+  srcView.hidden=!sources;
   if(sources){jumpTo(0);return;}
   cameFromDoc=false;placeRail();
   if(pendingClaim===null){jumpTo(paperY);return;}
@@ -994,7 +1007,6 @@ function leaveSources(){if(cameFromDoc)history.back();else location.hash='';}
 function showClaim(i){pendingClaim=i;leaveSources();}
 $('#openSources').addEventListener('click',function(){openSources();});
 $('#openResults').addEventListener('click',function(){if(!srcView.hidden)leaveSources();});
-$('#back').addEventListener('click',leaveSources);
 window.addEventListener('hashchange',syncView);
 renderSrcLead();renderSrcFilter();renderSources();renderSugSum();renderNeedSrc();syncView();
 

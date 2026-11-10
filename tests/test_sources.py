@@ -18,6 +18,7 @@ import pl_core
 import pl_http
 import pl_identify
 import pl_ingest
+import pl_resolve
 import pl_text
 from pl_core import Work, jload, jsave
 
@@ -509,6 +510,73 @@ class SourcesNeededTests(unittest.TestCase):
         self.assertNotIn("##", md)
         self.assertLess(len(md.splitlines()), 15)
 
+    def test_report_says_why_a_source_has_no_full_text(self):
+        reasons = pl_core.missing_reasons
+        self.assertEqual(
+            reasons({"errors": [], "oa_urls": []}), ["no open-access copy is listed for it"]
+        )
+        entry = {
+            "oa_urls": ["https://example.org/a.pdf"],
+            "errors": [
+                "unpaywall skipped: no contact email configured (run: pl.py config set-email)",
+                "openalex download: HTTP 403 for www.sciencedirect.com",
+                "openalex download: HTTP 403 for www.sciencedirect.com",
+                "openalex: link did not return a PDF",
+            ],
+        }
+        self.assertEqual(
+            reasons(entry),
+            [
+                "open-access copies were not looked up on Unpaywall (no contact email set)",
+                "www.sciencedirect.com refused an automatic download",
+                "an open link did not lead to the full text",
+            ],
+        )
+        refs = {r["id"]: r for r in pl_core.build_data(self.work)["refs"]}
+        self.assertEqual(refs["1"]["why_missing"], [])  # it has full text
+        self.assertEqual(refs["3"]["why_missing"], ["no open-access copy is listed for it"])
+
+    def test_reasons_are_kept_when_a_later_run_tries_no_download(self):
+        ref = {"id": "3", "title": "Sleep spindles", "authors": ["Brandt, K."], "year": 2021}
+        prior = {
+            "exists": "not_found",
+            "metadata_done": True,
+            "matched": None,
+            "status": "missing",
+            "errors": ["openalex download: HTTP 403 for example.org"],
+        }
+        with tempfile.TemporaryDirectory() as d:
+            entry = pl_resolve.resolve_one(Path(d), ref, prior, None, refresh=False, download=False)
+        self.assertEqual(entry["errors"], ["openalex download: HTTP 403 for example.org"])
+
+    def test_a_failed_download_on_a_later_run_keeps_the_abstract(self):
+        ref = {"id": "3", "title": "Sleep spindles", "authors": ["Brandt, K."], "year": 2021}
+        with tempfile.TemporaryDirectory() as d:
+            work = Path(d)
+            (work / "sources" / "_auto").mkdir(parents=True)
+            (work / "sources" / "_auto" / "3.abstract.txt").write_text(
+                "An abstract. " * 30, "utf-8"
+            )
+            prior = {
+                "exists": "verified",
+                "metadata_done": True,
+                "matched": {"title": "Sleep spindles", "authors": ["Brandt"], "year": 2021},
+                "status": "abstract_only",
+                "evidence_level": "abstract",
+                "evidence_file": "sources/_auto/3.abstract.txt",
+                "evidence_hash": "abc",
+                "evidence_chars": 390,
+            }
+            real_get = pl_http.http_get
+            pl_http.http_get = _offline
+            try:
+                entry = pl_resolve.resolve_one(work, ref, prior, None, refresh=False, download=True)
+            finally:
+                pl_http.http_get = real_get
+        self.assertEqual(entry["status"], "abstract_only")
+        self.assertEqual(entry["evidence_file"], "sources/_auto/3.abstract.txt")
+        self.assertEqual(entry["evidence_hash"], "abc")
+
     def test_nothing_tells_the_person_how_to_name_a_file(self):
         res = self._request()
         md = self.work.p("source_request.md").read_text("utf-8")
@@ -524,20 +592,23 @@ class SourcesNeededTests(unittest.TestCase):
         for ref in pl_core.build_data(self.work)["refs"]:
             self.assertNotIn("provide_as", ref)
 
-    def test_report_has_a_sources_page_with_a_way_back_and_a_way_to_add(self):
+    def test_report_has_results_and_sources_tabs_and_a_way_to_add(self):
         html = pl_core.build_report(self.work).read_text("utf-8")
         for needed in (
             'id="sourcesView"',
-            'id="back"',
+            'class="pagetabs"',
             'id="openResults"',
+            'id="openSources"',
             'id="addSources"',
             'id="pickFiles"',
             'id="pickFolder"',
             'id="srcFilter"',
         ):
             self.assertIn(needed, html)
-        self.assertIn("Back to document", html)
+        self.assertNotIn("Back to document", html)
         self.assertIn("Review Missing Sources", html)
+        self.assertNotIn("'No source'", html)
+        self.assertNotIn("'Located'", html)
         self.assertIn('id="wordReport"', html)
         self.assertNotIn("Screening aid", html)
         self.assertNotIn("<kbd>", html)
