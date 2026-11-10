@@ -2,6 +2,12 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.6] - 2026-11-10
+
+### Changed
+- The Results and Sources tabs are boxes on a rule, with the page you are on filled in
+- The line under the title (file name, date, counts) is removed
+
 ## [0.7.5] - 2026-11-10
 
 ### Changed

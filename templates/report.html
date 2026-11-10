@@ -68,13 +68,14 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 .iconbtn:hover{background:var(--hover);color:var(--ink)}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 /* ---------- page tabs ---------- */
-.pagetabs{background:var(--surface);border-bottom:1px solid var(--line)}
-.pagetabs .in{display:flex;gap:6px}
-.ptab{display:inline-flex;align-items:center;gap:8px;border:0;border-bottom:3px solid transparent;background:none;padding:11px 16px 8px;cursor:pointer;font:600 15px/1.4 var(--font-heading);color:var(--muted)}
-.ptab:first-child{margin-left:-16px}
-.ptab:hover{color:var(--ink);background:var(--hover)}
-.ptab[aria-current="page"]{color:var(--ink);border-bottom-color:var(--primary-dark)}
-.ptab .n{font-weight:400;color:var(--muted)}
+/* Tabs are boxes on a rule: the page you are on is filled and joined to the content below. */
+.pagetabs{background:var(--surface);border-bottom:2px solid var(--primary-dark)}
+.pagetabs .in{display:flex;gap:6px;align-items:flex-end}
+.ptab{display:inline-flex;align-items:center;gap:8px;min-width:132px;justify-content:center;height:42px;padding:0 22px;cursor:pointer;
+  border:1px solid var(--line);border-bottom:0;background:var(--bg);color:var(--ink);font:600 15px/1 var(--font-heading)}
+.ptab:hover{background:var(--hover)}
+.ptab[aria-current="page"]{background:var(--primary-dark);border-color:var(--primary-dark);color:var(--on-accent)}
+.ptab .n{font-weight:400;opacity:.8}
 .textbtn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13.5px/1 var(--font-heading);cursor:pointer}
 .textbtn:hover{background:var(--hover);color:var(--ink)}
 a.textbtn{text-decoration:none}
@@ -83,11 +84,9 @@ a.textbtn{text-decoration:none}
 [hidden]{display:none!important}
 
 /* ---------- title band ---------- */
-.hero{background:var(--surface);padding:6px 0 14px}
+.hero{background:var(--surface);padding:6px 0 18px}
 .summary{background:var(--surface);padding:18px 0 6px}
-.hero h1{font-size:clamp(22px,3.4vw,30px);line-height:1.25;margin:0 0 6px;text-wrap:balance}
-.meta{font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap}
-.meta span:not(:last-child)::after{content:"\2022";margin:0 .55em;color:var(--faint)}
+.hero h1{font-size:clamp(22px,3.4vw,30px);line-height:1.25;margin:0;text-wrap:balance}
 .bar{display:flex;height:6px;background:var(--line-light);margin:0;gap:2px}
 .bar button{border:0;padding:0;cursor:pointer;background:var(--c);min-width:6px;transition:flex-grow .4s}
 .bar button:hover{filter:brightness(1.12)}
@@ -253,8 +252,7 @@ a.textbtn{text-decoration:none}
   body.sheet-open .nav{display:none}
   .tabs{position:static}
   .tabs .in{min-height:0;justify-content:flex-end;padding-top:8px;padding-bottom:8px}
-  .ptab{flex:1;justify-content:center}
-  .ptab:first-child{margin-left:0}
+  .ptab{flex:1;min-width:0;padding:0 10px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.bar button{transition:none}}
 @media print{.tabs,.nav,.rail,.card,.iconbtn,.hint,.pagetabs,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
@@ -275,7 +273,6 @@ a.textbtn{text-decoration:none}
 <section class="hero">
   <div class="in">
     <h1 id="title"></h1>
-    <div class="meta" id="meta"></div>
   </div>
 </section>
 
@@ -358,8 +355,6 @@ function iconBtn(name,label){var b=el('button');b.type='button';b.title=label;b.
 
 document.title=(DATA.meta.title||'Report')+' · Athetize';
 $('#title').textContent=DATA.meta.title||'Untitled paper';
-var metaBits=[DATA.meta.source_file,'checked '+DATA.meta.generated,DATA.claims.length+' claims',DATA.refs.length+' sources'];
-metaBits.forEach(function(t){if(t)$('#meta').append(el('span',null,t));});
 
 /* ---------- build the item list ---------- */
 var items=[]; // {kind,d,verdict,group,el}
