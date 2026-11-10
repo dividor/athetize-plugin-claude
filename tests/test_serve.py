@@ -4,6 +4,7 @@ Each test starts a real helper for a throwaway check folder and talks to it over
 way the report page does. Lookups that would go to the internet are stubbed out.
 """
 
+import hashlib
 import http.client
 import io
 import json
@@ -174,6 +175,26 @@ class HelperTests(unittest.TestCase):
         self.assertEqual(self.summary["not_recognised"], [{"file": "notes.txt", "why": "no match"}])
         self.assertEqual(self.summary["not_recognised_folder"], str(aside))
         self.assertEqual(self.summary["next"], "Run the recheck step.")
+
+    def test_page_can_ask_which_files_are_already_among_the_sources(self):
+        self.work.p("sources").mkdir()
+        self.work.p("sources", "1.txt").write_bytes(b"already here")
+        have = hashlib.sha256(b"already here").hexdigest()
+        new = hashlib.sha256(b"not yet").hexdigest()
+        body = json.dumps({"hashes": [have, new]}).encode()
+        self.assertEqual(self.post_json("api/known", body=body), (200, {"known": [have]}))
+        self.assertEqual(self.post_json("api/known", body=b"not json")[0], 400)
+        self.assertEqual(self.post_json("api/known", body=b'{"hashes": "x"}')[0], 400)
+
+    def test_a_repeat_among_the_chosen_files_is_reported_and_not_kept(self):
+        self.post_json("api/upload?name=one.txt", body=BRANDT.encode())
+        self.post_json("api/upload?name=two.txt", body=BRANDT.encode())
+        result = self.post_json("api/import")[1]
+        self.assertEqual([m["file"] for m in result["matched"]], ["one.txt"])
+        self.assertEqual(
+            result["duplicates"], [{"file": "two.txt", "why": "same content as one.txt"}]
+        )
+        self.assertEqual(list(self.work.p(pl_serve.INCOMING).iterdir()), [])
 
     def test_importing_with_nothing_waiting_adds_nothing(self):
         status, result = self.post_json("api/import")

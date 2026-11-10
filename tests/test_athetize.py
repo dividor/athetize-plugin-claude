@@ -460,6 +460,67 @@ class IdentifyFileTests(unittest.TestCase):
         )
 
 
+class DuplicateSourcesTests(unittest.TestCase):
+    """A folder of papers is scanned for repeats before anything is added."""
+
+    BRANDT = (
+        "Sleep spindles and overnight retention across the lifespan\n"
+        "Karin Brandt and Rafael Silva\nJournal of Sleep Studies, 2021\n\n"
+    )
+    ALVAREZ = (
+        "Secular trends in adolescent sleep duration\nMaria Alvarez and Li Chen\n"
+        "Journal of Sleep Research, 2019\n\n"
+    )
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
+        self.work = Work(self.tmp / "sample-check")
+        self.work.root.mkdir()
+        jsave(self.work.p("paper.json"), pl_ingest.ingest(FIX / "paper.md"))
+        for f in ("refs.json", "claims.json"):
+            shutil.copy(FIX / f, self.work.p(f))
+        statuses = {"1": "full_text", "2": "abstract_only", "3": "missing", "4": "missing"}
+        jsave(
+            self.work.p("manifest.json"),
+            {"refs": {k: {"status": v} for k, v in statuses.items()}},
+        )
+        self.papers = self.tmp / "papers"
+        self.papers.mkdir()
+
+    def put(self, name, text):
+        (self.papers / name).write_text(text, "utf-8")
+
+    def test_repeats_are_named_and_only_one_copy_is_taken(self):
+        self.put("a.txt", self.BRANDT + "Published version. " * 40)
+        self.put("b.txt", self.BRANDT + "Published version. " * 40)
+        self.put("c.txt", self.BRANDT + "Preprint with different wording. " * 40)
+        self.put("d.txt", self.ALVAREZ + "Sleep duration fell across cohorts. " * 40)
+        res = pl.import_paths(self.work, [self.papers], dry_run=True)
+        self.assertEqual(
+            [(m["file"], m["ref"], m["how"]) for m in res["matched"]], [("a.txt", "3", "content")]
+        )
+        self.assertEqual(
+            res["duplicates"],
+            [
+                {"file": "b.txt", "why": "same content as a.txt"},
+                {
+                    "file": "c.txt",
+                    "ref": "3",
+                    "why": "another copy of reference 3; a.txt is used",
+                },
+                {"file": "d.txt", "ref": "1", "why": "reference 1 already has its full text"},
+            ],
+        )
+        self.assertEqual((res["unmatched"], res["ambiguous"]), ([], []))
+
+    def test_a_file_may_replace_full_text_when_every_reference_is_open(self):
+        self.put("d.txt", self.ALVAREZ + "Sleep duration fell across cohorts. " * 40)
+        res = pl.import_paths(self.work, [self.papers], every=True, dry_run=True)
+        self.assertEqual([(m["file"], m["ref"]) for m in res["matched"]], [("d.txt", "1")])
+        self.assertEqual(res["duplicates"], [])
+
+
 class IngestTests(unittest.TestCase):
     def test_fixture_structure(self):
         paper = pl_ingest.ingest(FIX / "paper.md")
@@ -665,7 +726,8 @@ class SourcesNeededTests(unittest.TestCase):
             'id="sourcesView"',
             'id="back"',
             'id="addSources"',
-            'id="srcPicker"',
+            'id="pickFiles"',
+            'id="pickFolder"',
             'id="srcFilter"',
         ):
             self.assertIn(needed, html)

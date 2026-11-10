@@ -24,7 +24,7 @@ from typing import cast
 import pl_core
 import pl_resolve
 from pl_cmd_setup import out
-from pl_cmd_sources import import_paths
+from pl_cmd_sources import import_paths, source_hashes
 from pl_identify import _ref_title
 from pl_workspace import Work
 
@@ -37,6 +37,9 @@ UNRECOGNISED = "not-recognised"
 _JSON = "application/json; charset=utf-8"
 _HTML = "text/html; charset=utf-8"
 _CHUNK = 64 * 1024
+# Largest list of file hashes the page may send, in bytes.
+_MAX_LIST = 1024 * 1024
+_RESULT_LISTS = ("matched", "ambiguous", "unmatched", "duplicates", "already_imported")
 
 
 class Refused(Exception):
@@ -131,13 +134,14 @@ class AddSources:
         """Match the waiting files to references, add the ones recognised and say what happened."""
         folder = self.work.p(INCOMING)
         if not folder.is_dir():
-            return {"matched": [], "ambiguous": [], "unmatched": [], "already_imported": []}
+            return {key: [] for key in _RESULT_LISTS}
         result = import_paths(self.work, [folder])
         refs = {r["id"]: r for r in self.work.refs()}
         for m in result["matched"]:
             m["title"] = _ref_title(refs[m["ref"]]) or pl_core._clean_raw(refs[m["ref"]]["raw"])
             self.added.append({k: m[k] for k in ("file", "ref", "status")})
-        for name in [m["file"] for m in result["matched"]] + result["already_imported"]:
+        filed = [m["file"] for m in result["matched"]] + result["already_imported"]
+        for name in filed + [d["file"] for d in result["duplicates"]]:
             (folder / name).unlink()
         for item in result["ambiguous"]:
             self._set_aside(item, "could be " + " or ".join(item["could_be"]))
@@ -145,6 +149,17 @@ class AddSources:
             self._set_aside(item, item["why"])
         result.pop("dry_run")
         return result
+
+    def known(self, body: bytes) -> dict:
+        """Which of the content hashes the page asks about are already among the sources."""
+        try:
+            asked = json.loads(body.decode("utf-8"))["hashes"]
+        except (ValueError, KeyError, TypeError) as exc:
+            raise Refused(400, "The list of files could not be read.") from exc
+        if not isinstance(asked, list):
+            raise Refused(400, "The list of files could not be read.")
+        have = source_hashes(self.work)
+        return {"known": [h for h in asked if h in have]}
 
     def _set_aside(self, item: dict, why: str) -> None:
         """Keep a file that was not recognised, out of the way of the next import."""
@@ -212,6 +227,7 @@ class _Handler(BaseHTTPRequestHandler):
             "POST",
             {
                 "api/upload": self._upload,
+                "api/known": self._known,
                 "api/import": lambda app, q: self._json(200, app.take_in()),
                 "api/done": self._done,
             },
@@ -223,6 +239,12 @@ class _Handler(BaseHTTPRequestHandler):
             raise Refused(411, "The file's size was not given.")
         name = (query.get("name") or [""])[0]
         self._json(200, app.save(name, int(length), self.rfile))
+
+    def _known(self, app: AddSources, query: dict) -> None:
+        length = self.headers.get("Content-Length") or ""
+        if not length.isdigit() or int(length) > _MAX_LIST:
+            raise Refused(413, "The list of files is too long.")
+        self._json(200, app.known(self.rfile.read(int(length))))
 
     def _done(self, app: AddSources, query: dict) -> None:
         app.finished = True

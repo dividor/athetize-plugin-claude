@@ -86,7 +86,7 @@ Say, for example:
 - "Check the citations in `draft.docx`." Claude runs `check-paper`.
 - "Here is the PDF for reference 4." Claude runs `add-source`, then offers `recheck`.
 - "Add the sources in `~/Papers`." or "Add the attached files as sources." Claude runs `add-source`. You do not name or number the files: each one is read and matched to its reference.
-- "Open the report so I can add sources." Claude runs `pl.py serve` and gives you an address on your own computer. On the report's Sources page, **Add sources** then opens your file chooser; you can also drop files or a whole folder on the page. Each file is matched to its reference straight away, and **Finish and recheck** hands the list back to Claude. This works where Claude's commands run on your own computer.
+- "Open the report so I can add sources." Claude runs `pl.py serve` and gives you an address on your own computer. On the report's Sources page, **Add sources** then lets you choose files or a whole folder; you can also drop them on the page. Each file is matched to its reference straight away, duplicates are skipped and named, and **Finish and recheck** hands the list back to Claude. On that page a claim link such as `c5` opens the claim's analysis in place. This works where Claude's commands run on your own computer.
 - "Update the report." Claude runs `recheck`.
 - "Run it on the new draft." Claude starts a new workspace and runs `pl.py carry-over` from the old one. Unchanged claims keep their sources and verdicts, so only new or edited text is checked again.
 - "Get the missing sources through my browser." Claude runs `fetch-sources`.

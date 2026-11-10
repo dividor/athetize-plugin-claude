@@ -206,6 +206,10 @@ kbd{font:600 12px var(--font-mono);border:1px solid var(--line);background:var(-
 .drophint{margin:-12px 0 20px;font-size:13px;color:var(--muted)}
 #sourcesView.dropping{outline:2px dashed var(--primary);outline-offset:-6px}
 .textbtn:disabled{opacity:.55;cursor:default}
+.addwrap{position:relative;flex:none}
+.addmenu{position:absolute;right:0;top:calc(100% + 4px);z-index:20;min-width:170px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.addmenu button{border:0;background:none;text-align:left;padding:10px 14px;font:14px/1.3 var(--font-body);color:var(--ink);cursor:pointer}
+.addmenu button:hover,.addmenu button:focus-visible{background:var(--hover)}
 .srcfilter{border-bottom:1px solid var(--line);margin:0 0 14px}
 .srcfilter .chip{--c:var(--primary)}
 .srcfilter .chip::before{display:none}
@@ -275,11 +279,12 @@ kbd{font:600 12px var(--font-mono);border:1px solid var(--line);background:var(-
 
 <main class="wrap in" id="sourcesView" hidden>
   <div class="srchead">
-    <div class="row"><h1>Sources</h1><button class="textbtn primary" id="addSources" type="button">Add sources</button></div>
+    <div class="row"><h1>Sources</h1><div class="addwrap"><button class="textbtn primary" id="addSources" type="button">Add sources</button><div class="addmenu" id="addMenu" role="menu" hidden><button type="button" role="menuitem" id="pickFiles">Files…</button><button type="button" role="menuitem" id="pickFolder">A folder…</button></div></div></div>
     <p id="srcLead"></p>
     <input type="file" id="srcPicker" multiple hidden accept=".pdf,.txt,.md,.html,.htm,.docx,.xml">
+    <input type="file" id="dirPicker" webkitdirectory hidden>
   </div>
-  <p class="drophint" id="dropHint" hidden>Add sources opens your files. You can also drop files or a whole folder onto this page. File names do not matter: each file is read and matched to its reference.</p>
+  <p class="drophint" id="dropHint" hidden>Add sources lets you choose files or a whole folder, or drop them on this page. Each file is read and matched to its reference, and duplicates are skipped. File names do not matter.</p>
   <section class="addsrc" id="addSrc" aria-live="polite" hidden></section>
   <div class="srcfilter"><div class="chips" id="srcFilter" role="group" aria-label="Filter sources"></div></div>
   <div id="srcList"></div>
@@ -519,9 +524,11 @@ function buildCard(i){
   if(it.kind==='claim'&&d.type)head.append(pill(d.type,'var(--muted)'));
   if(it.kind==='claim'&&d.retracted)head.append(pill('Retracted source','var(--bad)',true));
   head.append(el('span','sp'));
+  var onSources=!srcView.hidden;
   var pb=iconBtn('prev','Previous claim'),nb=iconBtn('next','Next claim'),cb=iconBtn('close','Close');
   pb.addEventListener('click',function(){go(-1);});nb.addEventListener('click',function(){go(1);});cb.addEventListener('click',closeCard);
-  head.append(pb,nb,cb);card.append(head);
+  if(!onSources)head.append(pb,nb);
+  head.append(cb);card.append(head);
   var body=el('div','c-body');
   if(it.kind==='claim'){
     var t=d.text.length>260?d.text.slice(0,257)+'…':d.text;
@@ -537,12 +544,18 @@ function buildCard(i){
     body.append(el('p','an',d.message));
     body.append(el('div','help',(d.kind||'note')+' · '+(d.severity||'info')));
   }
+  if(onSources){
+    var where=el('div','help'),go2=el('a',null,'Show in the document');go2.href='#';
+    go2.addEventListener('click',function(ev){ev.preventDefault();showClaim(i);});
+    where.append(go2);body.append(where);
+  }
   card.append(body);
 }
 
-function openCard(i,pin,focus){
+var cardAnchor=null;
+function openCard(i,pin,focus,anchor){
   clearTimeout(hideT);clearTimeout(showT);
-  openIdx=i;pinned=!!pin;
+  openIdx=i;pinned=!!pin;cardAnchor=anchor||null;
   buildCard(i);
   var sheet=sheetMode();
   card.classList.toggle('as-sheet',sheet);
@@ -551,8 +564,8 @@ function openCard(i,pin,focus){
   card.style.left='';card.style.top='';
   if(!sheet){
     card.style.visibility='hidden';card.classList.add('open');
-    var m=items[i].el,rects=m.getClientRects(),r=rects[0];
-    for(var k=0;k<rects.length;k++){if(lastPointer.y>=rects[k].top&&lastPointer.y<=rects[k].bottom){r=rects[k];break;}}
+    var m=anchor||items[i].el,rects=m.getClientRects(),r=rects[0];
+    for(var k=0;!anchor&&k<rects.length;k++){if(lastPointer.y>=rects[k].top&&lastPointer.y<=rects[k].bottom){r=rects[k];break;}}
     var vw=document.documentElement.clientWidth,w=card.offsetWidth,h=card.offsetHeight;
     var left=Math.max(12,Math.min(r.left,vw-w-12))+window.scrollX;
     var below=window.innerHeight-r.bottom;
@@ -569,7 +582,8 @@ function closeCard(){
   var wasIdx=openIdx;
   card.classList.remove('open');document.body.classList.remove('sheet-open');pinned=false;openIdx=-1;
   if(cur>=0&&items[cur])items[cur].el.classList.remove('active');
-  if(document.activeElement===card&&wasIdx>=0&&items[wasIdx])items[wasIdx].el.focus({preventScroll:true});
+  var back=cardAnchor||(wasIdx>=0&&items[wasIdx]?items[wasIdx].el:null);cardAnchor=null;
+  if(document.activeElement===card&&back)back.focus({preventScroll:true});
 }
 function scheduleHide(){clearTimeout(hideT);if(pinned)return;hideT=setTimeout(closeCard,240);}
 
@@ -607,7 +621,7 @@ paper.addEventListener('focusin',function(e){
 });
 document.addEventListener('click',function(e){
   if(!openIdx&&openIdx!==0)return;
-  if(card.contains(e.target)||(e.target.closest&&e.target.closest('[data-idx]'))||(e.target.closest&&e.target.closest('.nav')))return;
+  if(card.contains(e.target)||(e.target.closest&&e.target.closest('[data-idx],.nav,.used')))return;
   closeCard();
 });
 document.addEventListener('keydown',function(e){
@@ -668,7 +682,7 @@ function renderSources(){
         var idx=items.findIndex(function(it){return it.kind==='claim'&&it.d.id===cid;});
         if(idx<0)return;
         var a=el('a',null,cid);a.href='#';
-        a.addEventListener('click',function(ev){ev.preventDefault();showClaim(idx);});
+        a.addEventListener('click',function(ev){ev.preventDefault();if(openIdx===idx&&cardAnchor===a)closeCard();else openCard(idx,true,true,a);});
         used.append(a);
       });
       row.append(used);
@@ -719,7 +733,7 @@ function showHowToAdd(){
   addBox.append(el('p','after','Claude replies with a link to this report where Add sources opens your files. You can also attach the papers to a message to Claude, or tell it which folder they are in. File names do not matter.'));
 }
 function showAdded(res){
-  var n=res.matched.length;
+  var n=res.matched.length,skip=res.skipped;
   addNote(n?count(n,'source','sources')+' added':'No sources added');
   if(n)addList(res.matched.map(function(m){return '['+m.ref+'] '+m.title+', from '+m.file;}));
   var left=res.ambiguous.map(function(a){return a.file+': could be '+a.could_be.map(function(id){return '['+id+']';}).join(' or ');})
@@ -728,7 +742,10 @@ function showAdded(res){
     addBox.append(el('p',null,'Not recognised, so not added:'));addList(left);
     addBox.append(el('p',null,'Tell Claude which reference each of these is and it will add them.'));
   }
-  if(res.already_imported.length)addBox.append(el('p',null,'Already added before: '+res.already_imported.join(', ')+'.'));
+  var dupes=skip.same.concat(res.duplicates.map(function(d){return d.file+': '+d.why;}))
+    .concat(skip.known.concat(res.already_imported).map(function(f){return f+': already added';}));
+  if(dupes.length){addBox.append(el('p',null,'Skipped as duplicates:'));addList(dupes);}
+  if(skip.other)addBox.append(el('p',null,count(skip.other,'other file was','other files were')+' left out: not a type Athetize reads.'));
   if(!n)return;
   addBox.append(el('p',null,'The claims that cite '+(n===1?'this source have':'these sources have')+' not been rechecked yet. Add more, or finish.'));
   var fin=el('button',null,'Finish and recheck');fin.type='button';
@@ -746,14 +763,36 @@ function markAdded(res){
   });
   renderSrcLead();renderSrcFilter();renderSources();
 }
-function addFiles(list){
-  if(adding)return;
-  var files=Array.prototype.filter.call(list,function(f){return READS.test(f.name)&&f.name.charAt(0)!=='.';});
-  if(!files.length){addNote('Nothing to add',['None of those files is a type Athetize reads: PDF, Word, web page or text.']);return;}
-  var big=files.filter(function(f){return f.size>MAX_MB*1024*1024;});
-  if(big.length){addNote('Too large to add',[big.map(function(f){return f.name;}).join(', ')+' '+(big.length===1?'is':'are')+' over '+MAX_MB+' MB. Choose the other files again without '+(big.length===1?'it':'them')+'.']);return;}
-  adding=true;addBtn.disabled=true;
+function sha256(file){
+  return file.arrayBuffer().then(function(buf){return crypto.subtle.digest('SHA-256',buf);}).then(function(d){
+    return Array.prototype.map.call(new Uint8Array(d),function(b){return ('0'+b.toString(16)).slice(-2);}).join('');
+  });
+}
+/* Drop files whose content repeats within the selection, or is already among the sources. */
+function scanFiles(files,skip){
+  var seen={},keep=[],i=0;
+  function next(){
+    if(i>=files.length){
+      return api('known',{method:'POST',body:JSON.stringify({hashes:keep.map(function(k){return k.hash;})})}).then(function(j){
+        return keep.filter(function(k){
+          if(j.known.indexOf(k.hash)<0)return true;
+          skip.known.push(k.file.name);return false;
+        }).map(function(k){return k.file;});
+      });
+    }
+    var f=files[i++];
+    addNote('Adding sources',['Checking '+i+' of '+files.length+' for duplicates: '+f.name]);
+    return sha256(f).then(function(h){
+      if(seen[h])skip.same.push(f.name+': same content as '+seen[h]);
+      else{seen[h]=f.name;keep.push({file:f,hash:h});}
+      return next();
+    });
+  }
+  return next();
+}
+function sendFiles(files){
   var i=0;
+  if(!files.length)return {matched:[],ambiguous:[],unmatched:[],duplicates:[],already_imported:[]};
   function next(){
     if(i>=files.length){
       addNote('Adding sources',['Reading '+count(files.length,'file','files')+' and matching to the references.']);
@@ -763,7 +802,19 @@ function addFiles(list){
     addNote('Adding sources',['Sending '+i+' of '+files.length+': '+f.name]);
     return api('upload?name='+encodeURIComponent(f.name),{method:'POST',body:f}).then(next);
   }
-  next().then(function(res){markAdded(res);showAdded(res);},function(e){addNote('Could not add the files',[e.message]);})
+  return next();
+}
+function addFiles(list){
+  if(adding)return;
+  var all=Array.prototype.filter.call(list,function(f){return f.name.charAt(0)!=='.';});
+  var files=all.filter(function(f){return READS.test(f.name);});
+  var skip={other:all.length-files.length,same:[],known:[]};
+  if(!files.length){addNote('Nothing to add',['None of those files is a type Athetize reads: PDF, Word, web page or text.']);return;}
+  var big=files.filter(function(f){return f.size>MAX_MB*1024*1024;});
+  if(big.length){addNote('Too large to add',[big.map(function(f){return f.name;}).join(', ')+' '+(big.length===1?'is':'are')+' over '+MAX_MB+' MB. Choose the other files again without '+(big.length===1?'it':'them')+'.']);return;}
+  adding=true;addBtn.disabled=true;
+  scanFiles(files,skip).then(sendFiles)
+    .then(function(res){res.skipped=skip;markAdded(res);showAdded(res);},function(e){addNote('Could not add the files',[e.message]);})
     .then(function(){adding=false;addBtn.disabled=false;});
 }
 function entryFiles(entry){
@@ -778,12 +829,19 @@ function entryFiles(entry){
   }
   return more();
 }
+var addMenu=$('#addMenu'),dirPicker=$('#dirPicker');
+function showAddMenu(open){addMenu.hidden=!open;addBtn.setAttribute('aria-expanded',open?'true':'false');if(open)$('#pickFiles').focus();}
 addBtn.addEventListener('click',function(){
-  if(helper)picker.click();
+  if(helper)showAddMenu(addMenu.hidden);
   else if(addBox.hidden)showHowToAdd();
   else addBox.hidden=true;
 });
+$('#pickFiles').addEventListener('click',function(){showAddMenu(false);picker.click();});
+$('#pickFolder').addEventListener('click',function(){showAddMenu(false);dirPicker.click();});
 picker.addEventListener('change',function(){addFiles(picker.files);picker.value='';});
+dirPicker.addEventListener('change',function(){addFiles(dirPicker.files);dirPicker.value='';});
+document.addEventListener('click',function(e){if(!addMenu.hidden&&!e.target.closest('.addwrap'))showAddMenu(false);});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!addMenu.hidden){showAddMenu(false);addBtn.focus();}});
 function overPage(e){if(!helper)return;e.preventDefault();$('#sourcesView').classList.add('dropping');}
 $('#sourcesView').addEventListener('dragenter',overPage);
 $('#sourcesView').addEventListener('dragover',overPage);
@@ -827,7 +885,8 @@ var docView=$('#docView'),srcView=$('#sourcesView'),paperY=0,cameFromDoc=false,p
 function jumpTo(y){window.scrollTo({top:y,behavior:'instant'});}
 function showView(sources){
   if(sources===!srcView.hidden)return;
-  if(sources){paperY=window.scrollY;closeCard();}
+  closeCard();
+  if(sources)paperY=window.scrollY;
   [$('.hero'),$('.tabs'),docView,rail,$('#openSources')].forEach(function(e){e.hidden=sources;});
   [$('#srcBar'),srcView].forEach(function(e){e.hidden=!sources;});
   if(sources){jumpTo(0);return;}

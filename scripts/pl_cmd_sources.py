@@ -262,49 +262,69 @@ def _candidate_files(folders: list, recursive: bool) -> list[Path]:
     return files
 
 
-def _place_file(f: Path, text, targets: dict[str, dict], taken: dict[str, str], found: dict):
-    """Match one readable file to a reference and file it as matched, ambiguous or unmatched."""
-    rid, how, amb = _match_file_to_ref(
-        f, text or "", {k: v for k, v in targets.items() if k not in taken}
-    )
-    if rid:
-        if len((text or "").strip()) < 500:
-            found["unmatched"].append(
-                {
-                    "file": f.name,
-                    "why": f"matched {rid} but has almost no text (scanned or a preview page?)",
-                }
-            )
-            return
+def _place_file(
+    f: Path, text, refs: dict[str, dict], wanted: set, taken: dict[str, str], found: dict
+) -> None:
+    """Match one readable file to a reference and sort it.
+
+    It ends up matched, ambiguous, unmatched, or a duplicate: a second copy of a work
+    already taken from this batch, or a work that already has its full text.
+    """
+    rid, how, amb = _match_file_to_ref(f, text or "", refs)
+    if rid is None:
+        if how == "ambiguous":
+            found["ambiguous"].append({"file": f.name, "could_be": amb})
+        else:
+            found["unmatched"].append({"file": f.name, "why": how})
+    elif rid in taken:
+        why = f"another copy of reference {rid}; {taken[rid]} is used"
+        found["duplicates"].append({"file": f.name, "ref": rid, "why": why})
+    elif rid not in wanted:
+        why = f"reference {rid} already has its full text"
+        found["duplicates"].append({"file": f.name, "ref": rid, "why": why})
+    elif len((text or "").strip()) < 500:
+        why = f"matched {rid} but has almost no text (scanned or a preview page?)"
+        found["unmatched"].append({"file": f.name, "why": why})
+    else:
         taken[rid] = f.name
         found["matched"].append({"file": f.name, "ref": rid, "how": how, "path": str(f)})
-    elif how == "ambiguous":
-        found["ambiguous"].append({"file": f.name, "could_be": amb})
-    else:
-        found["unmatched"].append({"file": f.name, "why": how})
 
 
 def _sort_files(
-    files: list[Path], targets: dict[str, dict], have_hashes: set, since
+    files: list[Path], refs: dict[str, dict], wanted: set, have_hashes: set, since
 ) -> tuple[dict, dict[str, str]]:
-    """Sort files into matched, ambiguous, unmatched and already imported.
+    """Sort files into matched, ambiguous, unmatched, duplicates and already imported.
 
-    Also returns which reference each matched file was taken for.
+    A file is compared with every reference, so a paper that is already covered is named
+    as such instead of being reported as unknown. Also returns which reference each
+    matched file was taken for.
     """
-    found: dict[str, list] = {"matched": [], "unmatched": [], "ambiguous": [], "skipped": []}
+    found: dict[str, list] = {
+        "matched": [],
+        "unmatched": [],
+        "ambiguous": [],
+        "skipped": [],
+        "duplicates": [],
+    }
     taken: dict[str, str] = {}
+    seen: dict[str, str] = {}
     for f in files:
         if since and f.stat().st_mtime < since:
             continue
-        if pl_text.sha256_file(f) in have_hashes:
+        digest = pl_text.sha256_file(f)
+        if digest in have_hashes:
             found["skipped"].append(f.name)
             continue
+        if digest in seen:
+            found["duplicates"].append({"file": f.name, "why": f"same content as {seen[digest]}"})
+            continue
+        seen[digest] = f.name
         try:
             text = pl_text.extract_file_text(f)
         except Exception as exc:  # unreadable file
             found["unmatched"].append({"file": f.name, "why": f"could not read: {exc}"[:120]})
             continue
-        _place_file(f, text, targets, taken, found)
+        _place_file(f, text, refs, wanted, taken, found)
     return found, taken
 
 
@@ -323,6 +343,14 @@ def _import_matched(work: Work, refs: dict[str, dict], src: Path, matched: list[
     jsave(work.p("manifest.json"), manifest)
 
 
+def source_hashes(work: Work) -> set:
+    """Content hashes of every file already in the check's sources folder."""
+    src = work.p("sources")
+    return (
+        {pl_text.sha256_file(p) for p in src.rglob("*") if p.is_file()} if src.is_dir() else set()
+    )
+
+
 def import_paths(
     work: Work,
     paths: list,
@@ -333,18 +361,18 @@ def import_paths(
 ) -> dict:
     """Match the given files, and the files in the given folders, to references and add them.
 
-    Only references still lacking full text are considered unless ``every`` is set. Each file
-    is read and identified by what it says; see ``pl_identify``.
+    Each file is read and identified by what it says; see ``pl_identify``. Files with the
+    same content, second copies of one work and works that already have full text are
+    reported as duplicates and not added. ``every`` lets a file replace existing full text.
     """
     refs = {r["id"]: r for r in work.refs()}
-    need = {r["id"] for r in _needs_rows(work)} if not every else set(refs)
+    wanted = {r["id"] for r in _needs_rows(work)} if not every else set(refs)
     known = work.manifest().get("refs", {})
-    targets = {rid: with_known_doi(refs[rid], known.get(rid, {})) for rid in need}
+    candidates = {rid: with_known_doi(ref, known.get(rid, {})) for rid, ref in refs.items()}
     src = work.p("sources")
     src.mkdir(exist_ok=True)
-    have_hashes = {pl_text.sha256_file(p) for p in src.rglob("*") if p.is_file()}
     files = _candidate_files(paths, recursive)
-    found, taken = _sort_files(files, targets, have_hashes, since)
+    found, taken = _sort_files(files, candidates, wanted, source_hashes(work), since)
     matched = found["matched"]
     if not dry_run:
         _import_matched(work, refs, src, matched)
@@ -356,6 +384,7 @@ def import_paths(
         "matched": matched,
         "ambiguous": found["ambiguous"],
         "unmatched": found["unmatched"],
+        "duplicates": found["duplicates"],
         "already_imported": found["skipped"],
         "still_need_source": still,
         "dry_run": bool(dry_run),

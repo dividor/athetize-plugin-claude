@@ -16,7 +16,9 @@ All notable changes to Athetize will be documented in this file.
 
 ### Report
 - Sources is its own page, opened from a Sources button in the top bar, with a Back to document button that returns to where you were reading. The browser's Back button does the same
-- The Sources page has one Add sources button. When Claude shows the report through the new local helper, the button opens the file chooser, and files or a whole folder can be dropped on the page. Each file is matched to its reference at once and the list updates. Opened as a plain file, the button gives the request that gets Claude to open the report that way
+- The Sources page has one Add sources button. When Claude shows the report through the new local helper, the button offers Files or A folder, each opening the standard chooser, and files or a whole folder can be dropped on the page. Each file is matched to its reference at once and the list updates. Opened as a plain file, the button gives the request that gets Claude to open the report that way
+- On the Sources page a claim link such as c5 opens the claim's analysis there, with a link to show it in the document
+- Added files are scanned for duplicates before anything is sent or added: the same content twice, a second copy of one work, a work that already has its full text, and files added before. Each is named with the reason
 - The filter on the Sources page is a pair of tabs, All and Need full text, in place of the toggle button
 - The "Screening aid" box is gone
 - The summary of suggested edits sits under the paper

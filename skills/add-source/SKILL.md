@@ -17,13 +17,14 @@ Add files, a folder of files or a URL the user supplies to an existing check wor
    - The person said which reference it is (an id, or "this is the Strobel paper"): use that.
    - Otherwise run `pl.py import-sources PATH... --work W --dry-run`, giving the files, the folder, or both. It reads each file and identifies its reference from the DOI or arXiv number printed on its first pages, or from the reference title together with the first author's surname. The file name is looked at only when the text does not settle it. Add `--all` when the person is replacing a source that already has full text, and `--recursive` for a folder with subfolders.
    - Show anything listed under `ambiguous` or `unmatched` and ask which reference it is. Never guess between two references, and never ask the person to rename a file.
+   - Files listed under `duplicates` are not added: they repeat another file's content, are a second copy of a work already taken, or belong to a reference that already has its full text. Say so in one line, with the reason given for each.
 4. Add them. Run the same `import-sources` command without `--dry-run` for the files it matched. For a file whose reference the person stated, and for a URL, run `pl.py add-source --work W REF FILE_OR_URL`. Accepted types: pdf, txt, md, html, htm, docx, xml. A URL is downloaded once.
 5. Read the printed result. If the file produced little or no text (a scanned PDF, for instance), say so and ask for a text version or a different file. An image-only PDF cannot be verified.
 6. When all files are added, offer the `recheck` skill. Run it immediately when the user already asked for an updated report.
 
 ## Adding from the report page
 
-The report's Sources page has an **Add sources** button. It opens the person's file chooser, and takes files or a whole folder dropped on the page, when the report is shown by the plugin's helper instead of opened as a file. Use this when the person asks to add sources from the report, or says "open the report so I can add sources".
+The report's Sources page has an **Add sources** button. It lets the person choose files or a whole folder, or drop them on the page, and skips duplicates, when the report is shown by the plugin's helper instead of opened as a file. Use this when the person asks to add sources from the report, or says "open the report so I can add sources".
 
 1. Run `pl.py serve --work W` as a background command, never in the foreground: it waits for the person. Its first line of output is JSON with a `url` on `127.0.0.1`.
 2. Give the person that address and say: open it, go to Sources, press Add sources. Open it for them when a browser tool is available.
