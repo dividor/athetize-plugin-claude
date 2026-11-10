@@ -26,6 +26,9 @@ RANK = [
     "contradicted",
 ]
 
+# Verdicts that mean a cited source does not back the claim.
+FAILING = ("unsupported", "contradicted")
+
 VERDICT_LABEL = {
     "supported": "Supported",
     "partially_supported": "Partly supported",
@@ -227,6 +230,8 @@ def _report_claim(src: _Sources, c: dict, para: dict, span: tuple[int, int]) -> 
         "type": c.get("type", "empirical"),
         "cites": cites,
         "verdict": _claim_verdict(cites, items),
+        # sources that do not back the claim, kept visible when another source does better
+        "failing_refs": [i["ref_id"] for i in items if i["verdict"] in FAILING],
         "items": items,
         "retracted": flagged_retracted,
         "note": c.get("note", ""),
@@ -358,6 +363,7 @@ def _report_ref(rid: str, r: dict, e: dict, out_claims: list[dict], sugs: list[d
         "link": e.get("link"),
         "retracted": bool(e.get("retracted")),
         "retraction_notes": e.get("retraction_notes", []),
+        "discrepancies": e.get("discrepancies", []),
         "local_file": e.get("local_file"),
         "evidence_level": e.get("evidence_level", "none"),
         "match_score": e.get("match_score"),

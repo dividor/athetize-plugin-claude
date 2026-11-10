@@ -76,6 +76,7 @@ def _status_data(work: Work):
                 "status": e.get("status", "unresolved"),
                 "exists": e.get("exists", "unchecked"),
                 "retracted": e.get("retracted", False),
+                "discrepancies": e.get("discrepancies", []),
                 "citation": (e.get("citation") or r.get("raw") or r["id"])[:140],
                 "claims_affected": len(cited_by.get(r["id"], [])),
                 "errors": e.get("errors", [])[:3],
@@ -103,6 +104,11 @@ def cmd_status(args):
         "retracted": [{"id": r["id"], "citation": r["citation"]} for r in retracted],
         "metadata_problems": [
             {"id": r["id"], "exists": r["exists"], "citation": r["citation"]} for r in bad_exist
+        ],
+        "reference_discrepancies": [
+            {"id": r["id"], "citation": r["citation"], "differs": r["discrepancies"]}
+            for r in rows
+            if r["discrepancies"]
         ],
     }
     verdicts = work.verdicts().get("items", [])

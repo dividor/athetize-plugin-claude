@@ -91,12 +91,16 @@ def suggest_prepare(work: Work, batch_size: int = 8) -> dict:
     return {"flagged_claims": len(todo), "batches": n, "already_have_suggestions": len(existing)}
 
 
-def merge_suggestions(work: Work) -> int:
-    """Add the suggestions written to suggest_parts/*.json to suggestions.json, without repeats."""
+def merge_suggestions(work: Work, replace: bool = False) -> int:
+    """Add the suggestions written to suggest_parts/*.json to suggestions.json, without repeats.
+
+    With ``replace`` the list is rebuilt from the part files alone, so a suggestion that was
+    edited or deleted in its part file does not linger from an earlier merge.
+    """
     parts = (
         sorted(work.p("suggest_parts").glob("*.json")) if work.p("suggest_parts").is_dir() else []
     )
-    cur = work.suggestions()
+    cur = [] if replace else work.suggestions()
     have = {(sg.get("para"), sg.get("original")) for sg in cur}
     added = 0
     for f in parts:

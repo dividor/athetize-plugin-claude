@@ -14,9 +14,11 @@ import copy
 import difflib
 import re
 import time
+import unicodedata
 from pathlib import Path
 
 import pl_docx_package
+import pl_text
 from pl_docx_comments import (
     _BAD_XML,
     _anchor_comment,
@@ -79,6 +81,11 @@ def _para_text(p) -> str:
     return re.sub(r"\s+", " ", "".join(parts)).strip()
 
 
+def _stored_text(p) -> str:
+    """The paragraph's text as ingest stores it, for telling whether it is the same one."""
+    return pl_text.clean_extracted(_para_text(p)).replace("\n", " ")
+
+
 def _split_run(r, content) -> None:
     """Replace run r by one copy per text-bearing child, each keeping the run's formatting."""
     parent = r.getparent()
@@ -129,22 +136,57 @@ def _raw_text(segs) -> str:
     return "".join(((s[1].text or "") if s[1].tag == W + "t" else " ") for s in segs)
 
 
+def _clusters(raw: str):
+    """Yield (start, end) of each character in raw together with its combining marks."""
+    i = 0
+    while i < len(raw):
+        j = i + 1
+        while j < len(raw) and unicodedata.combining(raw[j]):
+            j += 1
+        yield i, j
+        i = j
+
+
 def _norm_with_map(raw: str):
-    out, mp = [], []
+    """The paragraph text as it is stored at ingest, with where each character came from.
+
+    Ingest normalises text (NFKC, soft hyphens dropped, runs of spaces collapsed), so the
+    stored text can differ from Word's: an angstrom sign becomes a capital A with a ring, a
+    ligature becomes two letters. Returns that text and, for each of its characters, the
+    (start, end) of the raw characters it stands for; a ligature's letters share one span.
+    """
+    out, spans = [], []
     prev_space = True
-    for i, ch in enumerate(raw):
-        if ch.isspace():
-            if prev_space:
-                continue
-            out.append(" ")
-            mp.append(i)
-            prev_space = True
-        else:
+    for start, end in _clusters(raw):
+        for ch in unicodedata.normalize("NFKC", raw[start:end]).replace("\u00ad", ""):
+            if ch.isspace():
+                if prev_space:
+                    continue
+                ch = " "
             out.append(ch)
-            mp.append(i)
-            prev_space = False
-    mp.append(len(raw))
-    return "".join(out), mp
+            spans.append((start, end))
+            prev_space = ch == " "
+    return "".join(out), spans
+
+
+def _raw_range(spans: list, norm: str, a: int, b: int, rep: str):
+    """Raw (start, end, replacement) for replacing norm[a:b] with rep.
+
+    When the range cuts through letters that share one raw character, it is widened to take
+    in the whole character and the letters it keeps are added to the replacement.
+    """
+    if not spans:
+        return 0, 0, rep
+    while 0 < a < len(spans) and spans[a] == spans[a - 1]:
+        a -= 1
+        rep = norm[a] + rep
+    while 0 < b < len(spans) and spans[b] == spans[b - 1]:
+        rep += norm[b]
+        b += 1
+    if a == b:
+        at = spans[a][0] if a < len(spans) else spans[-1][1]
+        return at, at, rep
+    return spans[a][0], spans[b - 1][1], rep
 
 
 def _split_at(p, pos: int):
@@ -359,11 +401,11 @@ def _group_by_paragraph(suggestions: list[dict]) -> dict[str, list[dict]]:
     return by_para
 
 
-def _locate(items: list[dict], norm: str, mp: list, results: list[dict]) -> list:
+def _locate(items: list[dict], norm: str, results: list[dict]) -> list:
     """Find each suggestion's original text in the paragraph.
 
-    Returns (raw_start, raw_end, original, suggestion) for those found exactly once; the
-    others are added to results as not applied.
+    Returns (start, end, original, suggestion), with positions in the normalised text, for
+    those found exactly once; the others are added to results as not applied.
     """
     located = []
     for s in items:
@@ -372,8 +414,7 @@ def _locate(items: list[dict], norm: str, mp: list, results: list[dict]) -> list
         if k < 0 or norm.find(orig, k + 1) >= 0:
             results.append(_not_applied(s, "text not found exactly once in the paragraph"))
             continue
-        raw_start, raw_end = mp[k], mp[k + len(orig) - 1] + 1
-        located.append((raw_start, raw_end, orig, s))
+        located.append((k, k + len(orig), orig, s))
     return located
 
 
@@ -386,41 +427,44 @@ def _add_comment(job: _Job, p, made: list, paragraphs: list) -> None:
     job.added_comments += 1
 
 
-def _apply_one(job: _Job, p, raw_start: int, orig: str, s: dict, norm: str) -> None:
-    """Apply one located suggestion to paragraph p, with its comment when it has a note."""
+def _apply_one(job: _Job, p, start: int, orig: str, s: dict, text: tuple) -> None:
+    """Apply one located suggestion to paragraph p, with its comment when it has a note.
+
+    ``start`` is where the original begins in the normalised text; ``text`` is that text
+    with its map back to the raw characters.
+    """
+    norm, spans = text
     sug = re.sub(r"\s+", " ", s["suggested"]).strip()
     made: list = []
     for a, b, rep in sorted(word_edits(orig, sug), key=lambda e: -e[0]):
-        made += (
-            _edit(p, raw_start + a, raw_start + b, rep, job.author, job.date, job.ids, job.etree)
-            or []
-        )
+        raw_a, raw_b, rep = _raw_range(spans, norm, start + a, start + b, rep)
+        made += _edit(p, raw_a, raw_b, rep, job.author, job.date, job.ids, job.etree) or []
     if made and job.notes.get(s["id"]):
         _add_comment(job, p, made, job.notes[s["id"]])
     if not sug and orig == norm.strip():
         _delete_paragraph_mark(p, job.author, job.date, job.ids, job.etree)
 
 
-def _apply_located(job: _Job, p, located: list, norm: str) -> None:
+def _apply_located(job: _Job, p, located: list, text: tuple) -> None:
     """Apply located suggestions from the end of the paragraph backwards, skipping overlaps."""
     located.sort(key=lambda x: -x[0])
     last_start = None
-    for raw_start, raw_end, orig, s in located:
-        if last_start is not None and raw_end > last_start:
+    for start, end, orig, s in located:
+        if last_start is not None and end > last_start:
             job.results.append(_not_applied(s, "overlaps another suggestion in the same paragraph"))
             continue
-        _apply_one(job, p, raw_start, orig, s, norm)
+        _apply_one(job, p, start, orig, s, text)
         job.results.append({"id": s["id"], "applied": True})
-        last_start = raw_start
+        last_start = start
 
 
 def _apply_paragraph(job: _Job, p, items: list[dict]) -> None:
     """Locate every suggestion for paragraph p first, then apply them."""
     _split_multi_content_runs(p)
     segs = _segments(p)
-    norm, mp = _norm_with_map(_raw_text(segs))
-    located = _locate(items, norm, mp, job.results)
-    _apply_located(job, p, located, norm)
+    text = _norm_with_map(_raw_text(segs))
+    located = _locate(items, text[0], job.results)
+    _apply_located(job, p, located, text)
 
 
 def apply(
@@ -449,7 +493,7 @@ def apply(
     job = _Job(etree, croot, author, date, notes, ids, next_cid)
     for para, items in _group_by_paragraph(suggestions).items():
         p = pid.get(para)
-        if p is None or _para_text(p) != paper_text.get(para):
+        if p is None or _stored_text(p) != paper_text.get(para):
             job.results.extend(_not_applied(s, _PARAGRAPH_NOT_FOUND) for s in items)
             continue
         _apply_paragraph(job, p, items)

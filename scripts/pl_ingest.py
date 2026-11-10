@@ -19,6 +19,15 @@ AFTER_REF = re.compile(
 )
 NUMBERED_HEAD = re.compile(r"^(\d+(\.\d+)*\.?|[IVX]+\.)\s+\S")
 
+# Section names that are headings but never the title of a paper.
+SECTION_NAME = re.compile(
+    r"^\W*(abstract|summary|introduction|background|keywords?|highlights|"
+    r"(table of )?contents)\W*$",
+    re.I,
+)
+# A word: two or more letters together. Text without one holds nothing to check.
+_WORD = re.compile(r"[^\W\d_]{2,}")
+
 # File types whose headings are not marked up, so a short "References" line counts as a heading.
 _PLAIN_TEXT_EXTS = (".pdf", ".md", ".markdown", ".txt", ".tex", "")
 
@@ -232,12 +241,15 @@ def _is_heading(ext: str, style: str, text: str):
 
 
 def _paragraph_kind(ext: str, style: str, text: str, in_refs: bool) -> tuple[str, bool]:
-    """Classify a paragraph as heading, body or reference.
+    """Classify a paragraph as heading, body, reference or other.
 
     Returns (kind, in_refs), where in_refs says whether the reference list is still open
     after this paragraph.
     """
     kind = "heading" if _is_heading(ext, style, text) else "body"
+    if kind == "body" and not in_refs and not _WORD.search(text):
+        # a table mark, a rule or a lone number: shown in the report, never sent for checking
+        return "other", in_refs
     if kind == "heading":
         if REF_HEAD.match(text):
             in_refs = True
@@ -252,9 +264,32 @@ def _paragraph_kind(ext: str, style: str, text: str, in_refs: bool) -> tuple[str
     return kind, in_refs
 
 
-def _is_title(style: str, kind: str, text: str):
-    """True when the paragraph can serve as the paper title."""
-    return style.startswith("title") or (kind == "heading" and not REF_HEAD.match(text))
+# A heading can only be the title when it is among the first few paragraphs.
+_TITLE_WITHIN = 5
+
+
+def _is_title(style: str, kind: str, text: str, position: int):
+    """True when the paragraph can serve as the paper title.
+
+    A numbered heading ("1. Introduction") or a plain section name is a section, not a
+    title, and so is any heading further down the paper.
+    """
+    if style.startswith("title"):
+        return True
+    if kind != "heading" or position >= _TITLE_WITHIN or REF_HEAD.match(text):
+        return False
+    return not NUMBERED_HEAD.match(text) and not SECTION_NAME.match(text)
+
+
+def _fallback_title(path: Path, paragraphs: list[dict]) -> str:
+    """A title for a paper that marks none.
+
+    Its opening line if that reads like a title, else its file name.
+    """
+    first = paragraphs[0]["text"] if paragraphs else ""
+    if first and len(first) <= 150 and not first.endswith("."):
+        return first
+    return re.sub(r"[_\-]+", " ", path.stem).strip()
 
 
 def ingest(path: Path) -> dict:
@@ -268,11 +303,11 @@ def ingest(path: Path) -> dict:
         text = pl_text.clean_extracted(p["text"]).replace("\n", " ")
         style = (p.get("style") or "").lower()
         kind, in_refs = _paragraph_kind(ext, style, text, in_refs)
-        if not title and _is_title(style, kind, text):
+        if not title and _is_title(style, kind, text, len(paragraphs)):
             title = text
         paragraphs.append({"id": f"p{len(paragraphs) + 1}", "text": text, "kind": kind})
-    if not title and paragraphs:
-        title = paragraphs[0]["text"][:160]
+    if not title:
+        title = _fallback_title(path, paragraphs)
     return {
         "source_file": path.name,
         "sha256": pl_text.sha256_file(path),

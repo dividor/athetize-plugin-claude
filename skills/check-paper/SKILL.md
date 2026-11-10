@@ -48,7 +48,7 @@ Then run `PL coverage --work W`. Every citation marker in the body should sit in
 
 ### 6. Resolve and download sources
 
-Run `PL resolve --work W`. It looks each reference up, flags retractions and metadata mismatches, and downloads open-access full text where it can: Unpaywall, OpenAlex, Europe PMC, arXiv, ERIC, Semantic Scholar, and any URL printed in the reference. Links from a doubtful metadata match are not used, so a wrong paper is not downloaded. Then read the `needs_source` list from the output.
+Run `PL resolve --work W`. It looks each reference up, flags retractions and metadata mismatches, and downloads open-access full text where it can: Unpaywall, OpenAlex, Europe PMC, arXiv, ERIC, Semantic Scholar, and any URL printed in the reference. Links from a doubtful metadata match are not used, so a wrong paper is not downloaded. Then read the `needs_source` list from the output. The output also has `reference_discrepancies`: references whose database record was accepted but disagrees with the paper on the year, the title or the DOI. They are likely errors in the reference list; carry them into the reference fixes of the `suggest-edits` skill.
 
 If any references need a source, do these in order:
 
@@ -73,7 +73,7 @@ If any references need a source, do these in order:
 
 ### 7. Prepare and verify
 
-1. `PL prepare --work W` writes `W/batches/batch-NNN.json` for claims that still need a verdict and prints the batch count.
+1. `PL prepare --work W` writes `W/batches/batch-NNN.json` for claims that still need a verdict and prints the batch count. In its output `pending_claims` counts claims, while `auto_unverifiable` counts pairs of a claim and one reference that were marked "can't verify" because the reference has no source text.
 2. Launch one `claim-verifier` subagent per batch file, all in a single message. Give each only the batch path, the work directory and the full path of the helper script.
 3. After they finish, run `PL verify --work W`. The script re-locates every quoted passage in the source text and downgrades any verdict whose quote cannot be found. Report the downgrade figure exactly as printed.
 4. If a batch produced no verdict file, rerun `PL prepare` (it keeps finished work) and launch only for the remaining batches.
@@ -87,8 +87,8 @@ When any claim is partly supported, overstated or contradicted, or the reference
 The deliverables are the HTML report and, for a Word manuscript, a Word copy with the suggested edits.
 
 1. `PL build --work W` writes `W/report.html`, with each suggestion shown in its claim's card. Print any warnings it shows.
-2. If the paper is a .docx (ingest keeps a private copy as `W/manuscript.docx`), run `PL export-docx --work W --author "<name>"`. It writes `W/<paper>_athetize_suggestions.docx`. Every suggestion becomes a tracked change, with a Word comment carrying the card's content: the verdict, why the edit is needed, each source's verdict and analysis, evidence excerpts with page numbers, and the source link. The user's original file is never modified. Report any suggestions it skipped.
-3. Send both files to the user with SendUserFile: the report with display render when offered, the Word file as an attachment. Also mention the folder path.
+2. If the paper is a .docx (ingest keeps a private copy as `W/manuscript.docx`), run `PL export-docx --work W --author "<name>"`, where the name is the person's own if you know it and "Athetize" if you do not. It writes `W/<paper>_athetize_suggestions.docx`. Every suggestion becomes a tracked change, with a Word comment carrying the card's content: the verdict, why the edit is needed, each source's verdict and analysis, evidence excerpts with page numbers, and the source link. The user's original file is never modified. Report any suggestions it skipped.
+3. Send both files to the user with SendUserFile, each as an attachment. Do not ask for the report to be shown inline: it needs its own scripts, and an inline preview can come up blank. Also mention the folder path.
    - When references still lack full text, a person is there to act on it, and this session's commands run on their own computer: also start the report helper (`PL serve --work W` as a background command; see "Adding from the report page" in the `add-source` skill) and give its address. On that copy of the report, Add sources on the Sources page opens their file chooser.
 4. Summarise in under 120 words, in this order. Use only numbers printed by the scripts.
    - If references still lack full text and the person has not already answered the question in step 6, start with that: how many, where the download list is, and that saving the papers and saying "done" gets a recheck. The report shows the same figures in a banner above the paper.

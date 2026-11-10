@@ -5,7 +5,14 @@ from __future__ import annotations
 import urllib.parse
 
 import pl_http
-from pl_refmatch import abstract_from_inverted, normalize_doi, score_candidate, strip_tags, surname
+from pl_refmatch import (
+    abstract_from_inverted,
+    clean_title,
+    normalize_doi,
+    score_candidate,
+    strip_tags,
+    surname,
+)
 
 _RETRACTION_TYPES = ("retraction", "withdrawal", "removal", "expression_of_concern")
 _OPENALEX_EXTRA_KEYS = ("is_retracted", "pdf_urls", "pmcid", "oa_url", "openalex_id")
@@ -13,7 +20,7 @@ _OPENALEX_EXTRA_KEYS = ("is_retracted", "pdf_urls", "pmcid", "oa_url", "openalex
 
 def candidate_from_crossref(msg: dict) -> dict:
     """Candidate record built from one Crossref work."""
-    title = (msg.get("title") or [""])[0]
+    title = clean_title((msg.get("title") or [""])[0])
     authors = [f"{a.get('family', '')}".strip() for a in msg.get("author", []) if a.get("family")]
     issued = (msg.get("issued", {}).get("date-parts") or [[None]])[0][0]
     venue = (msg.get("container-title") or [""])[0]
@@ -63,7 +70,7 @@ def candidate_from_openalex(w: dict) -> dict:
     ids = w.get("ids") or {}
     return {
         "source": "openalex",
-        "title": w.get("title") or w.get("display_name") or "",
+        "title": clean_title(w.get("title") or w.get("display_name") or ""),
         "authors": authors,
         "year": w.get("publication_year"),
         "venue": venue,

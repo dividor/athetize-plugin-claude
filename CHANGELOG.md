@@ -12,6 +12,8 @@ All notable changes to Athetize will be documented in this file.
 - `add-source` takes several files or a folder and works out which reference each one is
 
 ### Added
+- References whose accepted record disagrees with the paper on the year, the title or the DOI are listed by `pl.py status` as `reference_discrepancies` and shown on the report's Sources page
+- `pl.py merge-suggestions --replace` rebuilds the list from the part files, so a changed or deleted suggestion does not linger
 - PDFs can be read with `pypdf`, the library Claude's own PDF skill uses, when neither PyMuPDF nor `pdftotext` is present. Nothing changes where one of those is installed. With this, Athetize needs no package beyond the ones Claude's own document skills use
 - `pl.py serve --work W`: a helper that shows the report from `127.0.0.1` and takes the files chosen on its Sources page. It listens on this computer only, puts a random token in its address, refuses requests from other pages, and stops on "Finish and recheck" or after two hours without activity, printing what was added
 
@@ -27,6 +29,12 @@ All notable changes to Athetize will be documented in this file.
 - The summary of suggested edits sits under the paper
 
 ### Fixed
+- A suggested edit was left out of the Word copy when its paragraph held a character that is normalised at ingest, such as an angstrom sign or a ligature. The export now compares and locates text the way it is stored
+- A claim with one cited source that does not support it, and another that does better, no longer hides that finding. It is counted and filtered under "Not supported" too, underlined in red in the text, and named in the claim's card
+- A database record whose title is only the start of the reference's title, or carries a footnote after it, is no longer called a mismatch. Stored records are judged again with this rule
+- Markup such as `<sub>` and `<i>` is removed from record titles, and a record's capitals or footnote no longer replace the paper's own title in the citation shown
+- The paper title is no longer taken from a numbered section heading or a heading far down the paper. A paper with no marked title uses its opening line, or its file name
+- Table marks and other paragraphs without words are kept in the report but no longer sent to claim extraction
 - A file from the same field as several references could be matched to the wrong one, or reported as ambiguous, because any text that used the words of a title counted as carrying that title
 - A file with a publisher's name such as `1-s2.0-S0019103508.pdf` is no longer taken for reference 1
 - On the Sources page a "Closest database record" note no longer squeezes the citation into a narrow column

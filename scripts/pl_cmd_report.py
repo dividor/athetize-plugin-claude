@@ -184,10 +184,13 @@ def cmd_suggest_prepare(args):
 
 def cmd_merge_suggestions(args):
     work = Work(args.work)
-    n = pl_core.merge_suggestions(work)
+    n = pl_core.merge_suggestions(work, replace=args.replace)
     errors, warnings = pl_core.validate(work)
     errs = [e for e in errors if e.startswith(("suggestions.json", "s"))]
-    print(f"Merged {n} new suggestions ({len(work.suggestions())} total).")
+    if args.replace:
+        print(f"Rebuilt suggestions.json from the part files ({n} suggestions).")
+    else:
+        print(f"Merged {n} new suggestions ({len(work.suggestions())} total).")
     for e in errs:
         print("ERROR", e)
 

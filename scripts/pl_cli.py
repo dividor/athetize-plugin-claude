@@ -174,6 +174,11 @@ def _add_output_commands(sub) -> None:
 
     c = sub.add_parser("merge-suggestions")
     c.add_argument("--work", required=True)
+    c.add_argument(
+        "--replace",
+        action="store_true",
+        help="Rebuild the list from the part files, dropping suggestions no longer in them",
+    )
     c.set_defaults(fn=pl_cmd_report.cmd_merge_suggestions)
 
     c = sub.add_parser("export-docx")

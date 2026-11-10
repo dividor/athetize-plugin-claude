@@ -1010,7 +1010,7 @@ class GoldenTest(unittest.TestCase):
                 argparse.Namespace(work=str(s.w.root), from_="p5", to="p7", kind="body")
             )
             pl.cmd_coverage(argparse.Namespace(work=str(s.w.root), para="p5"))
-            pl.cmd_merge_suggestions(argparse.Namespace(work=str(s.w.root)))
+            pl.cmd_merge_suggestions(argparse.Namespace(work=str(s.w.root), replace=False))
             pl.cmd_build(argparse.Namespace(work=str(s.w.root), out=None))
         out["misc_stdout"] = buf.getvalue()
         out["search_urls"] = pl_core._search_urls(

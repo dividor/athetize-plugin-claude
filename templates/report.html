@@ -119,6 +119,8 @@ a.textbtn{text-decoration:none}
   -webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-color .15s,opacity .2s}
 .claim:hover,.claim.active{background:color-mix(in srgb,var(--c) 24%,transparent)}
 .claim.dim{opacity:.3}
+.claim.has-bad{border-bottom-color:var(--bad)}
+.failnote{margin:0 0 12px;font-size:13.5px;font-weight:600;color:var(--bad)}
 .v-supported{--c:var(--ok)}
 .v-partially_supported,.v-overstated{--c:var(--part);border-bottom-style:dashed}
 .v-unsupported,.v-contradicted{--c:var(--bad);border-bottom-style:double;border-bottom-width:4px}
@@ -222,6 +224,7 @@ a.textbtn{text-decoration:none}
 .srow .used{grid-column:2;font-size:12.5px;color:var(--muted);margin-top:4px}
 .srow .used a{margin-right:6px;font:600 12px var(--font-mono)}
 .srow .more{grid-column:2;font-size:12px;color:var(--muted)}
+.srow .differs{color:var(--part);font-weight:600}
 .srow.flag{border-left:3px solid var(--part)}
 .empty{padding:24px;text-align:center;color:var(--muted)}
 
@@ -309,6 +312,7 @@ if(!DATA){document.body.textContent='No report data found.';return;}
 var LABEL={supported:'Supported',partially_supported:'Partly supported',overstated:'Overstated',unsupported:'Not supported',contradicted:'Contradicted',unverifiable:"Can't verify",pending:'Not checked yet',uncited:'Needs a citation',note:'Note'};
 var GROUP={supported:'ok',partially_supported:'part',overstated:'part',unsupported:'bad',contradicted:'bad',unverifiable:'unv',pending:'unv',uncited:'unc',note:'unc'};
 var GLABEL={ok:'Supported',part:'Partial',bad:'Not supported',unv:"Can't verify",unc:'Uncited and notes'};
+var FAILING_NOTE='A cited source does not support this';
 var GVAR={ok:'--ok',part:'--part',bad:'--bad',unv:'--unv',unc:'--unc'};
 var STATUS={full_text:'Full text',abstract_only:'Abstract only',user_provided:'Provided by you',missing:'No source',unresolved:'Not resolved'};
 var EXISTS={verified:'Located',partial_match:'Partial metadata match',mismatch:'Metadata mismatch',not_found:'Not in citation databases',unchecked:'Unchecked'};
@@ -340,8 +344,8 @@ DATA.notes.forEach(function(n){
 var paper=$('#paper');
 var lastText=-1;DATA.paragraphs.forEach(function(p,pi){if(p.kind!=='heading')lastText=pi;});
 DATA.paragraphs.forEach(function(p,pi){
+  if(pi===0&&p.text===DATA.meta.title)return;
   if(p.kind==='heading'){
-    if(pi===0&&p.text===DATA.meta.title)return;
     if(pi>lastText)return;
     paper.append(el('h2','h',p.text));return;
   }
@@ -352,12 +356,13 @@ DATA.paragraphs.forEach(function(p,pi){
     if(s.start<pos){ if(s.kind==='note'){(pnotes[p.id]=pnotes[p.id]||[]).push(s.d);} return; }
     if(s.start>pos)node.append(document.createTextNode(p.text.slice(pos,s.start)));
     var verdict=s.kind==='claim'?s.d.verdict:'note';
-    var m=el('span','claim v-'+verdict,p.text.slice(s.start,s.end));
+    var failing=s.kind==='claim'&&GROUP[verdict]!=='bad'&&(s.d.failing_refs||[]).length>0;
+    var m=el('span','claim v-'+verdict+(failing?' has-bad':''),p.text.slice(s.start,s.end));
     m.tabIndex=0;m.setAttribute('role','button');
-    m.setAttribute('aria-label',LABEL[verdict]+': '+p.text.slice(s.start,s.end));
+    m.setAttribute('aria-label',LABEL[verdict]+(failing?', and '+FAILING_NOTE.toLowerCase():'')+': '+p.text.slice(s.start,s.end));
     var idx=items.length;
     m.dataset.idx=idx;
-    items.push({kind:s.kind,d:s.d,verdict:verdict,group:GROUP[verdict],el:m});
+    items.push({kind:s.kind,d:s.d,verdict:verdict,group:GROUP[verdict],failing:failing,el:m});
     node.append(m);pos=s.end;
   });
   if(pos<p.text.length)node.append(document.createTextNode(p.text.slice(pos)));
@@ -372,13 +377,21 @@ DATA.paragraphs.forEach(function(p,pi){
 if(!DATA.claims.length&&!DATA.notes.length){paper.append(el('div','empty','No checkable claims were found in this paper.'));}
 
 /* ---------- filters + summary bar ---------- */
+/* A claim sits in one group, by its best source. A claim that also has a cited source which
+   does not support it is counted and filtered under "Not supported" as well, so that
+   finding is never hidden behind a better result from another source. */
 var active={};
 var counts={ok:0,part:0,bad:0,unv:0,unc:0};
 items.forEach(function(it){counts[it.group]++;});
+function inGroup(it,g){return it.group===g||(g==='bad'&&it.failing);}
+function shown(it){return Object.keys(active).some(function(g){return active[g]&&inGroup(it,g);});}
+var alsoFailing=items.filter(function(it){return it.failing;}).length;
 var chips=$('#chips'), bar=$('#bar');
 Object.keys(GLABEL).forEach(function(g){
   var b=el('button','chip g-'+g);b.type='button';b.setAttribute('aria-pressed','false');b.dataset.g=g;
-  b.append(document.createTextNode(GLABEL[g]+' '));b.append(el('b',null,String(counts[g])));
+  var n=counts[g]+(g==='bad'?alsoFailing:0);
+  b.append(document.createTextNode(GLABEL[g]+' '));b.append(el('b',null,String(n)));
+  if(g==='bad'&&alsoFailing)b.title='Includes '+alsoFailing+(alsoFailing===1?' claim that another source supports in part, but one':' claims that another source supports in part, but one')+' cited source does not support';
   b.addEventListener('click',function(){active[g]=!active[g];applyFilter();});
   chips.append(b);
   if(counts[g]){
@@ -392,7 +405,7 @@ bar.removeAttribute('aria-hidden');
 function anyActive(){return Object.keys(active).some(function(k){return active[k];});}
 function applyFilter(){
   var any=anyActive();
-  items.forEach(function(it){it.el.classList.toggle('dim',any&&!active[it.group]);});
+  items.forEach(function(it){it.el.classList.toggle('dim',any&&!shown(it));});
   [].forEach.call(chips.children,function(c){c.setAttribute('aria-pressed',active[c.dataset.g]?'true':'false');});
   updateNav();placeRail();
 }
@@ -401,7 +414,7 @@ function applyFilter(){
 function navList(){
   var any=anyActive(),out=[];
   items.forEach(function(it,i){
-    if(any){if(active[it.group])out.push(i);}
+    if(any){if(shown(it))out.push(i);}
     else if(it.verdict!=='supported')out.push(i);
   });
   return out;
@@ -540,6 +553,10 @@ function buildCard(i){
   if(it.kind==='claim'){
     var t=d.text.length>260?d.text.slice(0,257)+'…':d.text;
     body.append(el('div','claimtxt',t));
+    if(it.failing){
+      var fr=d.failing_refs;
+      body.append(el('p','failnote',count(fr.length,'cited source does','cited sources do')+' not support this claim: '+fr.map(function(r){return '['+r+']';}).join(', ')+'.'));
+    }
     if(!d.items.length){
       body.append(el('p','an','This sentence states something specific but cites no source. Add a citation or soften the wording.'));
     }
@@ -683,6 +700,7 @@ function renderSources(){
     if(lh){var la=el('a',null,'Open local copy');la.href=lh;la.target='_blank';la.rel='noopener';la.style.fontSize='12px';pills.append(la);}
     row.append(pills);
     if(r.matched_title&&(r.exists==='partial_match'||r.exists==='mismatch')){row.append(el('div','more','Closest database record: \u201c'+r.matched_title+'\u201d. Not used: the citation and link above are the paper\u2019s own.'));}
+    if(r.discrepancies&&r.discrepancies.length)row.append(el('div','more differs','Differs from the database record. '+r.discrepancies.map(function(t){return t.charAt(0).toUpperCase()+t.slice(1);}).join('. ')+'.'));
     if(r.cited_by&&r.cited_by.length){
       var used=el('div','used','Supports ');
       r.cited_by.forEach(function(cid){

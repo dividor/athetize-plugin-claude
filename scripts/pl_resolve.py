@@ -34,6 +34,8 @@ from pl_refmatch import (
     abstract_matches,
     author_mismatch,
     citation_string,
+    clean_title,
+    discrepancies,
     display_fields,
     doi_slug,
     eric_id,
@@ -77,6 +79,8 @@ __all__ = [
     "surname",
     "title_in_text",
     "try_download_fulltext",
+    "clean_title",
+    "discrepancies",
 ]
 
 USER_FILE_EXTS = (".pdf", ".txt", ".md", ".html", ".htm", ".docx", ".xml")
@@ -142,9 +146,43 @@ def _note_record_title(entry: dict) -> None:
         entry["record_title"] = entry["matched"]["title"]
 
 
+# How well a record matches, worst first.
+_MATCH_RANK = ("not_found", "mismatch", "partial_match", "verified")
+
+
+def _rescore_stored_match(ref: dict, entry: dict) -> None:
+    """Judge a stored record again with the current rules, so an old verdict is not kept.
+
+    Earlier versions kept markup in record titles and scored a record whose title begins
+    the reference's title as a mismatch.
+    """
+    matched = entry.get("matched")
+    if not matched or not ref.get("title"):
+        return
+    if entry.get("exists") not in ("verified", "partial_match", "mismatch"):
+        return
+    matched["title"] = clean_title(matched.get("title"))
+    score = score_candidate(ref, matched)
+    now = _exists_from_score(score, normalize_doi(ref.get("doi")))
+    if _MATCH_RANK.index(now) <= _MATCH_RANK.index(entry["exists"]):
+        return  # only ever lifts a verdict; a doubtful match is lowered where it is explained
+    entry["match_score"] = round(score, 3)
+    entry["exists"] = now
+    if now == "verified":
+        entry.pop("record_title", None)
+        entry["doi"] = matched.get("doi") or entry.get("doi")
+
+
+def _note_discrepancies(ref: dict, entry: dict) -> None:
+    """For an accepted match, record where the record disagrees with the reference."""
+    accepted = entry.get("exists") == "verified"
+    entry["discrepancies"] = discrepancies(ref, entry.get("matched")) if accepted else []
+
+
 def _reuse_metadata(ref: dict, prior: dict, entry: dict, errors: list[str]) -> dict:
     """Metadata stage from the earlier manifest entry. Returns the candidate for download."""
     _copy_keys(entry, prior, _METADATA_KEYS)
+    _rescore_stored_match(ref, entry)
     if (
         entry.get("exists") == "verified"
         and entry.get("matched")
@@ -162,6 +200,7 @@ def _reuse_metadata(ref: dict, prior: dict, entry: dict, errors: list[str]) -> d
     if entry.get("exists") != "verified":
         entry["doi"] = shown_doi
         _note_record_title(entry)
+    _note_discrepancies(ref, entry)
     cand = dict(prior.get("matched") or {})
     cand["pdf_urls"] = prior.get("oa_urls") or []
     cand["pmcid"] = prior.get("pmcid")
@@ -213,6 +252,7 @@ def _record_match(ref: dict, doi: str | None, cand: dict, score: float | None, e
     if exists != "verified":
         _note_record_title(entry)
         entry["doi"] = shown_doi
+    _note_discrepancies(ref, entry)
     entry["oa_urls"] = cand.get("pdf_urls") or []
     entry["pmcid"] = cand.get("pmcid")
 

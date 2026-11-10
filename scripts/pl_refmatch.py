@@ -50,6 +50,27 @@ def strip_tags(s: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", s or "")).strip()
 
 
+# Tags that only style part of a word, so removing them must not add a space (CH<sub>4</sub>).
+_INLINE_TAGS = re.compile(r"</?(?:sub|sup|i|b|em|strong|scp|span|font|u)\b[^>]*>", re.I)
+
+
+def clean_title(title: str | None) -> str:
+    """A title from a database record as plain text: no markup, entities or stray spacing."""
+    text = _INLINE_TAGS.sub("", html.unescape(title or ""))
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", text)).strip()
+
+
+def titles_nest(a: str | None, b: str | None) -> bool:
+    """True when one title begins with the whole of the other.
+
+    Records often hold a short title where the reference gives the subtitle too, or carry a
+    footnote after the title. The shorter one must be at least three words and 15 letters.
+    """
+    na, nb = pl_text.norm_title(a or ""), pl_text.norm_title(b or "")
+    short, long_ = sorted((na, nb), key=len)
+    return len(short) >= 15 and len(short.split()) >= 3 and long_.startswith(short)
+
+
 def title_in_text(title: str | None, text: str, window: int = 8000) -> bool:
     """True when most distinctive words of the title appear near the start of the text."""
     words = [w for w in re.findall(r"[a-z]{4,}", (title or "").casefold())]
@@ -107,6 +128,8 @@ def author_mismatch(ref: dict, cand: dict) -> bool:
 def score_candidate(ref: dict, cand: dict) -> float:
     """Title similarity between reference and record, lowered for author or year disagreement."""
     sim = pl_text.title_similarity(ref.get("title") or "", cand.get("title") or "")
+    if titles_nest(ref.get("title"), cand.get("title")):
+        sim = max(sim, 0.9)
     if author_mismatch(ref, cand):
         # A different first author usually means a review, chapter or commentary about the work.
         sim = min(sim - 0.08, 0.7)
@@ -117,6 +140,38 @@ def score_candidate(ref: dict, cand: dict) -> float:
         except (TypeError, ValueError):
             pass
     return max(0.0, sim)
+
+
+def _year_gap(ref: dict, record: dict) -> int:
+    """Years between the reference and the record; 0 when either year is missing or odd."""
+    try:
+        return abs(int(ref["year"]) - int(record["year"]))
+    except (KeyError, TypeError, ValueError):
+        return 0
+
+
+def discrepancies(ref: dict, record: dict | None) -> list[str]:
+    """Where an accepted record disagrees with the reference as the paper prints it.
+
+    A match can be good enough to accept and still show an error in the reference list: a
+    wrong year, a missing DOI, a reworded title. These are for the person to check.
+    """
+    record = record or {}
+    notes = []
+    if _year_gap(ref, record) > 1:
+        notes.append(f"year: the reference says {ref['year']}, the record says {record['year']}")
+    theirs, ours = record.get("title") or "", ref.get("title") or ""
+    if theirs and ours and not titles_nest(ours, theirs):
+        if pl_text.title_similarity(ours, theirs) < 0.9:
+            notes.append(f"title: the record reads \u201c{theirs[:200]}\u201d")
+    if record.get("doi") and not normalize_doi(ref.get("doi")):
+        notes.append(f"DOI: the reference prints none, the record has {record['doi']}")
+    return notes
+
+
+def _same_title(ours: str, theirs: str) -> bool:
+    """True when a record's title is the reference's title, give or take styling or a tail."""
+    return titles_nest(ours, theirs) or pl_text.title_similarity(ours, theirs) >= 0.95
 
 
 def _who_from_raw(raw: str) -> str:
@@ -155,8 +210,10 @@ def citation_string(ref: dict, matched: dict | None) -> str:
     who = _who(ref, base)
     year = base.get("year") or ref.get("year") or ""
     title = base.get("title") or ref.get("title") or ""
+    if ref.get("title") and _same_title(ref["title"], title):
+        title = ref["title"]  # the paper's own wording, not a record's capitals or footnote
     venue = base.get("venue") or ref.get("venue") or ""
-    title, venue = html.unescape(title or ""), html.unescape(venue or "")
+    title, venue = clean_title(title), html.unescape(venue or "")
     head = (who + (f" ({year})" if year else "")).strip()
     parts = [p for p in [head, title.rstrip("."), venue] if p]
     return ". ".join(parts) if parts else (ref.get("raw") or ref["id"])

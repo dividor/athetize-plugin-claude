@@ -161,6 +161,107 @@ class ResolveHelperTests(unittest.TestCase):
         self.assertFalse(any("wrong.example" in c for c in calls))
 
 
+class RecordMatchTests(unittest.TestCase):
+    """Judging a database record against the reference as the paper prints it."""
+
+    REPORT = {
+        "id": "5",
+        "title": (
+            "Origins, Worlds, and Life: A Decadal Strategy for Planetary Science and "
+            "Astrobiology 2023\u20132032"
+        ),
+        "authors": ["National Academies of Sciences, Engineering, and Medicine"],
+        "year": 2023,
+        "doi": "10.17226/26522",
+    }
+    ARTICLE = {
+        "id": "34",
+        "title": "Hydrogen and methane in Titan's atmosphere: chemistry, diffusion and escape",
+        "authors": ["Strobel, D. F."],
+        "year": 2012,
+        "doi": "10.1139/p11-131",
+    }
+
+    def test_markup_is_removed_from_a_record_title(self):
+        clean = pl_resolve.clean_title
+        self.assertEqual(clean("The CH<sub>4</sub> structure"), "The CH4 structure")
+        self.assertEqual(clean("Ly\n   <i>\u03b1</i>\n   Emissions"), "Ly \u03b1 Emissions")
+        self.assertEqual(clean("Sleep &amp; memory<br/>revisited"), "Sleep & memory revisited")
+        self.assertEqual(clean(None), "")
+
+    def test_record_with_only_the_main_title_is_accepted(self):
+        record = {"title": "Origins, Worlds, and Life", "authors": [], "year": 2023}
+        self.assertGreaterEqual(pl_resolve.score_candidate(self.REPORT, record), 0.85)
+
+    def test_record_title_with_a_footnote_after_it_is_accepted(self):
+        record = {
+            "title": self.ARTICLE["title"] + " 1This article is part of a Special Issue.",
+            "authors": ["Strobel"],
+            "year": 2012,
+        }
+        self.assertGreaterEqual(pl_resolve.score_candidate(self.ARTICLE, record), 0.85)
+        shown = pl_resolve.citation_string(self.ARTICLE, record)
+        self.assertIn(self.ARTICLE["title"], shown)
+        self.assertNotIn("Special Issue", shown)
+
+    def test_a_short_shared_opening_is_not_enough(self):
+        ref = {"title": "Sleep and memory in adolescents: a cohort study", "year": 2020}
+        record = {"title": "Sleep and", "year": 2020}
+        self.assertLess(pl_resolve.score_candidate(ref, record), 0.6)
+
+    def test_differences_from_an_accepted_record_are_listed(self):
+        ref = {"title": "Pathways to Discovery in Astronomy", "year": 2021, "doi": "10.17226/26141"}
+        record = {
+            "title": "Pathways to Discovery in Astronomy",
+            "year": 2023,
+            "doi": "10.17226/26141",
+        }
+        self.assertEqual(
+            pl_resolve.discrepancies(ref, record),
+            ["year: the reference says 2021, the record says 2023"],
+        )
+        ref = {"title": "Lyman-alpha models for LRO LAMP based on MESSENGER data", "year": 2013}
+        record = {
+            "title": "Lyman-\u03b1 Models for LRO LAMP from MESSENGER and SOHO Data",
+            "year": 2014,
+            "doi": "10.1007/978-1-4614-6384-9_5",
+        }
+        got = pl_resolve.discrepancies(ref, record)
+        self.assertEqual(len(got), 2)
+        self.assertTrue(got[0].startswith("title: the record reads"))
+        self.assertEqual(
+            got[1], "DOI: the reference prints none, the record has 10.1007/978-1-4614-6384-9_5"
+        )
+        self.assertEqual(pl_resolve.discrepancies(self.ARTICLE, dict(self.ARTICLE)), [])
+        self.assertEqual(pl_resolve.discrepancies(self.ARTICLE, None), [])
+
+    def test_a_stored_mismatch_is_judged_again_with_the_current_rules(self):
+        with tempfile.TemporaryDirectory() as d:
+            prior = {
+                "exists": "mismatch",
+                "match_score": 0.404,
+                "matched": {
+                    "title": "Origins, Worlds, and <i>Life</i>",
+                    "authors": [],
+                    "year": 2023,
+                    "doi": "10.17226/26522",
+                },
+                "doi": "10.17226/26522",
+                "record_title": "Origins, Worlds, and <i>Life</i>",
+                "metadata_done": True,
+                "retracted": False,
+                "retraction_notes": [],
+            }
+            entry = pl_resolve.resolve_one(
+                Path(d), self.REPORT, prior, None, refresh=False, download=False
+            )
+        self.assertEqual(entry["exists"], "verified")
+        self.assertEqual(entry["matched"]["title"], "Origins, Worlds, and Life")
+        self.assertNotIn("record_title", entry)
+        self.assertEqual(entry["discrepancies"], [])
+        self.assertIn("A Decadal Strategy", entry["citation"])
+
+
 class DocxExportTests(unittest.TestCase):
     DOC = (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
@@ -242,6 +343,89 @@ class DocxExportTests(unittest.TestCase):
             "systems hear, score, and represent children", "systems transcribe speech of children"
         )
         self.assertEqual([o[0] for o in ops], ["=", "-", "+", "="])
+
+
+def _docx_with(path, body_xml):
+    """Write a minimal Word file whose body is the given paragraphs."""
+    with zipfile.ZipFile(path, "w") as z:
+        z.writestr(
+            "word/document.xml",
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+            f"<w:body>{body_xml}</w:body></w:document>",
+        )
+        z.writestr(
+            "[Content_Types].xml",
+            '<?xml version="1.0"?>'
+            '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"/>',
+        )
+        z.writestr(
+            "word/_rels/document.xml.rels",
+            '<?xml version="1.0"?><Relationships '
+            'xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>',
+        )
+
+
+def _accepted_text(docx):
+    """The document's text with every tracked change accepted."""
+    xml = zipfile.ZipFile(docx).read("word/document.xml").decode()
+    xml = re.sub(r"<w:del .*?</w:del>", "", xml, flags=re.S)
+    return "".join(re.findall(r"<w:t(?: [^>]*)?>([^<]*)</w:t>", xml))
+
+
+class DocxNormalisedTextTests(unittest.TestCase):
+    """Edits still land when Word's characters differ from the text stored at ingest."""
+
+    # an angstrom sign (U+212B) and an fi ligature (U+FB01), as Word files often hold them
+    RAW = "The exobase sits near 4000 \u212b and the \ufb01t is good (Lee, 2020)."
+
+    def _export(self, suggestions):
+        d = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, d, ignore_errors=True)
+        src, out = Path(d) / "in.docx", Path(d) / "out.docx"
+        _docx_with(src, f"<w:p><w:r><w:t>{self.RAW}</w:t></w:r></w:p>")
+        paper = pl_ingest.ingest(src)
+        stored = paper["paragraphs"][0]["text"]
+        self.assertEqual(
+            stored, "The exobase sits near 4000 \u00c5 and the fit is good (Lee, 2020)."
+        )
+        for s in suggestions:
+            s["para"] = "p1"
+        return pl_docx.apply(src, out, paper, suggestions, author="Test"), out
+
+    def test_paragraph_is_found_and_the_untouched_characters_are_kept(self):
+        res, out = self._export(
+            [
+                {
+                    "id": "s1",
+                    "original": "sits near 4000 \u00c5",
+                    "suggested": "sits at about 4000 \u00c5",
+                }
+            ]
+        )
+        self.assertEqual(res, [{"id": "s1", "applied": True}])
+        self.assertEqual(
+            _accepted_text(out),
+            "The exobase sits at about 4000 \u212b and the \ufb01t is good (Lee, 2020).",
+        )
+
+    def test_an_edit_inside_a_ligature_replaces_the_whole_word(self):
+        res, out = self._export(
+            [{"id": "s1", "original": "the fit is good", "suggested": "the match is good"}]
+        )
+        self.assertEqual(res, [{"id": "s1", "applied": True}])
+        self.assertEqual(
+            _accepted_text(out),
+            "The exobase sits near 4000 \u212b and the match is good (Lee, 2020).",
+        )
+
+    def test_map_gives_each_stored_character_its_raw_span(self):
+        norm, spans = pl_docx._norm_with_map("a \u00a0b\u00adc \ufb01 A\u030a")
+        self.assertEqual(norm, "a bc fi \u00c5")
+        self.assertEqual(len(norm), len(spans))
+        self.assertEqual(spans[5], spans[6])  # f and i come from the one ligature
+        self.assertEqual(spans[-1], (9, 11))  # A with its combining ring
+        self.assertEqual(pl_docx._raw_range(spans, norm, 6, 7, "X"), (7, 8, "fX"))
 
 
 class WordReportLinkTests(unittest.TestCase):
@@ -374,6 +558,50 @@ class IngestTests(unittest.TestCase):
         self.assertEqual(kinds["p9"], "reference")
         self.assertEqual(kinds["p12"], "reference")
 
+    def _ingest_docx(self, body_xml, name="Titan_escape-plan.docx"):
+        d = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, d, ignore_errors=True)
+        src = Path(d) / name
+        _docx_with(src, body_xml)
+        return pl_ingest.ingest(src)
+
+    @staticmethod
+    def _p(text):
+        return f"<w:p><w:r><w:t>{text}</w:t></w:r></w:p>"
+
+    def test_a_numbered_section_or_a_late_heading_is_not_the_title(self):
+        paper = self._ingest_docx(
+            self._p("Science/Technical/Management Plan")
+            + self._p("1. Introduction")
+            + self._p("We propose to characterize the escape of hydrogen from Titan.") * 5
+            + self._p("TASKS / TIMELINE")
+        )
+        self.assertEqual(paper["title"], "Science/Technical/Management Plan")
+        self.assertEqual(paper["paragraphs"][1]["kind"], "heading")
+        self.assertEqual(paper["paragraphs"][-1]["kind"], "heading")
+
+    def test_file_name_is_the_title_when_the_paper_opens_with_a_sentence(self):
+        paper = self._ingest_docx(
+            self._p("We propose to characterize the escape of hydrogen from Titan.")
+            + self._p("Introduction")
+        )
+        self.assertEqual(paper["title"], "Titan escape plan")
+
+    def test_marks_without_words_are_kept_but_not_sent_for_checking(self):
+        paper = self._ingest_docx(
+            self._p("Plan of work for the escape study")
+            + self._p("*")
+            + self._p("12")
+            + self._p("Fit the profile (PI, Student)")
+            + self._p("References")
+            + self._p("1.")
+        )
+        kinds = [p["kind"] for p in paper["paragraphs"]]
+        self.assertEqual(kinds, ["body", "other", "other", "body", "heading", "reference"])
+        self.assertEqual(
+            [p["id"] for p in paper["paragraphs"]], ["p1", "p2", "p3", "p4", "p5", "p6"]
+        )
+
 
 class PendingReportTests(unittest.TestCase):
     """A report can be built before any claim has been verified."""
@@ -394,6 +622,73 @@ class PendingReportTests(unittest.TestCase):
             self.assertEqual(by_id["c4"]["verdict"], "uncited")
             self.assertTrue(pl_core.build_report(w).exists())
             self.assertEqual(pl_core.suggest_prepare(w)["flagged_claims"], 0)
+
+
+class FailingSourceTests(unittest.TestCase):
+    """A source that does not back a claim stays visible when another source does better."""
+
+    def test_claim_keeps_its_best_verdict_and_names_the_failing_source(self):
+        with tempfile.TemporaryDirectory() as d:
+            w = Work(d)
+            jsave(w.p("paper.json"), pl_ingest.ingest(FIX / "paper.md"))
+            for f in ("refs.json", "claims.json"):
+                shutil.copy(FIX / f, w.p(f))
+            # c6 cites references 1 and 2; c1 cites reference 1 only
+            rows = [("c6", "1", "partially_supported"), ("c6", "2", "unsupported")]
+            rows.append(("c1", "1", "supported"))
+            jsave(
+                w.p("verdicts.json"),
+                {
+                    "items": [
+                        {
+                            "claim_id": c,
+                            "ref_id": r,
+                            "verdict": v,
+                            "analysis": "x",
+                            "confidence": 0.9,
+                            "evidence_level": "full_text",
+                        }
+                        for c, r, v in rows
+                    ]
+                },
+            )
+            by_id = {c["id"]: c for c in pl_core.build_data(w)["claims"]}
+            self.assertEqual(by_id["c6"]["verdict"], "partially_supported")
+            self.assertEqual(by_id["c6"]["failing_refs"], ["2"])
+            self.assertEqual(by_id["c1"]["failing_refs"], [])
+            html = pl_core.build_report(w).read_text("utf-8")
+            self.assertIn('"failing_refs": ["2"]', html)
+            self.assertIn("has-bad", html)
+
+
+class MergeSuggestionsTests(unittest.TestCase):
+    """Suggestions written in part files become one list."""
+
+    def _args(self, work, replace=False):
+        return argparse.Namespace(work=str(work.root), replace=replace)
+
+    def _merge(self, work, replace=False):
+        with contextlib.redirect_stdout(io.StringIO()) as buf:
+            pl.cmd_merge_suggestions(self._args(work, replace))
+        return buf.getvalue()
+
+    def test_replace_drops_a_suggestion_removed_from_its_part_file(self):
+        with tempfile.TemporaryDirectory() as d:
+            w = Work(d)
+            jsave(w.p("paper.json"), pl_ingest.ingest(FIX / "paper.md"))
+            for f in ("refs.json", "claims.json"):
+                shutil.copy(FIX / f, w.p(f))
+            w.p("suggest_parts").mkdir()
+            para = w.paper()["paragraphs"][4]
+            first = {"para": para["id"], "original": para["text"][:30], "suggested": "A."}
+            second = {"para": para["id"], "original": para["text"][40:70], "suggested": "B."}
+            jsave(w.p("suggest_parts", "part-01.json"), [first, second])
+            self.assertIn("Merged 2 new suggestions (2 total)", self._merge(w))
+            jsave(w.p("suggest_parts", "part-01.json"), [dict(second, suggested="C.")])
+            # a plain merge only adds, so the removed and the old wording both stay
+            self.assertIn("Merged 0 new suggestions (2 total)", self._merge(w))
+            self.assertIn("Rebuilt suggestions.json", self._merge(w, replace=True))
+            self.assertEqual([(s["id"], s["suggested"]) for s in w.suggestions()], [("s1", "C.")])
 
 
 class PipelineTests(unittest.TestCase):
