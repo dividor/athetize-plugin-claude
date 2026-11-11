@@ -21,7 +21,12 @@ Produce a self-contained `report.html` (and, for Word manuscripts, a tracked-cha
 
 ### 1. Preflight
 
-Run `PL doctor`. Report blocked services and a missing PDF extractor in one line each. If `xml_parser` is null and the paper is a Word file (or the user has Word or XML sources), the `defusedxml` package is missing. Say so, ask the person whether to install it (`pip install defusedxml`), and install it only when they agree. Never install a package without asking. If no contact email is configured, ask once whether to set one (`PL config set-email ADDRESS`); it enables Unpaywall open-access lookups and is stored only in `~/.athetize/config.json`. Continue without it if the user declines.
+Run `PL doctor`. Report blocked services in one line.
+
+If `missing_packages` is not empty, ask the person once, with the session's question tool when it has one (header "Setup"): "Athetize needs some small Python packages that are not installed here: NAMES. Install them now?" Answers: **Install** ("Installs them for this Python only, in your user folder or the active virtual environment") and **Not now**. Never install a package without asking.
+
+- **Install:** run `PL install-packages`. It installs the missing ones into the Python that runs these scripts and checks each one afterwards. Say in one line what was installed. If it exits with an error, show `pip_said` and `command`, say which features will not work (`not_available`), and carry on with the rest.
+- **Not now:** carry on, and say in one line what will not work: Word papers and sources need `defusedxml`, the Word copy needs `lxml`, and PDFs need `pypdf` when no other PDF reader is installed. If no contact email is configured, ask once whether to set one (`PL config set-email ADDRESS`); it enables Unpaywall open-access lookups and is stored only in `~/.athetize/config.json`. Continue without it if the user declines.
 
 ### 2. Ingest
 

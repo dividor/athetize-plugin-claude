@@ -5,6 +5,7 @@ The skills in this plugin call these subcommands for every deterministic step.
 Python 3.9+, standard library only (PyMuPDF optional for PDF text).
 
   pl.py doctor
+  pl.py install-packages
   pl.py config set-email you@example.org | show
   pl.py ingest PAPER [--work DIR]
   pl.py paragraphs --work DIR [--from p1 --to p40] [--kind body|heading|reference]
