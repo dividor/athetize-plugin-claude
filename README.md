@@ -11,14 +11,22 @@ A Claude plugin that checks whether the sources a paper cites support what the p
 
 ## Install
 
-In Claude Code:
+**Claude Code**
 
 ```
 /plugin marketplace add dividor/athetize-plugin-claude
 /plugin install athetize@athetize-plugin
 ```
 
-**Requirements.** Python 3.9 or newer. Athetize uses the same libraries as Claude's own Word and PDF skills, so where those work there is nothing to install. On your own computer, install them once:
+**Claude desktop app (Cowork) and claude.ai**
+
+Open Customize, then Plugins, choose Add marketplace and enter `dividor/athetize-plugin-claude`. An organisation admin can add it for everyone under Organization settings, Plugins & skills.
+
+Athetize is tested in Claude Code and the Claude desktop app. In claude.ai chat a plugin's agents are not used, and Athetize has not been tested there.
+
+**Requirements**
+
+Python 3.9 or newer with `defusedxml`, `lxml` and `pypdf`, the libraries Claude's own Word and PDF skills use. Claude checks for them when a check starts. If one is missing:
 
 ```bash
 pip install defusedxml lxml pypdf
@@ -48,7 +56,15 @@ Other things to say:
 
 To try it without a paper of your own, check the sample in [examples](examples/README.md).
 
-## What you get
+## Features
+
+- **Claim-by-claim checking.** Every cited claim is compared with the text of its source. Each result quotes the passage it rests on, and a script confirms that the quote is really in the source.
+- **Finds the sources.** Downloads open-access copies, follows addresses printed in a reference, and looks on the web for reports that have no record in the academic indexes.
+- **Uses your files.** Point it at a folder or pick files. Each one is read and matched to its reference by its content, whatever it is called.
+- **Interactive report.** One HTML file: your paper with its figures and tables, claims highlighted by result, filters, a card for each claim, and a Sources tab where missing sources can be added.
+- **Suggested edits.** Rewordings bounded by the evidence, and fixes to the reference list. View them in the report, or download a Word copy with tracked changes and comments.
+- **Reference checks.** Flags retracted sources and references whose year, title or DOI disagrees with the database record.
+- **Fast rechecks.** After new sources or a new draft, only what changed is checked again.
 
 | Result | Meaning |
 | --- | --- |
@@ -58,7 +74,7 @@ To try it without a paper of your own, check the sample in [examples](examples/R
 | Can't verify | The source could not be read. Never guessed. |
 | Uncited | A specific claim with no citation. |
 
-A result that rests on an abstract only is marked provisional. Retracted sources and reference-list errors are flagged.
+A result that rests on an abstract only is marked provisional.
 
 Click a claim for the analysis, the quoted passage and a suggested rewording:
 

@@ -2,6 +2,11 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.26] - 2026-11-10
+
+### Changed
+- README: install steps for the Claude desktop app and claude.ai beside the Claude Code ones; the requirements no longer say both that nothing needs installing and to install it; "What you get" is now "Features" and lists what the plugin does
+
 ## [0.7.25] - 2026-11-10
 
 ### Changed
