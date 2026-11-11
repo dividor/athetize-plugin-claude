@@ -2,6 +2,11 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.25] - 2026-11-10
+
+### Changed
+- The README is rewritten to be short and to follow the usual layout of a plugin repository: what it is, install, use, what you get, privacy, limitations. The long material moved to `docs/reference.md` and `docs/privacy.md`
+
 ## [0.7.24] - 2026-11-10
 
 ### Added
