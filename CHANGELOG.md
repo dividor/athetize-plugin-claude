@@ -2,6 +2,11 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.22] - 2026-11-10
+
+### Changed
+- In Settings the contact email is marked "(Optional)"
+
 ## [0.7.21] - 2026-11-10
 
 ### Added
