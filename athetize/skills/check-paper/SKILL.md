@@ -70,28 +70,40 @@ If any references need a source, do these in order:
    - The situation, filled from `summary` with the numbers copied: "`need_source` of `references` references have no full text: `abstract_only` have only an abstract and `no_text` have nothing. `claims_relying` claims rely on them and will be marked "can't verify", or judged from the abstract alone, never guessed. The report's Sources tab lists them."
    - The ones that matter most: the first five entries of `items` (fewer if the list is shorter), each as its `short` citation with its own `claims_affected`, and "abstract only" for status `abstract_only` or "no text" for status `missing`. Say that a result reached from an abstract alone is provisional and the full text is what settles it, so those papers matter as much as the ones with no text.
    - Only when no contact email is configured and the `resolve` output shows `unpaywall skipped` under `why`: one line saying that with a contact email, open-access copies can be tried for every reference before they download anything, and that they can reply with an address instead of choosing an answer.
-3. **Ask one question** that stands on its own, because the person may see only the question: "`need_source` of `references` references have no full text, and `claims_relying` claims rely on them. How do you want to add them?" Use the session's question tool when it has one (AskUserQuestion, header "Sources"); otherwise end the message with the question and the answers. Offer these answers, worded like this, leaving out any that cannot work in this session:
+3. **Work out which answers this session can honour.** Before asking, check which of these tools the session has, searching the session's deferred tools when they are not loaded yet (for example a tool search for "request_directory"). The tools give the kind of session:
+
+   | The session has | Kind of session | Choose a folder | Pick files |
+   | --- | --- | --- | --- |
+   | `mcp__ccd_directory__request_directory` | Desktop app, Code tab: commands run on their computer | Yes: a folder chooser | Yes: the report helper |
+   | `mcp__cowork__request_cowork_directory` | Cowork | Yes: its folder tool | Yes: attach files |
+   | tools named `mcp__remote-devices__*` | Cloud session linked to their computer | Yes: their connected folders | Yes: attach files |
+   | none of these, and commands run on their computer | Claude Code in a terminal | Yes: they name the folder | Yes: the report helper |
+   | none of these, and no access to their computer | A chat, or a cloud session not linked to a computer | **No** | Yes: attach files |
+
+   Never offer an answer the session cannot honour. In a chat Claude cannot reach the person's folders at all, so leave Choose a folder out rather than offer it and then ask for a path.
+4. **Ask one question** that stands on its own, because the person may see only the question: "`need_source` of `references` references have no full text, and `claims_relying` claims rely on them. How do you want to add them?" Use the session's question tool when it has one (AskUserQuestion, header "Sources"); otherwise end the message with the question and the answers. Offer these answers, worded like this, leaving out any that item 3 ruled out:
    - **Choose a folder**: "Point Claude at the folder that holds the papers. Any file names: each file is read and matched to its reference."
-   - **Pick files**: "Select the papers yourself, several at once."
+   - **Pick files**: "Select the papers yourself, several at once." In a chat or Cowork, word it instead as **Attach files**: "Attach the papers to your next message, several at once."
    - **Fetch through my browser**: "Claude opens each one in your browser, using your sign-ins." Offer this only when a browser tool is connected (the `fetch-sources` skill).
    - **Skip**: "Those claims stay marked can't verify."
 
    The person may answer with a folder path, or attach files, instead of choosing. Treat that as the matching answer. Never tell them to rename, number or sort files, and never give them a file name to save under.
-4. **Act on the answer.**
-   - **Choose a folder.** The person should pick, not type. What to do depends on where this session runs:
-     - **Desktop app, commands on their computer.** Call the folder tool with no path, so the native folder chooser opens: `request_directory` (Claude desktop) or `request_cowork_directory` (Cowork). It may be listed as a deferred tool that is not loaded yet; load it first with the session's tool search. Pass a path only when they already named one.
+5. **Act on the answer.**
+   - **Choose a folder.** The person should pick, not type. Use the route for the kind of session found in item 3:
+     - **Desktop app, Code tab** (`mcp__ccd_directory__request_directory`): call it with no `path`, which opens the native folder chooser. Pass a path only when they already named one.
+     - **Cowork** (`mcp__cowork__request_cowork_directory`): read the tool's description. When it says that leaving out the path opens a chooser, call it that way. Otherwise call it with `~/Downloads`, or the folder they named, and say in one line that they can approve that folder or choose another in the window that opens.
      - **Cloud session linked to their computer** (tools named `mcp__remote-devices__*`). Call `get_device_info`. When a folder is already connected, list it with `device_list_dir`, find the folders in it (and the folder itself) that hold PDF or Word files, and ask one question that offers up to four of them as answers, each with its number of files. When none is connected, call `device_request_folder_access` for `~/Downloads` with a one-line reason; the person approves it on their computer. Then stage the files with `device_stage_files` as the `request-sources` skill describes.
-     - **No such tool.** Only then, ask them to paste the folder's path or attach the files.
+     - **Claude Code in a terminal:** there is no chooser; ask them to type or paste the folder's path. Their own folders are readable from here.
 
      Then follow the folder route of the `add-source` skill (`import-sources`, dry run first). Say in a few lines what was matched, what was skipped as a duplicate and what was not recognised.
-   - **Pick files.** When this session's commands run on the person's own computer, start the report helper as in "Adding from the report page" of the `add-source` skill and give its address: on the Sources page, Add sources opens their file chooser for several files or a whole folder. When their browser cannot reach the helper (a cloud or sandboxed session), ask them to attach the files to their next message, then add them with the `add-source` skill.
+   - **Pick files.** In the desktop app's Code tab or a terminal, start the report helper as in "Adding from the report page" of the `add-source` skill and give its address: on the Sources page, Add sources opens their file chooser for several files or a whole folder. In a chat, Cowork or a cloud session the person's browser cannot reach that helper, so ask them to attach the files to their next message, then add them with the `add-source` skill.
    - **Fetch through my browser.** Run the `fetch-sources` skill. When it finishes and references still lack full text, ask this question again without the browser answer, so the person can give a folder, pick files or skip. Do not carry on silently.
    - **Skip.** Go on; those claims stay "can't verify".
    - They give an email address: run `PL config set-email ADDRESS`, then `PL resolve --work W` and `PL request-sources --work W` again. If references still need a source, give the new figures and ask the question again.
 
    While files are still on their way (the helper is open, or the person is downloading), go on to step 7 for the claims that already have source text. When the files are in, run the `recheck` skill.
-5. **Nobody to ask** (an unattended run, or the person said not to be interrupted): do item 1 only, then continue and open the final summary with the missing sources (step 9).
-6. **The question is dismissed or goes unanswered:** do not ask again. Continue as for "Skip" and open the final summary with the missing sources (step 9).
+6. **Nobody to ask** (an unattended run, or the person said not to be interrupted): do item 1 only, then continue and open the final summary with the missing sources (step 9).
+7. **The question is dismissed or goes unanswered:** do not ask again. Continue as for "Skip" and open the final summary with the missing sources (step 9).
 
 ### 7. Prepare and verify
 
