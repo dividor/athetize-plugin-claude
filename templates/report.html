@@ -1,0 +1,1401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Athetize report</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234A7490' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5'/%3E%3Cpath d='M9 14.5l2.2 2.2L15.5 12'/%3E%3C/svg%3E">
+<style>
+/* Layout: a brand row, a title band, a sticky row of result filters, then the paper on a
+   single aligned column with the source list under it. Claim details open in a card on
+   desktop and in a bottom sheet on touch screens. Everything is in this one file. */
+:root{
+  /* type: the named fonts are used when installed; nothing is downloaded */
+  --font-body:"Open Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-heading:"Poppins",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:"SF Mono",Menlo,Monaco,Consolas,monospace;
+  /* brand and neutrals */
+  --primary:#5B8FA8; --primary-dark:#4A7490; --link:#3E6D88; --accent:#475569; --on-accent:#FFFFFF;
+  --ink:#2C3E50; --muted:#5F6C6A; --faint:#8C9A97;
+  --line:#D1D9D7; --line-light:#E8ECEB; --bg:#FAFBFC; --surface:#FFFFFF; --soft:#F4F6F7;
+  --hover:rgba(91,143,168,.08); --note-bg:#FDFBEA; --note-line:#EAE3B4;
+  /* results */
+  --ok:#0B7A53; --part:#946000; --bad:#C0302B; --unv:#5F6C7B; --unc:#4A7490;
+  --shadow:0 4px 14px rgba(44,62,80,.12);
+  --col:900px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --primary:#7AA8BE; --primary-dark:#9CC3D6; --link:#9CC3D6; --accent:#CBD5E1; --on-accent:#17212B;
+    --ink:#E4EAED; --muted:#A7B3B8; --faint:#7F8D93;
+    --line:#33414D; --line-light:#28343F; --bg:#11181F; --surface:#18222B; --soft:#1F2B35;
+    --hover:rgba(122,168,190,.12); --note-bg:#25241A; --note-line:#4B4629;
+    --ok:#4FD1A1; --part:#F0B94B; --bad:#FF8078; --unv:#9DABBB; --unc:#9CC3D6;
+    --shadow:0 6px 20px rgba(0,0,0,.5);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --primary:#7AA8BE; --primary-dark:#9CC3D6; --link:#9CC3D6; --accent:#CBD5E1; --on-accent:#17212B;
+  --ink:#E4EAED; --muted:#A7B3B8; --faint:#7F8D93;
+  --line:#33414D; --line-light:#28343F; --bg:#11181F; --surface:#18222B; --soft:#1F2B35;
+  --hover:rgba(122,168,190,.12); --note-bg:#25241A; --note-line:#4B4629;
+  --ok:#4FD1A1; --part:#F0B94B; --bad:#FF8078; --unv:#9DABBB; --unc:#9CC3D6;
+  --shadow:0 6px 20px rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 var(--font-body);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-text-size-adjust:100%;position:relative}
+button{font:inherit;color:inherit}
+a{color:var(--link)}
+a:hover{color:var(--primary-dark)}
+h1,h2,h3{font-family:var(--font-heading);font-weight:600}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
+.in{max-width:var(--col);margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+
+/* ---------- brand row ---------- */
+/* a rule under the product row sets it apart from the document being reported on */
+.top{background:var(--surface);padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid var(--line)}
+.top .in{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px}
+.brand{display:flex;align-items:center;gap:9px;color:var(--primary-dark)}
+/* the mark is drawn 18px tall inside its 24px box; 26px type has capitals of the same height */
+.brand svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.brand-name{font:600 26px/1 var(--font-heading);letter-spacing:-.01em}
+.brand-sub{font-weight:400}
+.iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--muted);width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
+.iconbtn:hover{background:var(--hover);color:var(--ink)}
+.iconbtn[aria-expanded="true"]{background:var(--hover);color:var(--ink)}
+.topact{position:relative;display:flex;gap:8px;flex:none}
+/* a short note on what the product does, kept behind a button so the page stays clear */
+.about{position:absolute;right:0;top:calc(100% + 8px);z-index:50;width:min(400px,calc(100vw - 32px));padding:16px 18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+.about h2{font-size:1rem;margin:0 0 8px}
+.about p{margin:0 0 10px;font-size:13.5px;line-height:1.55;color:var(--ink)}
+.about p.quiet{color:var(--muted)}
+/* the diagram in the information panel: square boxes and hairlines, in the page's own colours */
+.flow{display:block;width:100%;height:auto;margin:2px 0 14px}
+.flow .fbox rect{fill:var(--soft);stroke:var(--line);stroke-width:1}
+.flow .fline path{fill:none;stroke:var(--primary);stroke-width:1.2}
+.flow text{text-anchor:middle;font-family:var(--font-heading)}
+.flow .fhead text{font-size:12.5px;font-weight:600;fill:var(--ink)}
+.flow .fsub text{font-size:10.5px;fill:var(--muted)}
+.setlbl{display:block;margin:0 0 4px;font:500 12.5px/1.4 var(--font-heading);color:var(--muted)}
+.setin{display:block;width:100%;height:36px;padding:0 10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:14px/1 var(--font-body)}
+.setin:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
+.setin:disabled{background:var(--soft);color:var(--muted)}
+.setact{display:flex;gap:8px;margin:10px 0 0}
+.about p.setmsg{margin:8px 0 10px;min-height:1.2em;font-size:13px;color:var(--muted)}
+.about p.setmsg.bad{color:var(--bad)}
+.about p.more{margin:12px 0 0;padding-top:10px;border-top:1px solid var(--line-light);font-size:13px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* ---------- page tabs ---------- */
+/* Tabs move between pages, so they must not look like the filled action buttons. They are
+   folder tabs on a rule: the page you are on is white, opens into the page below and has a
+   coloured top edge; the other is a grey tab behind it. */
+.pagetabs{background:var(--surface)}
+.tabstrip{display:flex;gap:4px;align-items:flex-end;border-bottom:1px solid var(--line)}
+.ptab{display:inline-flex;align-items:center;gap:8px;min-width:132px;justify-content:center;height:44px;padding:0 22px;margin-bottom:-1px;cursor:pointer;
+  border:1px solid var(--line);border-top:3px solid var(--line);background:var(--soft);color:var(--muted);font:500 15px/1 var(--font-heading)}
+.ptab:hover{background:var(--hover);color:var(--ink)}
+.ptab[aria-current="page"]{background:var(--surface);border-top-color:var(--primary-dark);border-bottom-color:var(--surface);color:var(--ink);font-weight:600;cursor:default}
+.ptab .n{font-weight:400;opacity:.8}
+.textbtn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13.5px/1 var(--font-heading);cursor:pointer}
+.textbtn:hover{background:var(--hover);color:var(--ink)}
+a.textbtn{text-decoration:none}
+.textbtn .n{font-weight:400;color:var(--muted)}
+.textbtn{white-space:nowrap}
+[hidden]{display:none!important}
+
+/* ---------- title band ---------- */
+.hero{background:var(--surface);padding:18px 0 18px}
+.docrow{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 24px}
+.docrow h1{flex:1 1 260px;min-width:0}
+/* the download is a plain link on the document's own line, its text level with the name */
+.dl{flex:none;display:inline-flex;align-items:baseline;gap:6px;font:500 14px/1.35 var(--font-heading);color:var(--link);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.dl:hover{color:var(--primary-dark)}
+.dl svg.ic{width:15px;height:15px;align-self:center}
+/* The document name is a label for what was checked, not the page's headline: it is smaller and
+   lighter than the product name above it. */
+.hero .eyebrow{margin:0 0 2px;font:500 12.5px/1.4 var(--font-heading);color:var(--muted)}
+.hero h1{font-size:clamp(17px,2.2vw,20px);font-weight:500;line-height:1.35;margin:0;color:var(--ink);overflow-wrap:anywhere}
+
+/* ---------- sticky filter row ---------- */
+/* One quiet toolbar under the tabs: the result filters, then a line with the hint on the
+   left and the stepper on the right. */
+.toolbar{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
+.toolbar .in{display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px;min-height:52px;padding-top:8px;padding-bottom:8px}
+.toolbar .nav{margin-left:auto} /* stays at the right edge, also when it wraps under the filters */
+/* The filters are plain square chips on a soft fill, with no outlines. A filter that is on
+   takes the look of the highlight it picks out in the paper: a tint over a coloured rule. */
+.toolbar .chips{flex:1 0 100%;flex-wrap:wrap;overflow:visible;gap:6px;margin:0}
+/* the chips share the row's whole width, so this row ends where every other row ends */
+.toolbar .chip{flex:1 1 auto;justify-content:center}
+.toolbar .hint{flex:1 1 260px;min-width:0;margin:0;font-size:13px}
+.toolbar .chip{height:32px;padding:0 12px;border:0;background:var(--soft);color:var(--ink);font-size:13.5px;transition:background-color .12s}
+.toolbar .chip::before{width:8px;height:8px}
+.toolbar .chip:hover{background:var(--hover)}
+.toolbar .chip[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 14%,var(--surface));box-shadow:inset 0 -2px 0 var(--c);font-weight:400}
+.toolbar .chip:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
+.chips{display:flex;overflow-x:auto;scrollbar-width:none;flex:1;margin-left:-10px}
+.chips::-webkit-scrollbar{display:none}
+.chip{--c:var(--unv);display:inline-flex;align-items:center;gap:7px;border:0;border-bottom:3px solid transparent;background:none;padding:13px 10px 10px;cursor:pointer;white-space:nowrap;font:400 14px/1.4 var(--font-heading);color:var(--muted)}
+.chip::before{content:"";width:9px;height:9px;background:var(--c);flex:none}
+.chip b{font-weight:600;color:var(--ink)}
+.chip:hover{background:var(--hover);color:var(--ink)}
+.chip[aria-pressed="true"]{border-bottom-color:var(--c);color:var(--ink);font-weight:600}
+.g-ok{--c:var(--ok)} .g-part{--c:var(--part)} .g-bad{--c:var(--bad)} .g-unv{--c:var(--unv)} .g-unc{--c:var(--unc)}
+.nav{display:flex;align-items:center;gap:6px;flex:none}
+.nav button{border:0;background:none;color:var(--muted);width:32px;height:32px;display:grid;place-items:center;cursor:pointer}
+.nav button:hover{background:var(--hover);color:var(--ink)}
+.nav span{font-size:13px;color:var(--muted);min-width:92px;text-align:center;white-space:nowrap}
+
+/* ---------- page ---------- */
+.wrap{padding-top:24px;padding-bottom:28px}
+.foot{padding:0 0 88px;font-size:12px;color:var(--muted)}
+.hint{font-size:13.5px;color:var(--muted);margin:0 0 14px}
+.notice{margin:0 0 20px;padding:14px 18px;border:1px solid var(--note-line);background:var(--note-bg);font-size:14px}
+.notice b{font-family:var(--font-heading);font-weight:600}
+.needband{background:var(--surface);padding:14px 0 6px}
+.needband .notice{margin:0}
+.notice.need{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px}
+.notice.need .txt{flex:1 1 420px}
+.notice.need .act{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.notice.need .act a,.notice.need .act button{font:600 13px/1.6 var(--font-heading);padding:5px 14px;white-space:nowrap;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none}
+.notice.need .act a:hover,.notice.need .act button:hover{background:var(--hover)}
+.sheet{background:var(--surface);border:1px solid var(--line);padding:clamp(20px,6vw,60px)}
+.sheet .h{line-height:1.35;margin:1.9em 0 .6em}
+.sheet h2.h{font-size:1.3rem}
+.sheet h3.h{font-size:1.12rem}
+.sheet h4.h{font-size:1rem;font-family:var(--font-heading);font-weight:600}
+.sheet .h:first-child,.sheet .viewsw+.h{margin-top:0}
+.para{font-size:1.03rem;line-height:1.8;margin:0 0 1.1em;overflow-wrap:anywhere}
+.para:last-child{margin-bottom:0}
+.para.ctr{text-align:center}
+.para sub,.para sup,.h sub,.h sup{font-size:.72em;line-height:0}
+/* the paper's own pictures and tables, laid out as they are in the manuscript */
+.docfig{display:block;margin:0 auto .8em;max-width:100%;height:auto;background:#fff}
+.nofig{margin:0 auto .8em;padding:18px;border:1px dashed var(--line);color:var(--muted);font-size:13px;text-align:center}
+.docbox{margin:1.7em auto;max-width:640px}
+.docbox.ruled{border:1px solid var(--line);padding:14px 16px}
+.docbox .para{font-size:.93rem;line-height:1.6;margin-bottom:.6em}
+.tablewrap{margin:1.6em 0;overflow-x:auto}
+.doctable{border-collapse:collapse;width:100%;font-size:.86rem}
+.doctable td{padding:5px 4px;vertical-align:middle}
+.doctable.ruled td{border:1px solid var(--line)}
+.doctable.wide{min-width:600px} /* many columns: scroll sideways on a phone, do not crush them */
+.doctable .para{font-size:inherit;line-height:1.45;margin:0;overflow-wrap:normal}
+
+/* ---------- claim overlay: colour plus a line style, so it reads without colour ---------- */
+.claim{--c:var(--unv);cursor:pointer;padding:1px 0;background:color-mix(in srgb,var(--c) 11%,transparent);border-bottom:2px solid var(--c);
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-color .15s,opacity .2s}
+.claim:hover,.claim.active{background:color-mix(in srgb,var(--c) 24%,transparent)}
+.claim.dim{opacity:.3}
+.claim.has-bad{border-bottom-color:var(--bad)}
+/* judged from an abstract only: striped, because only part of the source was read */
+.claim.prov{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--c) 20%,transparent) 0 4px,transparent 4px 8px)}
+.claim.prov:hover,.claim.prov.active{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--c) 34%,transparent) 0 4px,color-mix(in srgb,var(--c) 10%,transparent) 4px 8px)}
+.chip.g-prov{--c:var(--muted)}
+.chip.g-prov::before{background:repeating-linear-gradient(135deg,var(--muted) 0 2px,transparent 2px 4px);outline:1px solid var(--muted)}
+.provline{margin:0 0 8px;font-size:13px;color:var(--muted)}
+.provnote{margin:0 0 12px;padding:8px 12px;font-size:13.5px;border:1px solid var(--note-line);background:var(--note-bg)}
+.failnote{margin:0 0 12px;font-size:13.5px;font-weight:600;color:var(--bad)}
+.v-supported{--c:var(--ok)}
+.v-partially_supported,.v-overstated{--c:var(--part);border-bottom-style:dashed}
+.v-unsupported,.v-contradicted{--c:var(--bad);border-bottom-style:double;border-bottom-width:4px}
+.v-unverifiable,.v-pending{--c:var(--unv);border-bottom-style:dotted}
+.v-uncited{--c:var(--unc);border-bottom-style:dotted;background:none}
+.v-uncited:hover,.v-uncited.active{background:color-mix(in srgb,var(--c) 14%,transparent)}
+.v-note{--c:var(--unc);border-bottom-style:dotted;background:color-mix(in srgb,var(--c) 7%,transparent)}
+.pnote{margin-left:8px;border:1px solid var(--unc);color:var(--unc);background:transparent;padding:0 8px;font:600 11.5px/1.7 var(--font-body);cursor:pointer;vertical-align:.1em}
+.pnote:hover{background:var(--hover)}
+
+/* ---------- the paper with its suggested edits ----------
+   A switch at the top right of the paper shows it either with the results highlighted or
+   with the suggested rewordings marked in the text, as they are in the Word document. */
+.viewsw{float:right;display:flex;margin:2px 0 14px 24px}
+/* a joined pair with a ruled edge; the view that is on takes the page's soft blue tint, the
+   same quiet emphasis as the main buttons. Nothing like the grey filters. */
+.viewsw button{height:28px;padding:0 12px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font:500 12.5px/1 var(--font-heading);cursor:pointer;white-space:nowrap}
+.viewsw button+button{border-left:0}
+.viewsw button b{font-weight:600}
+.viewsw button:hover{color:var(--ink);background:var(--hover)}
+.viewsw button[aria-pressed="true"]{position:relative;background:color-mix(in srgb,var(--primary) 12%,var(--surface));border-color:color-mix(in srgb,var(--primary) 50%,var(--surface));color:var(--primary-dark);cursor:default}
+.viewsw button[aria-pressed="true"]+button{border-left:0}
+.viewsw button+button[aria-pressed="true"]{border-left:1px solid color-mix(in srgb,var(--primary) 50%,var(--surface));margin-left:-1px}
+.viewsw button:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.claim .ed{display:none}
+#paper.edits .claim{background:none;border-bottom-color:transparent;cursor:text;pointer-events:none}
+#paper.edits .claim.has-edit:not(.sug-off){cursor:pointer;pointer-events:auto}
+#paper.edits .claim.has-edit:not(.sug-off) .hl{display:none}
+#paper.edits .claim.has-edit:not(.sug-off) .ed{display:inline}
+#paper.edits .claim.has-edit:not(.sug-off):hover,#paper.edits .claim.has-edit.active:not(.sug-off){background:var(--hover)}
+
+/* ---------- position rail ---------- */
+.rail{position:fixed;right:max(6px,env(safe-area-inset-right,0px));top:64px;bottom:24px;width:8px;z-index:15;pointer-events:none}
+.rail a{position:absolute;left:0;width:8px;height:3px;background:var(--c);pointer-events:auto;opacity:.85}
+.rail a:hover{height:7px;margin-top:-2px;opacity:1}
+@media (max-width:980px){.rail{display:none}}
+
+/* ---------- claim card ---------- */
+.card{position:absolute;z-index:40;width:min(460px,calc(100vw - 24px));max-height:min(70vh,540px);overflow:auto;background:var(--surface);color:var(--ink);
+  border:1px solid var(--line);box-shadow:var(--shadow);padding:0;visibility:hidden;opacity:0;transform:translateY(4px);transition:opacity .14s,transform .14s,visibility 0s .14s}
+.card.open{visibility:visible;opacity:1;transform:none;transition:opacity .14s,transform .14s}
+.card.as-sheet{position:fixed;left:0;right:0;bottom:0;top:auto;width:auto;max-height:76vh;border-width:1px 0 0;transform:translateY(100%);transition:transform .25s cubic-bezier(.2,.8,.2,1),visibility 0s .25s;padding-bottom:env(safe-area-inset-bottom,0px)}
+.card.as-sheet.open{transform:none;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.card .grab{display:none;width:40px;height:3px;background:var(--line);margin:8px auto 0}
+.card.as-sheet .grab{display:block}
+.c-head{display:flex;align-items:center;gap:8px;padding:12px 16px;position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--line-light);z-index:1}
+.badge{--c:var(--unv);font:600 13px/1.5 var(--font-heading);color:var(--c);background:color-mix(in srgb,var(--c) 12%,var(--surface));border-left:3px solid var(--c);padding:3px 10px}
+.c-head .sp{flex:1}
+.c-head button{border:1px solid var(--line);background:var(--surface);color:var(--muted);width:32px;height:32px;cursor:pointer;display:grid;place-items:center}
+.c-head button:hover{background:var(--hover);color:var(--ink)}
+.c-body{padding:14px 16px 16px}
+.claimtxt{margin:0 0 12px;font-size:14px;line-height:1.6;font-style:italic;color:var(--muted);border-left:2px solid var(--line);padding-left:12px}
+.blk{border:1px solid var(--line-light);padding:12px 14px;margin-top:10px;background:var(--bg)}
+.blk .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:8px}
+/* a status is text with a small square in its colour: it must not read as a button */
+.pill{--c:var(--unv);display:inline-flex;align-items:center;gap:6px;font:400 12.5px/1.6 var(--font-body);color:var(--muted);white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;background:var(--c);flex:none}
+.pill.solid{color:var(--c);font-weight:600}
+.conf{font-size:12px;color:var(--muted)}
+.an{margin:0 0 10px;font-size:14px;line-height:1.6}
+.ev{margin:0 0 10px;padding:10px 12px;background:color-mix(in srgb,var(--c,var(--ok)) 8%,var(--surface));border-left:3px solid var(--c,var(--ok))}
+.ev figcaption{font:600 11px/1.5 var(--font-body);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.ev figcaption a{letter-spacing:0;text-transform:none}
+.ev blockquote.exq{margin:0;font-size:14px;line-height:1.65;max-height:16em;overflow:auto}
+.ev blockquote.exq .ctx{color:var(--muted)}
+.ev blockquote.exq mark{background:color-mix(in srgb,var(--c) 24%,transparent);color:inherit;padding:0 .1em}
+.src{font-size:13px;color:var(--muted);line-height:1.55}
+.src a{font-weight:600;overflow-wrap:anywhere}
+.src .cite{font-weight:600;color:var(--ink)}
+.src .rawref{margin-top:3px;font-size:12.5px}
+.srch{margin-top:4px;font-size:12.5px}
+.srch a{font-weight:400}
+.src .row2{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.help{margin-top:8px;font-size:12.5px;color:var(--muted)}
+.help code{font:12px var(--font-mono);background:var(--surface);border:1px solid var(--line);padding:0 5px}
+.sugs h3{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+.sug{border:1px solid var(--line);border-left:3px solid var(--primary);padding:10px 12px;margin-top:8px;background:var(--surface)}
+.sug.off{opacity:.55}
+.sug .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;font-size:12.5px;color:var(--muted)}
+.sug .diff{font-size:14px;line-height:1.65;overflow-wrap:anywhere}
+.sug .diff del,.claim .ed del{color:var(--bad);text-decoration:line-through;background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.sug .diff ins,.claim .ed ins{color:var(--ok);text-decoration:none;background:color-mix(in srgb,var(--ok) 13%,transparent);border-bottom:1px solid var(--ok)}
+.sug .why{font-size:13px;margin:6px 0 0;color:var(--muted)}
+.sug .act{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.sug .act button,.sugsum button,.addsrc .act button{font:400 12.5px/1.6 var(--font-body);padding:3px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.sug .act button:hover,.sugsum button:hover,.addsrc .act button:hover{background:var(--hover)}
+.sug .act button[aria-pressed="true"]{border-color:var(--ok);color:var(--ok)}
+.sugsum{margin:18px 0 0;font-size:13.5px;color:var(--muted)}
+.sugsum button{margin-left:8px}
+
+/* ---------- sources page ---------- */
+.srchead .row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 16px;margin:0 0 16px}
+/* the main action of a page: a soft tint with a ruled edge, not a solid block */
+.textbtn.primary{background:color-mix(in srgb,var(--primary) 12%,var(--surface));border-color:color-mix(in srgb,var(--primary) 50%,var(--surface));color:var(--primary-dark);font-weight:500}
+.textbtn.primary:hover{background:color-mix(in srgb,var(--primary) 22%,var(--surface));color:var(--primary-dark)}
+.srchead p{margin:0;font-size:14px;color:var(--muted);flex:1 1 240px;min-width:0;overflow-wrap:anywhere}
+.addsrc{background:var(--surface);border:1px solid var(--line);padding:18px 20px;margin:0 0 26px}
+.addsrc h2{font-size:1.1rem;margin:0 0 6px}
+.addsrc p{margin:0 0 14px;font-size:14px}
+.addsrc ul{margin:0 0 14px;padding-left:20px;font-size:14px}
+.addsrc li{margin:2px 0;overflow-wrap:anywhere}
+.addsrc .req{font:12.5px/1.5 var(--font-mono);background:var(--bg);border:1px solid var(--line-light);padding:8px 10px;margin:0 0 12px;color:var(--ink);overflow-wrap:anywhere}
+.addsrc .act{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.addsrc .after{margin:0;font-size:13px;color:var(--muted)}
+.addsrc > :last-child{margin-bottom:0}
+#sourcesView.dropping{outline:2px dashed var(--primary);outline-offset:-6px}
+.textbtn:disabled{opacity:.55;cursor:default}
+.addwrap{position:relative;flex:none}
+.addmenu{position:absolute;right:0;top:calc(100% + 4px);z-index:20;min-width:170px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.addmenu button{border:0;background:none;text-align:left;padding:10px 14px;font:14px/1.3 var(--font-body);color:var(--ink);cursor:pointer}
+.addmenu button:hover,.addmenu button:focus-visible{background:var(--hover)}
+.srcfilter{border-bottom:1px solid var(--line);margin:0 0 14px}
+.srcfilter .chips{margin-left:0;gap:26px}
+.srcfilter .chip{--c:var(--primary);padding-left:0;padding-right:0}
+.srcfilter .chip:hover{background:none}
+.srcfilter .chip::before{display:none}
+.srow{background:var(--surface);border:1px solid var(--line);padding:14px 18px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
+.srow .id{font:600 12.5px/1.8 var(--font-mono);color:var(--muted)}
+.srow .cit{font-size:14.5px;overflow-wrap:anywhere}
+/* a link that leaves the report opens in a new tab, and a small arrow says so */
+a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85em;text-decoration:none;color:var(--muted)}
+.srow .pills{display:flex;flex-wrap:wrap;align-items:center;gap:2px 18px;margin-top:6px;grid-column:2}
+.srow .used{grid-column:2;font-size:12.5px;color:var(--muted);margin-top:4px}
+.cchip{display:inline-block;margin:0 6px 4px 0;padding:0 7px;font:600 12px/1.75 var(--font-mono);color:var(--c);border:1px solid var(--c);background:color-mix(in srgb,var(--c) 10%,transparent);text-decoration:none}
+.cchip:hover{background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--c)}
+.g-ref{--c:var(--primary-dark)}
+.difflist{margin:0 0 10px;padding-left:18px;font-size:13.5px}
+.srow .more{grid-column:2;font-size:12px;color:var(--muted)}
+.srow .why{grid-column:2;font-size:12.5px;color:var(--muted)}
+.srow.flag{border-left:3px solid var(--part)}
+/* a row's own action is outlined, so the one filled button on the page stays Add sources */
+.srow .citeline{grid-column:2;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-top:6px}
+.srow .citeline .used{flex:1 1 auto;margin:0}
+.pill a{color:inherit}
+.pill a:hover{color:var(--ink)}
+.textbtn.small{height:30px;padding:0 11px;font-size:12.5px;gap:6px}
+.textbtn.small svg.ic{width:15px;height:15px}
+.srow .rownote{grid-column:2;margin-top:8px;font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.srow .rownote.bad{color:var(--bad)}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+
+/* ---------- phones ---------- */
+@media (max-width:760px){
+  .brand-name{font-size:19px}
+  .brand svg{width:18px;height:18px}
+  .chip{padding:13px 10px 10px;font-size:13.5px}
+  .nav{position:fixed;left:0;right:0;bottom:0;z-index:35;justify-content:center;gap:10px;background:var(--surface);border-top:1px solid var(--line);
+    padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px))}
+  .nav button{width:44px;height:40px;border:1px solid var(--line);background:var(--surface)}
+  body.sheet-open .nav{display:none}
+  .toolbar{position:static}
+  .toolbar .in{min-height:0}
+  .ptab{flex:1;min-width:0;padding:0 10px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.toolbar .chip{transition:none}}
+@media print{.toolbar,.viewsw,.needband,.nav,.rail,.card,.iconbtn,.about,.hint,.pagetabs,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="in">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 14.5l2.2 2.2L15.5 12"/></svg>
+      <span class="brand-name">Athetize <span class="brand-sub">Fact Checker</span></span>
+    </div>
+    <div class="topact">
+      <button class="iconbtn" id="settingsBtn" type="button" aria-label="Settings" title="Settings" aria-expanded="false" aria-controls="settings"><svg class="ic" viewBox="0 0 24 24" style="stroke-width:1.7" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      <div class="about" id="settings" role="dialog" aria-label="Settings" hidden>
+        <h2>Settings</h2>
+        <label class="setlbl" for="setEmail">Contact email (Optional)</label>
+        <input class="setin" type="email" id="setEmail" autocomplete="email" spellcheck="false" placeholder="name@university.edu">
+        <div class="setact"><button class="textbtn primary" id="setSave" type="button">Save</button><button class="textbtn" id="setRemove" type="button" hidden>Remove</button></div>
+        <p class="setmsg" id="setMsg" role="status"></p>
+        <p class="quiet">Lets Athetize look for free copies on Unpaywall. Saved on this computer and sent only with lookups to public indexes.</p>
+      </div>
+      <button class="iconbtn" id="aboutBtn" type="button" aria-label="What Athetize does" title="What Athetize does" aria-expanded="false" aria-controls="about"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.2"/></svg></button>
+      <div class="about" id="about" role="dialog" aria-label="What Athetize does" hidden>
+        <h2>What Athetize does</h2>
+        <svg class="flow" viewBox="0 0 344 204" role="img" aria-label="Your paper and its sources go to Claude, which compares each claim with its source and produces a report and a Word document.">
+          <g class="fbox"><rect x="0.5" y="0.5" width="159" height="58"/><rect x="184.5" y="0.5" width="159" height="58"/><rect x="52.5" y="88.5" width="239" height="44"/><rect x="0.5" y="160.5" width="159" height="43"/><rect x="184.5" y="160.5" width="159" height="43"/></g>
+          <g class="fline"><path d="M80 59v14h184V59M172 73v11"/><path d="M168 80l4 5 4-5"/><path d="M172 133v13M80 156v-10h184v10"/><path d="M76 152l4 5 4-5M260 152l4 5 4-5"/></g>
+          <g class="fhead"><text x="80" y="22">Your paper</text><text x="264" y="22">Sources</text><text x="172" y="107">Claude compares each claim</text><text x="80" y="179">Report</text><text x="264" y="179">Word document</text></g>
+          <g class="fsub"><text x="80" y="38">each claim and</text><text x="80" y="51">the source it cites</text><text x="264" y="38">open copies found online</text><text x="264" y="51">and files you add</text><text x="172" y="123">with the text of its source</text><text x="80" y="194">results and evidence</text><text x="264" y="194">suggested edits</text></g>
+        </svg>
+        <p>Athetize identifies each claim in your paper and the source it cites. It retrieves open-access copies of the sources where they are available and uses any files you provide. A source that cannot be read is marked “can’t verify”; no result is inferred.</p>
+        <p>The assessment is performed by AI and may contain errors. Review the quoted evidence before revising your paper.</p>
+        <p class="quiet">Claude reads your paper and the sources. The only other information transmitted is reference metadata, such as titles and DOIs, which is sent to public indexes to locate the sources.</p>
+        <p class="more" id="aboutMore"><a class="ext" id="aboutLink" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">Athetize on GitHub</a></p>
+      </div>
+    <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="in">
+    <p class="eyebrow">Document checked</p>
+    <div class="docrow">
+      <h1 id="title"></h1>
+      <a class="dl" id="wordReport" hidden title="Download the report as a Word document: your paper with every suggested edit as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download Report</a>
+    </div>
+  </div>
+</section>
+
+<nav class="pagetabs" aria-label="Report pages">
+  <div class="in"><div class="tabstrip">
+    <button class="ptab" id="openResults" type="button" aria-current="page">Results</button>
+    <button class="ptab" id="openSources" type="button">Sources <span class="n" id="srcCount"></span></button>
+  </div></div>
+</nav>
+
+<div class="needband" id="needBand" hidden>
+  <div class="in"><div class="notice need" id="needSrc" hidden></div></div>
+</div>
+
+<div class="toolbar">
+  <div class="in">
+    <div class="chips" id="chips" role="group" aria-label="Filter claims by result"></div>
+    <p class="hint" id="hint">Hover or tap a highlight for details.</p>
+    <div class="nav" id="nav"><button type="button" id="prev" aria-label="Previous claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span id="navLabel"></span><button type="button" id="next" aria-label="Next claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
+  </div>
+</div>
+
+<main class="wrap in" id="docView">
+  <p class="provline" id="provLine" hidden></p>
+  <article class="sheet" id="paper">
+    <div class="viewsw" id="viewSw" role="group" aria-label="What the paper shows" hidden>
+      <button type="button" id="showHl" aria-pressed="true">Highlight</button><button type="button" id="showEd" aria-pressed="false">Suggested Edits <b id="edCount"></b></button>
+    </div>
+  </article>
+  <div class="sugsum" id="sugSum"></div>
+</main>
+
+<main class="wrap in" id="sourcesView" hidden>
+  <h2 class="vh">Sources</h2>
+  <div class="srchead">
+    <div class="row"><p id="srcLead"></p><div class="addwrap"><button class="textbtn primary" id="addSources" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add sources</button><div class="addmenu" id="addMenu" role="menu" hidden><button type="button" role="menuitem" id="pickFiles">Files…</button><button type="button" role="menuitem" id="pickFolder">A folder…</button></div></div></div>
+    <input type="file" id="srcPicker" multiple hidden accept=".pdf,.txt,.md,.html,.htm,.docx,.xml">
+    <input type="file" id="dirPicker" webkitdirectory hidden>
+    <input type="file" id="onePicker" hidden accept=".pdf,.txt,.md,.html,.htm,.docx,.xml">
+  </div>
+  <section class="addsrc" id="addSrc" aria-live="polite" hidden></section>
+  <div class="srcfilter"><div class="chips" id="srcFilter" role="group" aria-label="Filter sources"></div></div>
+  <div id="srcList"></div>
+</main>
+
+<footer class="foot"><div class="in" id="foot"></div></footer>
+
+<div class="rail" id="rail" aria-hidden="true"></div>
+<div class="card" id="card" role="dialog" aria-label="Claim analysis" tabindex="-1"></div>
+
+<script>
+(function(){
+'use strict';
+var DATA = /*__ATHETIZE_DATA__*/null;
+if(!DATA){document.body.textContent='No report data found.';return;}
+
+var LABEL={supported:'Supported',partially_supported:'Partly supported',overstated:'Overstated',unsupported:'Not supported',contradicted:'Contradicted',unverifiable:"Can't verify",pending:'Not checked yet',uncited:'Needs a citation',note:'Note'};
+var GROUP={supported:'ok',partially_supported:'part',overstated:'part',unsupported:'bad',contradicted:'bad',unverifiable:'unv',pending:'unv',uncited:'unc',note:'unc'};
+var GLABEL={ok:'Supported',part:'Partial',bad:'Not supported',unv:"Can't verify",unc:'Uncited and notes'};
+var FAILING_NOTE='A cited source does not support this';
+var PROV_LABEL='from the abstract only';
+var GVAR={ok:'--ok',part:'--part',bad:'--bad',unv:'--unv',unc:'--unc'};
+var STATUS={full_text:'Full text, downloaded',user_provided:'Full text, provided by you',abstract_only:'Abstract only',missing:'No full text found',unresolved:'Not looked up'};
+var DATABASE={crossref:'Crossref',openalex:'OpenAlex'};
+var EXISTS={verified:'Found in a citation database',partial_match:'Database record differs in part',mismatch:'Database record does not match',not_found:'Not found in citation databases',unchecked:'Not looked up'};
+var EXISTS_MEANS={verified:'A record matching this reference was found, so the work exists as cited.',partial_match:'The closest record differs from the reference in part, so it was not relied on.',mismatch:'The record behind the printed DOI is a different work.',not_found:'No record of this work was found in Crossref or OpenAlex.'};
+function existsPill(r){
+  var text=r.exists==='verified'&&DATABASE[r.matched_source]?'Found in '+DATABASE[r.matched_source]:(EXISTS[r.exists]||r.exists);
+  var url=r.exists==='verified'?safeUrl(r.matched_url):null;
+  var p=pill(url?'':text,r.exists==='verified'?'var(--ok)':'var(--part)');if(EXISTS_MEANS[r.exists])p.title=EXISTS_MEANS[r.exists];
+  /* the label leads to the record itself in that database */
+  if(url){var a=el('a','ext',text);a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.title='See the record. Opens in a new tab';p.append(a);}
+  return p;
+}
+/* True when a source was not looked up on Unpaywall because no contact email is set. */
+function needsEmail(reasons){return !hasEmail&&reasons.some(function(t){return /Unpaywall/.test(t)&&/no contact email/.test(t);});}
+function whyLine(reasons,cls){
+  var d=el('div',cls,'Why there is no full text: '+reasons.join('; ')+'.');
+  if(needsEmail(reasons)){
+    var a=el('a',null,'Add email');a.href='#';
+    a.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();openSettings();});
+    d.append(document.createTextNode(' '),a);
+  }
+  return d;
+}
+
+function $(s,r){return (r||document).querySelector(s);}
+function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
+function safeUrl(u){if(!u)return null;try{var x=new URL(u,location.href);return(x.protocol==='https:'||x.protocol==='http:')?x.href:null;}catch(e){return null;}}
+function localHref(p){if(location.protocol!=='file:')return null;return(p&&/^sources\//.test(p)&&p.indexOf('..')<0)?encodeURI(p):null;}
+var SVGNS='http://www.w3.org/2000/svg';
+var ICONS={prev:'M15 6l-6 6 6 6',next:'M9 6l6 6-6 6',close:'M6 6l12 12M18 6L6 18',plus:'M12 5v14M5 12h14'};
+function icon(name){var s=document.createElementNS(SVGNS,'svg');s.setAttribute('class','ic');s.setAttribute('viewBox','0 0 24 24');s.setAttribute('aria-hidden','true');
+  var p=document.createElementNS(SVGNS,'path');p.setAttribute('d',ICONS[name]);s.appendChild(p);return s;}
+function iconBtn(name,label){var b=el('button');b.type='button';b.title=label;b.setAttribute('aria-label',label);b.append(icon(name));return b;}
+
+document.title=(DATA.meta.title||'Report')+' · Athetize Fact Checker';
+$('#title').textContent=DATA.meta.title||'Untitled paper';
+$('#foot').textContent='Checked '+DATA.meta.generated+(DATA.meta.source_file?' \u00b7 '+DATA.meta.source_file:'')+' \u00b7 Athetize '+DATA.meta.version;
+
+/* ---------- build the item list ---------- */
+var items=[]; // {kind,d,verdict,group,el}
+var byPara={}, pnotes={};
+DATA.claims.forEach(function(c){(byPara[c.para]=byPara[c.para]||[]).push({kind:'claim',d:c,start:c.start,end:c.end});});
+DATA.notes.forEach(function(n){
+  if(n.start!=null){(byPara[n.para]=byPara[n.para]||[]).push({kind:'note',d:n,start:n.start,end:n.end});}
+  else{(pnotes[n.para]=pnotes[n.para]||[]).push(n);}
+});
+
+var paper=$('#paper');
+/* The paper is laid out as it was written: headings by depth, bold, italic, subscripts and
+   superscripts, tables with their merged cells, and pictures where they stand. */
+var MARK_TAG={b:'strong',i:'em',sub:'sub',sup:'sup'};
+var FIGURE_SCALE=1.5; // pictures are drawn larger than on the printed page, to be read on a screen
+function rich(p,a,b){ // the text of paragraph p from a to b, with its type styles
+  var frag=document.createDocumentFragment(),fmt=(p.fmt||[]).filter(function(f){return MARK_TAG[f[2]]&&f[0]<b&&f[1]>a;}),cuts=[a,b];
+  fmt.forEach(function(f){if(f[0]>a)cuts.push(f[0]);if(f[1]<b)cuts.push(f[1]);});
+  cuts.sort(function(x,y){return x-y;});
+  for(var i=0;i<cuts.length-1;i++){
+    var from=cuts[i],to=cuts[i+1];if(to<=from)continue;
+    var node=document.createTextNode(p.text.slice(from,to));
+    fmt.forEach(function(f){if(f[0]<=from&&f[1]>=to){var w=document.createElement(MARK_TAG[f[2]]);w.append(node);node=w;}});
+    frag.append(node);
+  }
+  return frag;
+}
+/* The first suggested rewording of each claim, to mark in the paper's text. */
+var REWRITE={};
+(DATA.suggestions||[]).forEach(function(sg){if(sg.kind==='rewrite'&&sg.claim_id&&!REWRITE[sg.claim_id])REWRITE[sg.claim_id]=sg;});
+function editNode(p,c,sg){ // the claim's text with the rewording marked in it; null when it cannot be placed
+  var at=p.text.indexOf(sg.original);if(at<0)return null;
+  var box=el('span','ed'),pos=at,ok=true;
+  if(at>c.start)box.append(rich(p,c.start,Math.min(at,c.end)));
+  (sg.suggested?sg.diff:[['-',sg.original]]).forEach(function(op){
+    if(op[0]==='+'){if(pos<c.start||pos>c.end)ok=false;else box.append(el('ins',null,op[1]));return;}
+    var a=pos,b=pos+op[1].length;pos=b;
+    /* unchanged words outside the claim are already in the paragraph; a change there cannot be shown */
+    if(op[0]==='-'&&(a<c.start||b>c.end)){ok=false;return;}
+    var from=Math.max(a,c.start),to=Math.min(b,c.end);if(to<=from)return;
+    if(op[0]==='=')box.append(rich(p,from,to));
+    else{var d=el('del');d.append(rich(p,from,to));box.append(d);}
+  });
+  if(pos<c.end)box.append(rich(p,Math.max(pos,c.start),c.end));
+  return ok?box:null;
+}
+function paraNode(p){
+  var node=el('p','para'+(p.align==='center'?' ctr':''));node.id='para-'+p.id;
+  var segs=(byPara[p.id]||[]).sort(function(a,b){return a.start-b.start||(a.kind==='claim'?-1:1);});
+  var pos=0;
+  segs.forEach(function(s){
+    if(s.start<pos){ if(s.kind==='note'){(pnotes[p.id]=pnotes[p.id]||[]).push(s.d);} return; }
+    if(s.start>pos)node.append(rich(p,pos,s.start));
+    var verdict=s.kind==='claim'?s.d.verdict:'note';
+    var failing=s.kind==='claim'&&GROUP[verdict]!=='bad'&&(s.d.failing_refs||[]).length>0;
+    var prov=s.kind==='claim'&&s.d.provisional===true;
+    var m=el('span','claim v-'+verdict+(failing?' has-bad':'')+(prov?' prov':''));
+    var hl=el('span','hl');hl.append(rich(p,s.start,s.end));m.append(hl);
+    var sg=s.kind==='claim'?REWRITE[s.d.id]:null,ed=sg?editNode(p,s.d,sg):null;
+    if(ed){m.append(ed);m.classList.add('has-edit');m.dataset.sug=sg.id;}
+    m.tabIndex=0;m.setAttribute('role','button');
+    m.setAttribute('aria-label',LABEL[verdict]+(prov?', '+PROV_LABEL+', provisional':'')+(failing?', and '+FAILING_NOTE.toLowerCase():'')+': '+p.text.slice(s.start,s.end));
+    var idx=items.length;
+    m.dataset.idx=idx;
+    items.push({kind:s.kind,d:s.d,verdict:verdict,group:GROUP[verdict],failing:failing,prov:prov,edit:!!ed,el:m});
+    node.append(m);pos=s.end;
+  });
+  if(pos<p.text.length)node.append(rich(p,pos,p.text.length));
+  (pnotes[p.id]||[]).forEach(function(n){
+    var b=el('button','pnote','Note');b.type='button';
+    var idx=items.length;b.dataset.idx=idx;
+    items.push({kind:'note',d:n,verdict:'note',group:'unc',el:b});
+    node.append(b);
+  });
+  return node;
+}
+function addFigures(list,host){
+  (list||[]).forEach(function(f){
+    var src=(DATA.figures||{})[f.file];
+    if(!src){host.append(el('div','nofig','A picture in the paper is not shown here.'));return;}
+    var img=el('img','docfig');img.src=src;img.alt='Picture from the paper';
+    if(f.w&&f.h){img.width=Math.round(f.w*FIGURE_SCALE);img.height=Math.round(f.h*FIGURE_SCALE);}
+    host.append(img);
+  });
+}
+function buildTable(info){ // returns the place for each cell, keyed "row:cell"
+  var rows=info.rows,cells={},ruled=info.borders?' ruled':'';
+  if(rows.length===1&&rows[0].length===1){ // one cell: a box around a figure and its caption
+    var box=el('div','docbox'+ruled);paper.append(box);cells['0:0']=box;return cells;
+  }
+  var wrap=el('div','tablewrap'),table=el('table','doctable'+ruled+((info.cols||[]).length>6?' wide':'')),above={};
+  if(info.cols){
+    var total=info.cols.reduce(function(a,b){return a+b;},0),group=el('colgroup');
+    info.cols.forEach(function(w){var c=el('col');c.style.width=(100*w/total).toFixed(2)+'%';group.append(c);});
+    table.append(group);
+  }
+  rows.forEach(function(row,ri){
+    var tr=el('tr'),col=0;
+    row.forEach(function(c,ci){
+      if(c[1]){var td=el('td');if(c[0]>1)td.colSpan=c[0];if(c[1]>1)td.rowSpan=c[1];tr.append(td);above[col]=td;}
+      cells[ri+':'+ci]=above[col];col+=c[0]; // a cell merged into the one above shares its place
+    });
+    table.append(tr);
+  });
+  wrap.append(table);paper.append(wrap);return cells;
+}
+var tablePlaces={};
+function placeFor(p){
+  if(!p.tbl)return paper;
+  var t=p.tbl[0];
+  if(!tablePlaces[t])tablePlaces[t]=buildTable(DATA.tables[t]);
+  return tablePlaces[t][p.tbl[1]+':'+p.tbl[2]];
+}
+var lastText=-1;DATA.paragraphs.forEach(function(p,pi){if(p.kind!=='heading')lastText=pi;});
+DATA.paragraphs.forEach(function(p,pi){
+  if(pi===0&&p.text===DATA.meta.title)return;
+  var host=placeFor(p);
+  addFigures(p.figures,host);
+  if(p.kind==='heading'&&!p.tbl){
+    if(pi>lastText)return;
+    var h=el('h'+Math.min((p.level||1)+1,4),'h');h.append(rich(p,0,p.text.length));host.append(h);
+  }else{
+    host.append(paraNode(p));
+  }
+  addFigures(p.figures_after,host);
+});
+if(!DATA.claims.length&&!DATA.notes.length){paper.append(el('div','empty','No checkable claims were found in this paper.'));}
+
+/* ---------- filters + summary bar ---------- */
+/* A claim sits in one group, by its best source. A claim that also has a cited source which
+   does not support it is counted and filtered under "Not supported" as well, so that
+   finding is never hidden behind a better result from another source. */
+var active={};
+var counts={ok:0,part:0,bad:0,unv:0,unc:0};
+items.forEach(function(it){counts[it.group]++;});
+function inGroup(it,g){return it.group===g||(g==='bad'&&it.failing)||(g==='prov'&&it.prov);}
+function shown(it){return Object.keys(active).some(function(g){return active[g]&&inGroup(it,g);});}
+var alsoFailing=items.filter(function(it){return it.failing;}).length;
+var chips=$('#chips');
+Object.keys(GLABEL).forEach(function(g){
+  var b=el('button','chip g-'+g);b.type='button';b.setAttribute('aria-pressed','false');b.dataset.g=g;
+  var n=counts[g]+(g==='bad'?alsoFailing:0);
+  b.append(document.createTextNode(GLABEL[g]+' '));b.append(el('b',null,String(n)));
+  b.title='Show only: '+GLABEL[g];
+  if(g==='bad'&&alsoFailing)b.title='Includes '+alsoFailing+(alsoFailing===1?' claim that another source supports in part, but one':' claims that another source supports in part, but one')+' cited source does not support';
+  b.addEventListener('click',function(){active[g]=!active[g];applyFilter();});
+  chips.append(b);
+});
+var provCount=items.filter(function(it){return it.prov;}).length;
+var judgedCount=items.filter(function(it){return it.group==='ok'||it.group==='part'||it.group==='bad';}).length;
+if(provCount){
+  var pc=el('button','chip g-prov');pc.type='button';pc.setAttribute('aria-pressed','false');pc.dataset.g='prov';
+  pc.append(document.createTextNode('Abstract only '));pc.append(el('b',null,String(provCount)));
+  pc.title='Results judged from an abstract only. They are provisional.';
+  pc.addEventListener('click',function(){active.prov=!active.prov;applyFilter();});
+  chips.append(pc);
+  var pl=$('#provLine');pl.hidden=false;
+  pl.textContent=provCount+' of '+count(judgedCount,'result rests','results rest')+' on an abstract only (striped). '+(provCount===1?'It is':'They are')+' provisional: the full text is what settles '+(provCount===1?'it.':'them.');
+}
+function anyActive(){return Object.keys(active).some(function(k){return active[k];});}
+function applyFilter(){
+  var any=anyActive();
+  items.forEach(function(it){it.el.classList.toggle('dim',any&&!shown(it));});
+  [].forEach.call(chips.querySelectorAll('.chip'),function(c){c.setAttribute('aria-pressed',active[c.dataset.g]?'true':'false');});
+  updateNav();placeRail();
+}
+
+/* ---------- navigation list ---------- */
+var editsMode=false;
+function hasEdit(it){return it.edit===true&&!it.el.classList.contains('sug-off');}
+function navList(){
+  var any=anyActive(),out=[];
+  items.forEach(function(it,i){
+    if(editsMode){if(hasEdit(it)&&(!any||shown(it)))out.push(i);}
+    else if(any){if(shown(it))out.push(i);}
+    else if(it.verdict!=='supported')out.push(i);
+  });
+  return out;
+}
+var cur=-1;
+function updateNav(){
+  var l=navList(),pos=l.indexOf(cur);
+  /* before anything is picked it reads 1: the next press goes to the first one */
+  $('#navLabel').textContent=l.length?((pos>=0?pos+1:1)+' of '+l.length+(editsMode?(l.length===1?' edit':' edits'):(anyActive()?' shown':' to review'))):(editsMode?'no edits':'nothing to review');
+}
+function go(delta){
+  var l=navList();if(!l.length)return;
+  var pos=l.indexOf(cur);
+  var next=pos<0?(delta>0?0:l.length-1):(pos+delta+l.length)%l.length;
+  focusItem(l[next],true);
+}
+function focusItem(i,scroll){
+  if(cur>=0&&items[cur])items[cur].el.classList.remove('active');
+  cur=i;var it=items[i];it.el.classList.add('active');
+  if(scroll)it.el.scrollIntoView({block:'center',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  openCard(i,true,false);updateNav();
+}
+$('#prev').addEventListener('click',function(){go(-1);});
+$('#next').addEventListener('click',function(){go(1);});
+
+/* ---------- card ---------- */
+var card=$('#card'), pinned=false, showT=null, hideT=null, openIdx=-1, lastPointer={x:0,y:0};
+function sheetMode(){return window.matchMedia('(max-width: 760px), (hover: none)').matches;}
+
+function searchLinks(sr){var d=el('div','srch');d.append(document.createTextNode('No link in the reference. Find it: '));
+  [['Google Scholar',sr.scholar],['WorldCat',sr.worldcat]].forEach(function(x,i){var u=safeUrl(x[1]);if(!u)return;if(i)d.append(document.createTextNode(' \u00b7 '));var a=el('a',null,x[0]);a.href=u;a.target='_blank';a.rel='noopener noreferrer';d.append(a);});return d;}
+var SUG={};(DATA.suggestions||[]).forEach(function(x){SUG[x.id]=x;});
+var EXKEY='athetize-excluded-'+(DATA.meta.source_file||'paper'), EXCL={};
+try{(JSON.parse(localStorage.getItem(EXKEY)||'[]')||[]).forEach(function(k){EXCL[k]=1;});}catch(e){}
+function saveExcl(){try{localStorage.setItem(EXKEY,JSON.stringify(Object.keys(EXCL)));}catch(e){}renderSugSum();syncEdits();}
+function copyText(t,btn){var done=function(){var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o;},1200);};
+  try{navigator.clipboard.writeText(t).then(done,function(){btn.textContent='Copy failed';});}catch(e){btn.textContent='Copy failed';}}
+function sugBlock(sg){
+  var b=el('div','sug'+(EXCL[sg.id]?' off':''));
+  var row=el('div','row');
+  row.append(pill(sg.kind==='rewrite'?'Suggested rewording':(sg.kind==='reference'?'Reference list fix':'Citation fix'),'var(--muted)'));
+  row.append(el('span',null,sg.id+' \u00b7 '+sg.where+(sg.refs&&sg.refs.length?' \u00b7 ['+sg.refs.join('], [')+']':'')));
+  b.append(row);
+  var d=el('div','diff');
+  if(!sg.suggested){d.append(el('del',null,sg.original));d.append(el('span',null,' (delete)'));}
+  else sg.diff.forEach(function(op){d.append(op[0]==='='?document.createTextNode(op[1]):el(op[0]==='-'?'del':'ins',null,op[1]));});
+  b.append(d);
+  if(sg.rationale)b.append(el('p','why',sg.rationale));
+  var act=el('div','act');
+  if(sg.suggested){var cp=el('button',null,'Copy new text');cp.type='button';cp.addEventListener('click',function(){copyText(sg.suggested,cp);});act.append(cp);}
+  var tg=el('button',null,EXCL[sg.id]?'Excluded from Word export':'Included in Word export');tg.type='button';tg.setAttribute('aria-pressed',EXCL[sg.id]?'false':'true');
+  tg.addEventListener('click',function(){if(EXCL[sg.id])delete EXCL[sg.id];else EXCL[sg.id]=1;var off=!!EXCL[sg.id];
+    b.classList.toggle('off',off);tg.textContent=off?'Excluded from Word export':'Included in Word export';tg.setAttribute('aria-pressed',off?'false':'true');saveExcl();});
+  act.append(tg);b.append(act);
+  return b;
+}
+function renderSugSum(){var box=document.getElementById('sugSum');if(!box)return;box.textContent='';
+  var all=DATA.suggestions||[];if(!all.length)return;
+  var ex=all.filter(function(x){return EXCL[x.id];}).map(function(x){return x.id;});
+  box.append(document.createTextNode(all.length+(all.length===1?' suggested edit (':' suggested edits (')+(all.length-ex.length)+' included in the Word export). Ask Claude to export them to Word as tracked changes'+(ex.length?', excluding: '+ex.join(', '):'')+'.'));
+  if(ex.length){var c=el('button',null,'Copy exclusion list');c.type='button';c.addEventListener('click',function(){copyText('Export suggestions to Word, excluding '+ex.join(', '),c);});box.append(c);}
+}
+function pill(text,color,solid){var p=el('span','pill'+(solid?' solid':''),text);p.style.setProperty('--c',color);return p;}
+function colorFor(v){return 'var('+GVAR[GROUP[v]||'unv']+')';}
+
+function refBlock(r,multi){
+  var b=el('div','blk');
+  var row=el('div','row');
+  if(multi){var vp=pill(LABEL[r.verdict],colorFor(r.verdict),true);row.append(vp);}
+  row.append(pill('['+r.ref_id+']','var(--muted)'));
+  if(r.confidence!=null&&r.verdict!=='pending'&&!(r.flags&&r.flags.indexOf('no_source')>=0))row.append(el('span','conf',Math.round(r.confidence*100)+'% confidence'));
+  b.append(row);
+  if(r.analysis)b.append(el('p','an',r.analysis));
+  var exs=(r.excerpts&&r.excerpts.length)?r.excerpts:(r.quote?[{before:'',match:r.quote,after:'',page:r.page,mode:r.match}]:[]);
+  exs.forEach(function(x,k){
+    var fig=el('figure','ev');fig.style.margin='0 0 8px';fig.style.setProperty('--c',colorFor(r.verdict));
+    var cap=[exs.length>1?('Evidence '+(k+1)+' of '+exs.length):'Evidence in source'];
+    if(x.page)cap.push('p. '+x.page);
+    cap.push(r.evidence_level==='abstract'?'abstract only':'full text');
+    if(x.mode&&x.mode!=='exact')cap.push('near-exact match');
+    var fc=el('figcaption',null,cap.join(' \u00b7 '));
+    var lhp=localHref(r.local_file);
+    if(lhp){var pa=el('a',null,x.page?'Open at p. '+x.page:'Open source');
+      pa.href=lhp+(x.page&&/\.pdf$/i.test(r.local_file||'')?'#page='+x.page:'');pa.target='_blank';pa.rel='noopener';
+      fc.append(document.createTextNode(' \u00b7 '));fc.append(pa);}
+    fig.append(fc);
+    var q=el('blockquote','exq');
+    if(x.before)q.append(el('span','ctx',x.before+' '));
+    q.append(el('mark',null,x.match));
+    if(x.after)q.append(el('span','ctx',' '+x.after));
+    fig.append(q);
+    b.append(fig);
+  });
+  var src=el('div','src');
+  var url=safeUrl(r.link);
+  if(url){var a=el('a','ext',r.citation);a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.title='Opens in a new tab';src.append(a);}
+  else src.append(el('span','cite',r.citation));
+  if(r.raw&&r.raw!==r.citation)src.append(el('div','rawref',r.raw));
+  if(!url&&r.search)src.append(searchLinks(r.search));
+  var row2=el('div','row2');
+  if(r.retracted)row2.append(pill('Retracted or corrected','var(--bad)',true));
+  if(r.exists&&r.exists!=='verified'&&r.exists!=='unchecked')row2.append(pill(EXISTS[r.exists]||r.exists,'var(--part)'));
+  if(r.evidence_level==='abstract')row2.append(pill('Abstract only','var(--part)'));
+  if(r.evidence_level==='none')row2.append(pill('No full text found','var(--unv)'));
+  var lh=localHref(r.local_file);
+  if(lh){var la=el('a',null,'Open local copy');la.href=lh;la.target='_blank';la.rel='noopener';row2.append(la);}
+  else if(r.local_file&&location.protocol!=='file:'){var nt=el('span',null,'Local copy available when report.html is opened from its folder');nt.style.fontSize='11.5px';nt.style.opacity='.7';row2.append(nt);}
+  if(row2.children.length)src.append(row2);
+  b.append(src);
+  if(r.evidence_level!=='full_text'){
+    var h=el('div','help');
+    if(r.why_missing&&r.why_missing.length)b.append(whyLine(r.why_missing,'help'));
+    h.append(document.createTextNode('Have the full text? '));
+    var add=el('a',null,'Add it on the Sources page');add.href='#sources';
+    add.addEventListener('click',function(ev){ev.preventDefault();openSources(null,r.ref_id);});
+    h.append(add);h.append(document.createTextNode('.'));
+    b.append(h);
+  }
+  return b;
+}
+
+function buildCard(i){
+  var it=items[i],d=it.d;
+  card.textContent='';
+  card.append(el('div','grab'));
+  var head=el('div','c-head');
+  var badge=el('span','badge',LABEL[it.verdict]+(it.prov?' \u00b7 abstract only':''));badge.style.setProperty('--c',colorFor(it.verdict));
+  head.append(badge);
+  if(it.kind==='claim'&&d.type)head.append(pill(d.type,'var(--muted)'));
+  if(it.kind==='claim'&&d.retracted)head.append(pill('Retracted source','var(--bad)',true));
+  head.append(el('span','sp'));
+  var onSources=!srcView.hidden;
+  var pb=iconBtn('prev','Previous claim'),nb=iconBtn('next','Next claim'),cb=iconBtn('close','Close');
+  pb.addEventListener('click',function(){go(-1);});nb.addEventListener('click',function(){go(1);});cb.addEventListener('click',closeCard);
+  if(!onSources)head.append(pb,nb);
+  head.append(cb);card.append(head);
+  var body=el('div','c-body');
+  if(it.kind==='claim'){
+    var t=d.text.length>260?d.text.slice(0,257)+'…':d.text;
+    body.append(el('div','claimtxt',t));
+    if(it.prov)body.append(el('p','provnote','Judged from the abstract only. The full paper may say more, or something different, so this result is provisional until the full text is added.'));
+    if(it.failing){
+      var fr=d.failing_refs;
+      body.append(el('p','failnote',count(fr.length,'cited source does','cited sources do')+' not support this claim: '+fr.map(function(r){return '['+r+']';}).join(', ')+'.'));
+    }
+    if(!d.items.length){
+      body.append(el('p','an','This sentence states something specific but cites no source. Add a citation or soften the wording.'));
+    }
+    var multi=d.items.length>1;d.items.forEach(function(r){body.append(refBlock(r,multi));});
+    if(d.note)body.append(el('p','help',d.note));
+    if(d.suggestions&&d.suggestions.length){var sw=el('div','sugs');sw.append(el('h3',null,'Suggested edits'));
+      d.suggestions.forEach(function(id){if(SUG[id])sw.append(sugBlock(SUG[id]));});body.append(sw);}
+  }else{
+    body.append(el('p','an',d.message));
+    body.append(el('div','help',(d.kind||'note')+' · '+(d.severity||'info')));
+  }
+  if(onSources){
+    var where=el('div','help'),go2=el('a',null,'Show in the document');go2.href='#';
+    go2.addEventListener('click',function(ev){ev.preventDefault();showClaim(i);});
+    where.append(go2);body.append(where);
+  }
+  card.append(body);
+}
+
+var cardAnchor=null;
+function openCard(i,pin,focus,anchor){
+  clearTimeout(hideT);clearTimeout(showT);
+  openIdx=i;pinned=!!pin;cardAnchor=anchor||null;
+  buildCard(i);
+  var m=anchor||items[i].el,rects=m.getClientRects(),at=rects[0];
+  for(var k=0;!anchor&&k<rects.length;k++){if(lastPointer.y>=rects[k].top&&lastPointer.y<=rects[k].bottom){at=rects[k];break;}}
+  showCardAt(at,focus);
+}
+/* Show the card that has just been filled, beside the given rectangle (or as a sheet on a phone). */
+function showCardAt(r,focus){
+  var sheet=sheetMode();
+  card.classList.toggle('as-sheet',sheet);
+  document.body.classList.toggle('sheet-open',sheet);
+  card.classList.remove('open');
+  card.style.left='';card.style.top='';
+  if(!sheet){
+    card.style.visibility='hidden';card.classList.add('open');
+    var vw=document.documentElement.clientWidth,w=card.offsetWidth,h=card.offsetHeight;
+    var left=Math.max(12,Math.min(r.left,vw-w-12))+window.scrollX;
+    var below=window.innerHeight-r.bottom;
+    var top=(below>=Math.min(h,360)+16||r.top<h+16)?r.bottom+8+window.scrollY:r.top-h-8+window.scrollY;
+    card.style.left=left+'px';card.style.top=top+'px';card.style.visibility='';
+  }else{
+    requestAnimationFrame(function(){card.classList.add('open');});
+  }
+  card.classList.add('open');
+  if(focus)card.focus({preventScroll:true});
+}
+function closeCard(){
+  clearTimeout(showT);clearTimeout(hideT);
+  var wasIdx=openIdx;
+  card.classList.remove('open');document.body.classList.remove('sheet-open');pinned=false;openIdx=-1;
+  if(cur>=0&&items[cur])items[cur].el.classList.remove('active');
+  var back=cardAnchor||(wasIdx>=0&&items[wasIdx]?items[wasIdx].el:null);cardAnchor=null;
+  if(document.activeElement===card&&back)back.focus({preventScroll:true});
+}
+function scheduleHide(){clearTimeout(hideT);if(pinned)return;hideT=setTimeout(closeCard,240);}
+
+paper.addEventListener('pointermove',function(e){lastPointer.x=e.clientX;lastPointer.y=e.clientY;});
+paper.addEventListener('mouseover',function(e){
+  if(sheetMode())return;
+  var m=e.target.closest&&e.target.closest('[data-idx]');if(!m||!paper.contains(m))return;
+  var i=+m.dataset.idx;
+  clearTimeout(hideT);clearTimeout(showT);
+  if(openIdx===i)return;
+  showT=setTimeout(function(){if(!pinned||openIdx!==i){if(pinned&&openIdx!==i&&openIdx>=0)return;openCard(i,false,false);}},130);
+});
+paper.addEventListener('mouseout',function(e){
+  if(sheetMode())return;
+  var m=e.target.closest&&e.target.closest('[data-idx]');if(!m)return;
+  clearTimeout(showT);scheduleHide();
+});
+card.addEventListener('mouseenter',function(){clearTimeout(hideT);});
+card.addEventListener('mouseleave',function(){if(!sheetMode())scheduleHide();});
+paper.addEventListener('click',function(e){
+  var m=e.target.closest&&e.target.closest('[data-idx]');if(!m)return;
+  var i=+m.dataset.idx;
+  if(cur>=0&&items[cur])items[cur].el.classList.remove('active');
+  cur=i;m.classList.add('active');
+  if(!sheetMode()&&pinned&&openIdx===i){closeCard();return;}
+  openCard(i,true,false);updateNav();
+});
+paper.addEventListener('keydown',function(e){
+  var m=e.target.closest&&e.target.closest('[data-idx]');if(!m)return;
+  if(e.key==='Enter'||e.key===' '){e.preventDefault();var i=+m.dataset.idx;cur=i;m.classList.add('active');openCard(i,true,true);updateNav();}
+});
+paper.addEventListener('focusin',function(e){
+  var m=e.target.closest&&e.target.closest('[data-idx]');if(!m||sheetMode()||pinned)return;
+  openCard(+m.dataset.idx,false,false);
+});
+document.addEventListener('click',function(e){
+  if(!openIdx&&openIdx!==0)return;
+  if(card.contains(e.target)||(e.target.closest&&e.target.closest('[data-idx],.nav,.used')))return;
+  closeCard();
+});
+document.addEventListener('keydown',function(e){
+  var tag=(e.target&&e.target.tagName)||'';
+  if(e.key==='Escape'){closeCard();return;}
+  if(/INPUT|TEXTAREA|SELECT/.test(tag)||e.metaKey||e.ctrlKey||e.altKey)return;
+  if(!srcView.hidden)return;
+  if(e.key==='j')go(1);else if(e.key==='k')go(-1);
+});
+
+/* ---------- rail ---------- */
+var rail=$('#rail');
+function placeRail(){
+  rail.textContent='';
+  var h=Math.max(1,document.documentElement.scrollHeight),box=rail.getBoundingClientRect().height||1;
+  items.forEach(function(it,i){
+    if(it.el.classList.contains('dim'))return;
+    var y=it.el.getBoundingClientRect().top+window.scrollY;
+    var a=el('a');a.href='#';a.tabIndex=-1;a.style.top=(y/h*box)+'px';a.style.setProperty('--c','var('+GVAR[it.group]+')');
+    a.addEventListener('click',function(ev){ev.preventDefault();focusItem(i,true);});
+    rail.append(a);
+  });
+}
+window.addEventListener('resize',function(){placeRail();if(openIdx>=0&&!sheetMode()&&!pinned)closeCard();});
+window.addEventListener('load',placeRail);
+
+/* ---------- sources page ---------- */
+var srcList=$('#srcList'), needsOnly=false, rowNote={}, hasEmail=false;
+function count(n,one,many){return n+' '+(n===1?one:many);}
+function needsSource(r){return r.status==='missing'||r.status==='abstract_only'||r.status==='unresolved';}
+function needCount(){return DATA.refs.filter(needsSource).length;}
+function renderSources(){
+  srcList.textContent='';
+  var shown=0;
+  DATA.refs.forEach(function(r){
+    var needs=needsSource(r);
+    /* a row just given its document stays in view, so its note can be read */
+    if(needsOnly&&!needs&&!rowNote[r.id])return;
+    shown++;
+    var row=el('div','srow'+((needs||r.retracted)?' flag':''));
+    row.id='ref-'+r.id;
+    row.append(el('div','id','['+r.id+']'));
+    var c=el('div','cit');var url=safeUrl(r.link);
+    if(url){var a=el('a','ext',r.citation);a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.title='Opens in a new tab';c.append(a);}else c.textContent=r.citation;
+    if(!url&&r.search){var sl=searchLinks(r.search);sl.style.fontSize='12px';c.append(sl);}
+    row.append(c);
+    var pills=el('div','pills');
+    var sc=r.status==='full_text'||r.status==='user_provided'?'var(--ok)':(r.status==='abstract_only'?'var(--part)':'var(--unv)');
+    pills.append(pill(STATUS[r.status]||r.status,sc));
+    if(r.exists&&r.exists!=='unchecked')pills.append(existsPill(r));
+    if(r.retracted)pills.append(pill('Retracted or corrected','var(--bad)',true));
+    var lh=localHref(r.local_file);
+    if(lh){var la=el('a',null,'Open local copy');la.href=lh;la.target='_blank';la.rel='noopener';la.style.fontSize='12px';pills.append(la);}
+    row.append(pills);
+    if(r.matched_title&&(r.exists==='partial_match'||r.exists==='mismatch')){row.append(el('div','more','Closest database record: \u201c'+r.matched_title+'\u201d. Not used: the citation and link above are the paper\u2019s own.'));}
+    if(r.why_missing&&r.why_missing.length)row.append(whyLine(r.why_missing,'why'));
+    var ub=null;
+    if(needs){
+      /* the person says which reference the file is for by pressing its row: nothing is matched */
+      ub=el('button','textbtn small');ub.type='button';ub.append(icon('plus'),document.createTextNode('Upload document'));
+      ub.setAttribute('aria-label','Upload the document for reference '+r.id);
+      ub.disabled=adding===true;
+      ub.addEventListener('click',function(){uploadFor(r);});
+    }
+    var cited=r.cited_by&&r.cited_by.length;
+    if(cited||ub){
+      /* one line: the claims that cite this source on the left, its upload on the right */
+      var line=el('div','citeline'),used=el('div','used',cited?'Citations ':'');
+      line.append(used);if(ub)line.append(ub);
+      (r.cited_by||[]).forEach(function(cid){
+        var idx=items.findIndex(function(it){return it.kind==='claim'&&it.d.id===cid;});
+        if(idx<0)return;
+        /* coloured by what this source did for the claim, with the legend's colours */
+        var mine=items[idx].d.items.filter(function(x){return x.ref_id===r.id;})[0];
+        var v=mine?mine.verdict:items[idx].verdict;
+        var a=el('a','cchip g-'+(GROUP[v]||'unv'),cid);a.href='#';a.title=LABEL[v]||v;
+        a.addEventListener('click',function(ev){ev.preventDefault();if(openIdx===idx&&cardAnchor===a)closeCard();else openCard(idx,true,true,a);});
+        used.append(a);
+      });
+      row.append(line);
+    }
+    if(rowNote[r.id])row.append(el('div','rownote'+(rowNote[r.id].bad?' bad':''),rowNote[r.id].text));
+    var fixes=(r.suggestions||[]).filter(function(id){return SUG[id];});
+    var differs=r.discrepancies&&r.discrepancies.length;
+    if(fixes.length||differs){
+      var notes=el('div','used','Reference list ');
+      (fixes.length?fixes:['note']).forEach(function(label){
+        var a=el('a','cchip g-ref',label);a.href='#';a.title=fixes.length?'Suggested fix to this reference':'The database record differs from this reference';
+        a.addEventListener('click',function(ev){ev.preventDefault();if(cardAnchor===a&&card.classList.contains('open'))closeCard();else openRefCard(r,a);});
+        notes.append(a);
+      });
+      row.append(notes);
+    }
+    srcList.append(row);
+  });
+  if(!shown)srcList.append(el('div','empty',needsOnly?'Every source has its full text.':'No references were extracted.'));
+}
+/* The card for a reference: a suggested fix to its entry, or where the database record differs. */
+function openRefCard(r,anchor){
+  clearTimeout(hideT);clearTimeout(showT);
+  openIdx=-1;pinned=true;cardAnchor=anchor;
+  card.textContent='';card.append(el('div','grab'));
+  var head=el('div','c-head');
+  var badge=el('span','badge','Reference ['+r.id+']');badge.style.setProperty('--c','var(--primary-dark)');
+  var cb=iconBtn('close','Close');cb.addEventListener('click',closeCard);
+  head.append(badge,el('span','sp'),cb);card.append(head);
+  var body=el('div','c-body');
+  body.append(el('div','claimtxt',r.raw||r.citation));
+  var fixes=(r.suggestions||[]).filter(function(id){return SUG[id];});
+  if(!fixes.length&&r.discrepancies&&r.discrepancies.length){
+    body.append(el('p','an','The database record differs from the reference as printed:'));
+    var ul=el('ul','difflist');
+    r.discrepancies.forEach(function(t){ul.append(el('li',null,t.charAt(0).toUpperCase()+t.slice(1)+'.'));});
+    body.append(ul);
+  }
+  fixes.forEach(function(id){body.append(sugBlock(SUG[id]));});
+  card.append(body);
+  showCardAt(anchor.getBoundingClientRect(),true);
+}
+function renderSrcFilter(){
+  var box=$('#srcFilter');box.textContent='';
+  [['All',false,DATA.refs.length],['Need full text',true,needCount()]].forEach(function(x){
+    var b=el('button','chip',x[0]+' ');b.type='button';b.setAttribute('aria-pressed',needsOnly===x[1]?'true':'false');
+    b.append(el('b',null,x[2]));
+    b.addEventListener('click',function(){setNeedsOnly(x[1]);});
+    box.append(b);
+  });
+}
+function setNeedsOnly(on){needsOnly=on;renderSrcFilter();renderSources();}
+$('#srcCount').textContent=DATA.refs.length;
+function renderSrcLead(){
+  var n=needCount();
+  $('#srcLead').textContent=count(DATA.refs.length,'reference','references')+' cited in '+(DATA.meta.source_file||'this paper')+'. '+(n?count(n,'still needs its','still need their')+' full text.':'Every one has its full text.');
+}
+
+/* ---------- Word report ----------
+   The Word copy sits beside the report, so it can be offered when the report is opened from
+   its folder or shown by the helper, not from a copy hosted somewhere else. */
+var wordName=DATA.meta.word_export;
+function offerWord(href){
+  var a=$('#wordReport');a.href=href;a.setAttribute('download',wordName);
+  a.setAttribute('aria-label','Download the report as a Word document with the suggested edits: '+wordName);a.hidden=false;
+}
+if(wordName&&location.protocol==='file:'&&/^[^\/\\]+\.docx$/.test(wordName))offerWord(encodeURI(wordName));
+
+/* ---------- add sources ----------
+   The page can take files only when the plugin's helper on this computer is showing it
+   (pl.py serve). Opened as a plain file, the button says how to get that. */
+var paperName=DATA.meta.source_file||DATA.meta.title||'this paper';
+var addBtn=$('#addSources'),picker=$('#srcPicker'),addBox=$('#addSrc'),helper=false,adding=false,oneChooser=false;
+var READS=/\.(pdf|txt|md|html?|docx|xml)$/i, MAX_MB=300;
+function api(route,opts){
+  return fetch('api/'+route,opts).then(function(r){
+    return r.json().then(function(j){if(!r.ok)throw new Error(j.error||'The request failed.');return j;});
+  });
+}
+function addNote(title,lines){
+  addBox.hidden=false;addBox.textContent='';addBox.append(el('h2',null,title));
+  (lines||[]).forEach(function(t){addBox.append(el('p',null,t));});
+}
+function addList(lines){var ul=el('ul');lines.forEach(function(t){ul.append(el('li',null,t));});addBox.append(ul);}
+function showHowToAdd(){
+  var req='Open the Athetize report for '+paperName+' so I can add sources.';
+  addNote('Add sources',['This page can take your files once Claude has opened the report for you. Ask Claude:']);
+  addBox.append(el('div','req',req));
+  var c=el('button',null,'Copy request');c.type='button';c.addEventListener('click',function(){copyText(req,c);});
+  var act=el('div','act');act.append(c);addBox.append(act);
+  addBox.append(el('p','after','Claude replies with a link to this report where Add sources opens your files. You can also attach the papers to a message to Claude, or tell it which folder they are in. File names do not matter.'));
+}
+function showAdded(res){
+  var n=res.matched.length,skip=res.skipped;
+  addNote(n?count(n,'source','sources')+' added':'No sources added');
+  if(n)addList(res.matched.map(function(m){return '['+m.ref+'] '+m.title+', from '+m.file;}));
+  var left=res.ambiguous.map(function(a){return a.file+': could be '+a.could_be.map(function(id){return '['+id+']';}).join(' or ');})
+    .concat(res.unmatched.map(function(u){return u.file+': '+u.why;}));
+  if(left.length){
+    addBox.append(el('p',null,'Not recognised, so not added:'));addList(left);
+    addBox.append(el('p',null,'Tell Claude which reference each of these is and it will add them.'));
+  }
+  var dupes=skip.same.concat(res.duplicates.map(function(d){return d.file+': '+d.why;}))
+    .concat(skip.known.concat(res.already_imported).map(function(f){return f+': already added';}));
+  if(dupes.length){addBox.append(el('p',null,'Skipped as duplicates:'));addList(dupes);}
+  if(skip.other)addBox.append(el('p',null,count(skip.other,'other file was','other files were')+' left out: not a type Athetize reads.'));
+  if(!n)return;
+  addBox.append(el('p',null,'The claims that cite '+(n===1?'this source have':'these sources have')+' not been rechecked yet. Add more, or finish.'));
+  var fin=el('button',null,'Finish and recheck');fin.type='button';
+  fin.addEventListener('click',function(){
+    api('done',{method:'POST'}).then(function(){
+      addBtn.disabled=true;helper=false;
+      addNote('Handed to Claude',['Claude now has the list of what you added and rechecks the claims that cite it. If it does not start by itself, tell it \u201crecheck\u201d. Open the report again when Claude says it is ready.']);
+    }).catch(function(e){addNote('Could not finish',[e.message]);});
+  });
+  var act=el('div','act');act.append(fin);addBox.append(act);
+}
+function markAdded(res){
+  res.matched.forEach(function(m){
+    DATA.refs.forEach(function(r){if(r.id===m.ref){r.status=m.status;r.why_missing=[];}});
+  });
+  renderSrcLead();renderSrcFilter();renderSources();
+}
+function sha256(file){
+  return file.arrayBuffer().then(function(buf){return crypto.subtle.digest('SHA-256',buf);}).then(function(d){
+    return Array.prototype.map.call(new Uint8Array(d),function(b){return ('0'+b.toString(16)).slice(-2);}).join('');
+  });
+}
+/* Drop files whose content repeats within the selection, or is already among the sources. */
+function scanFiles(files,skip){
+  var seen={},keep=[],i=0;
+  function next(){
+    if(i>=files.length){
+      return api('known',{method:'POST',body:JSON.stringify({hashes:keep.map(function(k){return k.hash;})})}).then(function(j){
+        return keep.filter(function(k){
+          if(j.known.indexOf(k.hash)<0)return true;
+          skip.known.push(k.file.name);return false;
+        }).map(function(k){return k.file;});
+      });
+    }
+    var f=files[i++];
+    addNote('Adding sources',['Checking '+i+' of '+files.length+' for duplicates: '+f.name]);
+    return sha256(f).then(function(h){
+      if(seen[h])skip.same.push(f.name+': same content as '+seen[h]);
+      else{seen[h]=f.name;keep.push({file:f,hash:h});}
+      return next();
+    });
+  }
+  return next();
+}
+function sendFiles(files){
+  var i=0;
+  if(!files.length)return {matched:[],ambiguous:[],unmatched:[],duplicates:[],already_imported:[]};
+  function next(){
+    if(i>=files.length){
+      addNote('Adding sources',['Reading '+count(files.length,'file','files')+' and matching to the references.']);
+      return api('import',{method:'POST'});
+    }
+    var f=files[i++];
+    addNote('Adding sources',['Sending '+i+' of '+files.length+': '+f.name]);
+    return api('upload?name='+encodeURIComponent(f.name),{method:'POST',body:f}).then(next);
+  }
+  return next();
+}
+function addFiles(list){
+  if(adding)return;
+  var all=Array.prototype.filter.call(list,function(f){return f.name.charAt(0)!=='.';});
+  var files=all.filter(function(f){return READS.test(f.name);});
+  var skip={other:all.length-files.length,same:[],known:[]};
+  if(!files.length){addNote('Nothing to add',['None of those files is a type Athetize reads: PDF, Word, web page or text.']);return;}
+  var big=files.filter(function(f){return f.size>MAX_MB*1024*1024;});
+  if(big.length){addNote('Too large to add',[big.map(function(f){return f.name;}).join(', ')+' '+(big.length===1?'is':'are')+' over '+MAX_MB+' MB. Choose the other files again without '+(big.length===1?'it':'them')+'.']);return;}
+  adding=true;addBtn.disabled=true;
+  scanFiles(files,skip).then(sendFiles)
+    .then(function(res){res.skipped=skip;markAdded(res);showAdded(res);},function(e){addNote('Could not add the files',[e.message]);})
+    .then(function(){adding=false;addBtn.disabled=false;});
+}
+function entryFiles(entry){
+  if(entry.isFile)return new Promise(function(done,fail){entry.file(function(f){done([f]);},fail);});
+  if(!entry.isDirectory)return Promise.resolve([]);
+  var reader=entry.createReader(),all=[];
+  function more(){
+    return new Promise(function(done,fail){reader.readEntries(done,fail);}).then(function(batch){
+      if(!batch.length)return all;
+      return Promise.all(batch.map(entryFiles)).then(function(lists){lists.forEach(function(l){all=all.concat(l);});return more();});
+    });
+  }
+  return more();
+}
+/* One document for one reference, from the button on that reference's row. */
+var onePicker=$('#onePicker'),oneRef=null;
+function uploadFor(r){
+  if(adding)return;
+  if(!helper){showHowToAdd();addBox.scrollIntoView({block:'center'});return;}
+  oneRef=r;onePicker.click();
+}
+onePicker.addEventListener('change',function(){
+  var f=onePicker.files[0],r=oneRef;onePicker.value='';oneRef=null;
+  if(!f||!r||adding)return;
+  function say(text,bad){rowNote[r.id]={text:text,bad:bad===true};renderSources();}
+  if(!READS.test(f.name)){say(f.name+' is not a type Athetize reads: PDF, Word, web page or text.',true);return;}
+  if(f.size>MAX_MB*1024*1024){say(f.name+' is over '+MAX_MB+' MB.',true);return;}
+  adding=true;addBtn.disabled=true;say('Reading '+f.name+'\u2026');
+  api('upload-for?ref='+encodeURIComponent(r.id)+'&name='+encodeURIComponent(f.name),{method:'POST',body:f}).then(function(m){
+    var res={matched:[m],ambiguous:[],unmatched:[],duplicates:[],already_imported:[],skipped:{other:0,same:[],known:[]}};
+    rowNote[r.id]={bad:false,text:'Added from '+m.file+'. Not rechecked yet: press Finish and recheck at the top of this page when you are done.'
+      +(m.looks_like?' Its text looks like reference ['+m.looks_like+'] ('+m.looks_like_title+'), not this one, so check it is the right file.':'')};
+    markAdded(res);showAdded(res);
+  },function(e){rowNote[r.id]={bad:true,text:'Not added. '+e.message};})
+    .then(function(){adding=false;addBtn.disabled=false;renderSources();});
+});
+var addMenu=$('#addMenu'),dirPicker=$('#dirPicker');
+function showAddMenu(open){addMenu.hidden=!open;addBtn.setAttribute('aria-expanded',open?'true':'false');if(open)$('#pickFiles').focus();}
+/* On a Mac the helper opens the system's own chooser, which takes files and folders
+   together. Elsewhere the browser's two dialogs are offered, since a page cannot do both. */
+function chooseOnThisComputer(){
+  if(adding)return;
+  /* the system's own chooser is all that opens: no box on the page while it is up */
+  adding=true;addBtn.disabled=true;addBox.hidden=true;
+  api('choose',{method:'POST'}).then(function(res){
+    if(res.cancelled){addBox.hidden=true;return;}
+    res.skipped={other:res.other_files||0,same:[],known:[]};
+    markAdded(res);showAdded(res);
+  },function(e){addNote('Could not add the files',[e.message]);})
+    .then(function(){adding=false;addBtn.disabled=false;});
+}
+addBtn.addEventListener('click',function(){
+  if(helper&&oneChooser)chooseOnThisComputer();
+  else if(helper)showAddMenu(addMenu.hidden);
+  else if(addBox.hidden)showHowToAdd();
+  else addBox.hidden=true;
+});
+$('#pickFiles').addEventListener('click',function(){showAddMenu(false);picker.click();});
+$('#pickFolder').addEventListener('click',function(){showAddMenu(false);dirPicker.click();});
+picker.addEventListener('change',function(){addFiles(picker.files);picker.value='';});
+dirPicker.addEventListener('change',function(){addFiles(dirPicker.files);dirPicker.value='';});
+document.addEventListener('click',function(e){if(!addMenu.hidden&&!e.target.closest('.addwrap'))showAddMenu(false);});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!addMenu.hidden){showAddMenu(false);addBtn.focus();}});
+function overPage(e){if(!helper)return;e.preventDefault();$('#sourcesView').classList.add('dropping');}
+$('#sourcesView').addEventListener('dragenter',overPage);
+$('#sourcesView').addEventListener('dragover',overPage);
+$('#sourcesView').addEventListener('dragleave',function(e){if(!this.contains(e.relatedTarget))this.classList.remove('dropping');});
+$('#sourcesView').addEventListener('drop',function(e){
+  this.classList.remove('dropping');
+  if(!helper)return;
+  e.preventDefault();
+  var reads=Array.prototype.map.call(e.dataTransfer.items||[],function(it){
+    var entry=it.webkitGetAsEntry?it.webkitGetAsEntry():null,file=it.getAsFile();
+    return entry?entryFiles(entry):Promise.resolve(file?[file]:[]);
+  });
+  Promise.all(reads).then(function(lists){addFiles([].concat.apply([],lists));},function(err){addNote('Could not read what was dropped',[err.message]);});
+});
+if(location.protocol==='http:'&&/^(127\.0\.0\.1|localhost)$/.test(location.hostname)){
+  addBtn.disabled=true;
+  api('ping').then(function(j){helper=j.ok===true;oneChooser=j.chooser===true;},function(){helper=false;})
+    .then(function(){addBtn.disabled=false;if(helper&&wordName)offerWord('word.docx');if(helper)api('settings').then(function(j){gotSettings(j,false);},function(){});});
+}
+
+/* ---------- missing-sources notice ---------- */
+function renderNeedSrc(){
+  var n=DATA.sources_needed,box=$('#needSrc');
+  if(!box||!n||!n.need_source)return;
+  box.hidden=false;$('#needBand').hidden=false;
+  var txt=el('div','txt');
+  txt.append(el('b',null,n.need_source+' of '+count(n.references,'source has','sources have')+' no full text.'));
+  txt.append(document.createTextNode(' '+count(n.claims_relying,'claim','claims')+' can\u2019t be fully checked yet.'));
+  box.append(txt);
+  var act=el('div','act');
+  var b=el('button',null,'Review Missing Sources');b.type='button';
+  b.addEventListener('click',function(){openSources(true);});
+  act.append(b);
+  if(n.request_file&&location.protocol==='file:'&&/^[\w.-]+$/.test(n.request_file)){var a=el('a',null,'Open the download list');a.href=encodeURI(n.request_file);a.target='_blank';a.rel='noopener';act.append(a);}
+  box.append(act);
+}
+
+/* ---------- document and sources views ---------- */
+var docView=$('#docView'),srcView=$('#sourcesView'),paperY=0,cameFromDoc=false,pendingClaim=null;
+function jumpTo(y){window.scrollTo({top:y,behavior:'instant'});}
+function showView(sources){
+  if(sources===!srcView.hidden)return;
+  closeCard();
+  if(sources)paperY=window.scrollY;
+  [$('.toolbar'),docView,rail].forEach(function(e){e.hidden=sources;});
+  $('#needBand').hidden=sources||$('#needSrc').hidden;
+  $(sources?'#openSources':'#openResults').setAttribute('aria-current','page');
+  $(sources?'#openResults':'#openSources').removeAttribute('aria-current');
+  srcView.hidden=!sources;
+  if(sources){jumpTo(0);return;}
+  cameFromDoc=false;placeRail();
+  if(pendingClaim===null){jumpTo(paperY);return;}
+  var i=pendingClaim;pendingClaim=null;
+  items[i].el.scrollIntoView({block:'center',behavior:'instant'});focusItem(i,false);
+}
+function syncView(){showView(location.hash==='#sources');}
+function openSources(needs,refId){
+  if(needs!==null&&needs!==undefined)setNeedsOnly(needs);
+  if(location.hash!=='#sources'){cameFromDoc=true;location.hash='sources';}
+  showView(true);
+  var row=refId&&document.getElementById('ref-'+refId);
+  if(row)row.scrollIntoView({block:'center',behavior:'instant'});
+}
+function leaveSources(){if(cameFromDoc)history.back();else location.hash='';}
+function showClaim(i){pendingClaim=i;leaveSources();}
+$('#openSources').addEventListener('click',function(){openSources();});
+$('#openResults').addEventListener('click',function(){if(!srcView.hidden)leaveSources();});
+window.addEventListener('hashchange',syncView);
+renderSrcLead();renderSrcFilter();renderSources();renderSugSum();renderNeedSrc();syncView();
+
+/* ---------- highlights or suggested edits ---------- */
+/* A suggestion left out of the Word document is left out of the paper's edits too. */
+function syncEdits(){
+  var n=0;
+  items.forEach(function(it){
+    if(!it.edit)return;
+    it.el.classList.toggle('sug-off',EXCL[it.el.dataset.sug]===1);
+    if(hasEdit(it))n++;
+  });
+  $('#edCount').textContent=n;
+  $('#viewSw').hidden=!items.some(function(it){return it.edit;});
+  items.forEach(function(it){if(it.kind==='claim')it.el.tabIndex=(editsMode&&!hasEdit(it))?-1:0;});
+  updateNav();
+}
+function setEditsMode(on){
+  editsMode=on;closeCard();
+  paper.classList.toggle('edits',on);
+  $('#showHl').setAttribute('aria-pressed',on?'false':'true');
+  $('#showEd').setAttribute('aria-pressed',on?'true':'false');
+  $('#hint').textContent=on?'Click an edit to see why.':'Hover or tap a highlight for details.';
+  syncEdits();placeRail();
+}
+$('#showHl').addEventListener('click',function(){setEditsMode(false);});
+$('#showEd').addEventListener('click',function(){setEditsMode(true);});
+syncEdits();
+
+/* ---------- links ---------- */
+/* Every link that leaves the report opens in a new tab, whatever part of the page made it.
+   Links within the page and the Word download are left alone. */
+document.addEventListener('click',function(e){
+  var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;
+  var to=a.getAttribute('href');
+  if(!to||to.charAt(0)==='#'||a.hasAttribute('download'))return;
+  a.target='_blank';
+  if(!/\bnoopener\b/.test(a.rel))a.rel=(a.rel?a.rel+' ':'')+'noopener';
+},true);
+
+/* ---------- what Athetize does ---------- */
+var aboutBtn=$('#aboutBtn'),about=$('#about'),setBtn=$('#settingsBtn'),setBox=$('#settings');
+/* the plugin's page: its source code, its documentation and where to report a problem */
+var home=safeUrl(DATA.meta.homepage);
+if(home)$('#aboutLink').href=home;else $('#aboutMore').hidden=true;
+function showAbout(open){about.hidden=!open;aboutBtn.setAttribute('aria-expanded',open?'true':'false');if(open)showSettings(false);}
+aboutBtn.addEventListener('click',function(){showAbout(about.hidden);});
+document.addEventListener('click',function(e){if(e.target.closest('.topact'))return;if(!about.hidden)showAbout(false);if(!setBox.hidden)showSettings(false);});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape')return;
+  if(!about.hidden){showAbout(false);aboutBtn.focus();}
+  if(!setBox.hidden){showSettings(false);setBtn.focus();}
+});
+
+/* ---------- settings ----------
+   One setting: the contact email that Unpaywall asks for. It is saved by the plugin's helper
+   on this computer, so it can be changed only when the helper is showing the report. */
+function setSay(text,bad){var m=$('#setMsg');m.textContent=text;m.classList.toggle('bad',bad===true);}
+function showSettings(open){
+  setBox.hidden=!open;setBtn.setAttribute('aria-expanded',open?'true':'false');
+  if(!open)return;
+  showAbout(false);
+  $('#setEmail').disabled=!helper;$('#setSave').disabled=!helper;
+  if(!helper)setSay('Settings can be changed when Claude has opened this report for you.');
+  else $('#setEmail').focus();
+}
+function openSettings(){closeCard();window.scrollTo({top:0,behavior:'instant'});showSettings(true);}
+function gotSettings(j,saved){
+  hasEmail=j.has_email===true;
+  $('#setRemove').hidden=!hasEmail;$('#setEmail').value='';
+  setSay(hasEmail?(saved?'Saved: ':'An email is saved: ')+j.email+'.'+(saved?' It is used the next time Claude looks for the sources: tell Claude \u201clook for the sources again\u201d.':''):(saved?'The email was removed.':'No email is saved.'));
+  renderSources();
+}
+function saveEmail(value){
+  $('#setSave').disabled=true;
+  api('settings',{method:'POST',body:JSON.stringify({email:value})})
+    .then(function(j){gotSettings(j,true);},function(e){setSay(e.message,true);})
+    .then(function(){$('#setSave').disabled=false;});
+}
+setBtn.addEventListener('click',function(){showSettings(setBox.hidden);});
+$('#setSave').addEventListener('click',function(){
+  var v=$('#setEmail').value.trim();
+  if(!v){setSay('Type an email address first.',true);$('#setEmail').focus();return;}
+  saveEmail(v);
+});
+$('#setEmail').addEventListener('keydown',function(e){if(e.key==='Enter')$('#setSave').click();});
+$('#setRemove').addEventListener('click',function(){saveEmail('');});
+
+/* ---------- theme ---------- */
+$('#theme').addEventListener('click',function(){
+  var root=document.documentElement;
+  var dark=root.getAttribute('data-theme')?root.getAttribute('data-theme')==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var next=dark?'light':'dark';root.setAttribute('data-theme',next);
+  try{localStorage.setItem('athetize-theme',next);}catch(e){}
+});
+try{var t=localStorage.getItem('athetize-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}
+
+updateNav();
+setTimeout(placeRail,200);
+})();
+</script>
+</body>
+</html>

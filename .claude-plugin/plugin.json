@@ -1,0 +1,20 @@
+{
+  "name": "athetize",
+  "version": "0.7.26",
+  "description": "Checks a paper's cited claims against the sources it cites. Downloads open-access sources (Unpaywall, OpenAlex, Europe PMC, arXiv, ERIC, Semantic Scholar), fetches blocked ones with Claude's browser tools in your own browser, accepts ones you provide, and produces a self-contained HTML report with a green/red overlay and hover analysis.",
+  "author": {
+    "name": "Matthew Harris",
+    "url": "https://github.com/dividor"
+  },
+  "homepage": "https://github.com/dividor/athetize-plugin-claude",
+  "repository": "https://github.com/dividor/athetize-plugin-claude",
+  "license": "MIT",
+  "keywords": [
+    "citations",
+    "claim-verification",
+    "peer-review",
+    "academic-writing",
+    "retractions",
+    "references"
+  ]
+}

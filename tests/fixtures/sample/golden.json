@@ -1,0 +1,3162 @@
+{
+ "abstract_from_inverted": "a b a",
+ "abstract_matches": [
+  true,
+  false,
+  true,
+  false
+ ],
+ "accept_html": [
+  "Attendance trial\nAttendance trial\n\nword0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial word10 attendance trial word11 attendance trial word12 attendance trial word13 attendance trial word14 attendance trial word15 attendance trial word16 attendance trial word17 attendance trial word18 attendance trial word19 attendance trial word20 attendance trial word21 attendance trial word22 attendance trial word23 attendance trial word24 attendance trial word25 attendance trial word26 attendance trial word27 attendance trial word28 attendance trial word29 attendance trial word30 attendance trial word31 attendance trial word32 attendance trial word33 attendance trial word34 attendance trial word35 attendance trial word36 attendance trial word0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial word5 attendance trial word6 attendance trial word7 attendance trial word8 attendance trial word9 attendance trial\n\nDiscussion of the results.",
+  null,
+  null,
+  null
+ ],
+ "accept_html_errors": [
+  "t: page had too little text for full text (10 chars)",
+  "t: page is a paywall or preview page, not full text",
+  "t: page text does not match the reference title"
+ ],
+ "add_source_stdout": "Added 4.txt for 4: status=user_provided, 1760 characters of text.\nRun the recheck step to re-verify the claims that cite it.\n",
+ "aggregate": [
+  "pending",
+  "partially_supported",
+  "supported",
+  "overstated"
+ ],
+ "append_claim_parts": [
+  {
+   "added": 1,
+   "skipped": [
+    {
+     "file": "add-01.json",
+     "reason": "overlaps an existing claim",
+     "text": "Taken together, these results"
+    },
+    {
+     "file": "add-01.json",
+     "reason": "not found in paragraph",
+     "text": "not present"
+    }
+   ],
+   "total": 6
+  },
+  [
+   {
+    "cites": [
+     "1"
+    ],
+    "id": "c1",
+    "para": "p5",
+    "text": "Adolescents sleep less than they did a generation ago [1].",
+    "type": "empirical"
+   },
+   {
+    "cites": [
+     "2"
+    ],
+    "id": "c2",
+    "para": "p5",
+    "text": "Short sleep is linked to poorer next-day recall of new material [2].",
+    "type": "empirical"
+   },
+   {
+    "cites": [
+     "3"
+    ],
+    "id": "c3",
+    "para": "p5",
+    "text": "Sleep spindles strongly improve memory consolidation in every age group [3].",
+    "type": "empirical"
+   },
+   {
+    "cites": [],
+    "id": "c4",
+    "para": "p5",
+    "text": "About 70% of high school students report insufficient sleep.",
+    "type": "numeric"
+   },
+   {
+    "cites": [
+     "1",
+     "2"
+    ],
+    "id": "c5",
+    "para": "p7",
+    "text": "Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2].",
+    "type": "empirical"
+   },
+   {
+    "checkworthy": true,
+    "cites": [
+     "2"
+    ],
+    "id": "c6",
+    "para": "p7",
+    "text": "A new sentence cites [2].",
+    "type": "empirical"
+   }
+  ],
+  {
+   "citation_markers": 6,
+   "items": [
+    {
+     "markers": [
+      "[4]"
+     ],
+     "para": "p5",
+     "sentence": "Later school start times raised average attendance by 8% in a large district trial [4]."
+    }
+   ],
+   "uncovered_markers": 1,
+   "uncovered_sentences": 1
+  }
+ ],
+ "author_mismatch": [
+  true,
+  false,
+  false,
+  false,
+  false
+ ],
+ "author_segment": [
+  "alvarez, m., chen, l. ",
+  "nichd early child care research network. ",
+  "no year"
+ ],
+ "batches": {
+  "batch-001.json": {
+   "claims": [
+    {
+     "claim_hash": "digest:9a6c90239e554bc7",
+     "claim_id": "c1",
+     "claim_text": "Adolescents sleep less than they did a generation ago [1].",
+     "paragraph_context": "Adolescents sleep less than they did a generation ago [1]. Short sleep is linked to poorer next-day recall of new material [2]. Sleep spindles strongly improve memory consolidation in every age group [3]. About 70% of high school students report insufficient sleep. Later school start times raised average attendance by 9% in a large district trial [4].",
+     "refs": [
+      {
+       "citation": "Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology",
+       "evidence_hash": "digest:0fb9dbdae8e90025",
+       "evidence_level": "full_text",
+       "passages": [
+        {
+         "page": null,
+         "rank": 1,
+         "text": "Secular trends in adolescent sleep duration\n\nMethods. We pooled survey data from 12 countries collected between 1990 and 2010.\n\nResults. Between 1990 and 2010, mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample. The decline was larger on school nights than on weekends. Weekend sleep duration was largely unchanged.\n\nDiscussion. These findings suggest that adolescents now sleep less than previous generations, although self-report bias may affect the estimates"
+        }
+       ],
+       "ref_id": "1",
+       "source_chars": 499
+      }
+     ],
+     "type": "empirical"
+    },
+    {
+     "claim_hash": "digest:2f57ec86f39e1316",
+     "claim_id": "c2",
+     "claim_text": "Short sleep is linked to poorer next-day recall of new material [2].",
+     "paragraph_context": "Adolescents sleep less than they did a generation ago [1]. Short sleep is linked to poorer next-day recall of new material [2]. Sleep spindles strongly improve memory consolidation in every age group [3]. About 70% of high school students report insufficient sleep. Later school start times raised average attendance by 9% in a large district trial [4].",
+     "refs": [
+      {
+       "citation": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+       "evidence_hash": "digest:699db883a221f6dc",
+       "evidence_level": "full_text",
+       "passages": [
+        {
+         "page": null,
+         "rank": 1,
+         "text": "Restricted sleep and word recall in teenagers\n\nAbstract. Forty-eight teenagers learned a list of 60 words in the evening. After a night of restricted sleep (five hours), participants recalled 12% fewer words the next morning than after a night of normal sleep (nine hours). The effect was present in both boys and girls.\n\nDiscussion. Because the design was a within-subject laboratory study, we cannot say whether chronic short sleep at home has the same effect"
+        }
+       ],
+       "ref_id": "2",
+       "source_chars": 462
+      }
+     ],
+     "type": "empirical"
+    },
+    {
+     "claim_hash": "digest:728c55efaeab3a67",
+     "claim_id": "c3",
+     "claim_text": "Sleep spindles strongly improve memory consolidation in every age group [3].",
+     "paragraph_context": "Adolescents sleep less than they did a generation ago [1]. Short sleep is linked to poorer next-day recall of new material [2]. Sleep spindles strongly improve memory consolidation in every age group [3]. About 70% of high school students report insufficient sleep. Later school start times raised average attendance by 9% in a large district trial [4].",
+     "refs": [
+      {
+       "citation": "Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal",
+       "evidence_hash": "digest:88fe00b710d60963",
+       "evidence_level": "full_text",
+       "passages": [
+        {
+         "page": null,
+         "rank": 1,
+         "text": "Sleep spindles and overnight retention across the lifespan\n\nResults. Spindle density showed a modest positive correlation with overnight retention in adults aged 20 to 35 (r = 0.21). In children under 12 we found no association between spindle density and overnight retention. Among adolescents the correlation was weak and did not survive correction for multiple comparisons.\n\nDiscussion. The relationship between spindles and memory consolidation appears to depend strongly on age and should not be assumed to hold in every age group"
+        }
+       ],
+       "ref_id": "3",
+       "source_chars": 536
+      }
+     ],
+     "type": "empirical"
+    },
+    {
+     "claim_hash": "digest:8634cacc50bdbf66",
+     "claim_id": "c6",
+     "claim_text": "Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2].",
+     "paragraph_context": "Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2]. We therefore recommend delaying the first bell.",
+     "refs": [
+      {
+       "citation": "Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology",
+       "evidence_hash": "digest:0fb9dbdae8e90025",
+       "evidence_level": "full_text",
+       "passages": [
+        {
+         "page": null,
+         "rank": 1,
+         "text": "Secular trends in adolescent sleep duration\n\nMethods. We pooled survey data from 12 countries collected between 1990 and 2010.\n\nResults. Between 1990 and 2010, mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample. The decline was larger on school nights than on weekends. Weekend sleep duration was largely unchanged.\n\nDiscussion. These findings suggest that adolescents now sleep less than previous generations, although self-report bias may affect the estimates"
+        }
+       ],
+       "ref_id": "1",
+       "source_chars": 499
+      },
+      {
+       "citation": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+       "evidence_hash": "digest:699db883a221f6dc",
+       "evidence_level": "full_text",
+       "passages": [
+        {
+         "page": null,
+         "rank": 1,
+         "text": "Restricted sleep and word recall in teenagers\n\nAbstract. Forty-eight teenagers learned a list of 60 words in the evening. After a night of restricted sleep (five hours), participants recalled 12% fewer words the next morning than after a night of normal sleep (nine hours). The effect was present in both boys and girls.\n\nDiscussion. Because the design was a within-subject laboratory study, we cannot say whether chronic short sleep at home has the same effect"
+        }
+       ],
+       "ref_id": "2",
+       "source_chars": 462
+      }
+     ],
+     "type": "empirical"
+    }
+   ],
+   "output_file": "verdicts/batch-001.json"
+  }
+ },
+ "bm25": [
+  {
+   "end": 201,
+   "page": null,
+   "rank": 1,
+   "score": 2.938,
+   "start": 0,
+   "text": "Cats are small.\n\nCats are small.\n\nCats are small.\n\nCats are small.\n\nCats are small.\n\nSpindle density showed r = 0.21 with retention in adults.\n\nDogs bark.\n\nDogs bark.\n\nDogs bark.\n\nDogs bark.\n\nDogs bark"
+  }
+ ],
+ "bm25_empty": [],
+ "browser_queue": {
+  "count": 1,
+  "items": [
+   {
+    "citation": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly",
+    "claims_affected": 1,
+    "exists": "unchecked",
+    "id": "4",
+    "kind": "book",
+    "links": [],
+    "save_as": "sources/4.txt",
+    "status": "missing",
+    "title": "School start times and attendance: a district trial"
+   }
+  ]
+ },
+ "build_data": {
+  "claims": [
+   {
+    "cites": [
+     "1"
+    ],
+    "end": 58,
+    "evidence_basis": "full_text",
+    "failing_refs": [],
+    "id": "c1",
+    "items": [
+     {
+      "analysis": "The pooled survey data show a decline in adolescent sleep between 1990 and 2010.",
+      "citation": "Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology",
+      "confidence": 0.92,
+      "evidence_level": "full_text",
+      "excerpts": [
+       {
+        "after": ". The decline was larger on school nights than on weekends. Weekend sleep duration was largely unchanged. Discussion. These findings suggest that adolescents now sleep less than previous generations, although self-report bias may affect the estimates.",
+        "before": "Secular trends in adolescent sleep duration Methods. We pooled survey data from 12 countries collected between 1990 and 2010. Results. Between 1990 and 2010,",
+        "match": "mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample",
+        "mode": "exact",
+        "page": null
+       }
+      ],
+      "exists": "unchecked",
+      "flags": [],
+      "link": null,
+      "local_file": "sources/1.txt",
+      "match": "exact",
+      "page": null,
+      "quote": "mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample",
+      "raw": "Alvarez, M., Chen, L. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology.",
+      "ref_id": "1",
+      "retracted": false,
+      "search": {
+       "scholar": "https://scholar.google.com/scholar?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M.",
+       "worldcat": "https://search.worldcat.org/search?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M."
+      },
+      "verdict": "supported",
+      "why_missing": []
+     }
+    ],
+    "note": "",
+    "para": "p5",
+    "provisional": false,
+    "retracted": false,
+    "start": 0,
+    "suggestions": [],
+    "text": "Adolescents sleep less than they did a generation ago [1].",
+    "type": "empirical",
+    "verdict": "supported"
+   },
+   {
+    "cites": [
+     "2"
+    ],
+    "end": 127,
+    "evidence_basis": "full_text",
+    "failing_refs": [],
+    "id": "c2",
+    "items": [
+     {
+      "analysis": "FABRICATED on purpose to test the quote check. [Downgraded from 'supported': the quoted evidence could not be found in the source text.]",
+      "citation": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+      "confidence": 0.9,
+      "evidence_level": "full_text",
+      "excerpts": [],
+      "exists": "unchecked",
+      "flags": [
+       "quote_not_found"
+      ],
+      "link": null,
+      "local_file": "sources/2.txt",
+      "match": null,
+      "page": null,
+      "quote": "participants recalled 30% fewer words the morning after restricted sleep in a field study",
+      "raw": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research.",
+      "ref_id": "2",
+      "retracted": false,
+      "search": {
+       "scholar": "https://scholar.google.com/scholar?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T.",
+       "worldcat": "https://search.worldcat.org/search?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T."
+      },
+      "verdict": "unverifiable",
+      "why_missing": []
+     }
+    ],
+    "note": "",
+    "para": "p5",
+    "provisional": false,
+    "retracted": false,
+    "start": 59,
+    "suggestions": [],
+    "text": "Short sleep is linked to poorer next-day recall of new material [2].",
+    "type": "empirical",
+    "verdict": "unverifiable"
+   },
+   {
+    "cites": [
+     "3"
+    ],
+    "end": 204,
+    "evidence_basis": "full_text",
+    "failing_refs": [
+     "3"
+    ],
+    "id": "c3",
+    "items": [
+     {
+      "analysis": "The source finds no association in children and only a modest one in adults, so the claim about every age group is contradicted.",
+      "citation": "Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal",
+      "confidence": 0.93,
+      "evidence_level": "full_text",
+      "excerpts": [
+       {
+        "after": ". Among adolescents the correlation was weak and did not survive correction for multiple comparisons. Discussion. The relationship between spindles and memory consolidation appears to depend strongly on age and should not be assumed to hold in every age group.",
+        "before": "Sleep spindles and overnight retention across the lifespan Results. Spindle density showed a modest positive correlation with overnight retention in adults aged 20 to 35 (r = 0.21).",
+        "match": "In children under 12 we found no association between spindle density and overnight retention",
+        "mode": "exact",
+        "page": null
+       }
+      ],
+      "exists": "unchecked",
+      "flags": [],
+      "link": null,
+      "local_file": "sources/3.txt",
+      "match": "exact",
+      "page": null,
+      "quote": "In children under 12 we found no association between spindle density and overnight retention",
+      "raw": "Brandt, K., Silva, R. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal.",
+      "ref_id": "3",
+      "retracted": false,
+      "search": {
+       "scholar": "https://scholar.google.com/scholar?q=Sleep%20spindles%20and%20overnight%20retention%20across%20the%20lifespan%20Brandt%2C%20K.",
+       "worldcat": "https://search.worldcat.org/search?q=Sleep%20spindles%20and%20overnight%20retention%20across%20the%20lifespan%20Brandt%2C%20K."
+      },
+      "verdict": "contradicted",
+      "why_missing": []
+     }
+    ],
+    "note": "",
+    "para": "p5",
+    "provisional": false,
+    "retracted": false,
+    "start": 128,
+    "suggestions": [
+     "s2"
+    ],
+    "text": "Sleep spindles strongly improve memory consolidation in every age group [3].",
+    "type": "empirical",
+    "verdict": "contradicted"
+   },
+   {
+    "cites": [],
+    "end": 265,
+    "evidence_basis": "none",
+    "failing_refs": [],
+    "id": "c4",
+    "items": [],
+    "note": "",
+    "para": "p5",
+    "provisional": false,
+    "retracted": false,
+    "start": 205,
+    "suggestions": [],
+    "text": "About 70% of high school students report insufficient sleep.",
+    "type": "numeric",
+    "verdict": "uncited"
+   },
+   {
+    "cites": [
+     "4"
+    ],
+    "end": 353,
+    "evidence_basis": "none",
+    "failing_refs": [],
+    "id": "c5",
+    "items": [
+     {
+      "analysis": "No source text is available for this reference, so the claim could not be checked.",
+      "citation": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly",
+      "confidence": 1.0,
+      "evidence_level": "none",
+      "excerpts": [],
+      "exists": "unchecked",
+      "flags": [
+       "no_source"
+      ],
+      "link": null,
+      "local_file": null,
+      "match": null,
+      "page": null,
+      "quote": "",
+      "raw": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly.",
+      "ref_id": "4",
+      "retracted": false,
+      "search": {
+       "scholar": "https://scholar.google.com/scholar?q=School%20start%20times%20and%20attendance%3A%20a%20district%20trial%20Novak%2C%20P.",
+       "worldcat": "https://search.worldcat.org/search?q=School%20start%20times%20and%20attendance%3A%20a%20district%20trial%20Novak%2C%20P."
+      },
+      "verdict": "unverifiable",
+      "why_missing": [
+       "no open-access copy is listed for it",
+       "offline.test: could not be reached"
+      ]
+     }
+    ],
+    "note": "",
+    "para": "p5",
+    "provisional": false,
+    "retracted": false,
+    "start": 266,
+    "suggestions": [
+     "s1"
+    ],
+    "text": "Later school start times raised average attendance by 9% in a large district trial [4].",
+    "type": "numeric",
+    "verdict": "unverifiable"
+   },
+   {
+    "cites": [
+     "1",
+     "2"
+    ],
+    "end": 91,
+    "evidence_basis": "full_text",
+    "failing_refs": [],
+    "id": "c6",
+    "items": [
+     {
+      "analysis": "Supports less sleep, not that sleep drives learning.",
+      "citation": "Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology",
+      "confidence": 0.7,
+      "evidence_level": "full_text",
+      "excerpts": [
+       {
+        "after": ", although self-report bias may affect the estimates.",
+        "before": "Secular trends in adolescent sleep duration Methods. We pooled survey data from 12 countries collected between 1990 and 2010. Results. Between 1990 and 2010, mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample. The decline was larger on school nights than on weekends. Weekend sleep duration was largely unchanged. Discussion.",
+        "match": "These findings suggest that adolescents now sleep less than previous generations",
+        "mode": "exact",
+        "page": null
+       }
+      ],
+      "exists": "unchecked",
+      "flags": [],
+      "link": null,
+      "local_file": "sources/1.txt",
+      "match": "exact",
+      "page": null,
+      "quote": "These findings suggest that adolescents now sleep less than previous generations",
+      "raw": "Alvarez, M., Chen, L. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology.",
+      "ref_id": "1",
+      "retracted": false,
+      "search": {
+       "scholar": "https://scholar.google.com/scholar?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M.",
+       "worldcat": "https://search.worldcat.org/search?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M."
+      },
+      "verdict": "supported",
+      "why_missing": []
+     },
+     {
+      "analysis": "Lab evidence of lower recall after restricted sleep, in one night only.",
+      "citation": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+      "confidence": 0.8,
+      "evidence_level": "full_text",
+      "excerpts": [
+       {
+        "after": "(nine hours). The effect was present in both boys and girls. Discussion. Because the design was a within-subject laboratory study, we cannot say whether chronic short sleep at home has the same effect.",
+        "before": "Restricted sleep and word recall in teenagers Abstract. Forty-eight teenagers learned a list of 60 words in the evening. After a night of restricted sleep (five hours), participants",
+        "match": "recalled 12% fewer words the next morning than after a night of normal sleep",
+        "mode": "exact",
+        "page": null
+       }
+      ],
+      "exists": "unchecked",
+      "flags": [],
+      "link": null,
+      "local_file": "sources/2.txt",
+      "match": "exact",
+      "page": null,
+      "quote": "recalled 12% fewer words the next morning than after a night of normal sleep",
+      "raw": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research.",
+      "ref_id": "2",
+      "retracted": false,
+      "search": {
+       "scholar": "https://scholar.google.com/scholar?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T.",
+       "worldcat": "https://search.worldcat.org/search?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T."
+      },
+      "verdict": "partially_supported",
+      "why_missing": []
+     }
+    ],
+    "note": "",
+    "para": "p7",
+    "provisional": false,
+    "retracted": false,
+    "start": 0,
+    "suggestions": [],
+    "text": "Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2].",
+    "type": "empirical",
+    "verdict": "supported"
+   }
+  ],
+  "figures": {},
+  "meta": {
+   "homepage": "https://github.com/dividor/athetize-plugin-claude",
+   "source_file": "paper.md",
+   "title": "Sleep Duration and Memory Consolidation in Adolescents",
+   "word_export": null
+  },
+  "notes": [
+   {
+    "end": 139,
+    "id": "n1",
+    "kind": "overreach",
+    "message": "The recommendation leans on spindle and attendance claims that the cited sources do not support (see c3 and c5).",
+    "para": "p7",
+    "severity": "warn",
+    "start": 92
+   }
+  ],
+  "paragraphs": [
+   {
+    "id": "p1",
+    "kind": "heading",
+    "level": 1,
+    "text": "Sleep Duration and Memory Consolidation in Adolescents"
+   },
+   {
+    "id": "p2",
+    "kind": "heading",
+    "level": 2,
+    "text": "Abstract"
+   },
+   {
+    "id": "p3",
+    "kind": "body",
+    "text": "This short review summarises how sleep duration and sleep spindles relate to learning in teenagers. We argue that school start times should move later."
+   },
+   {
+    "id": "p4",
+    "kind": "heading",
+    "level": 2,
+    "text": "1. Introduction"
+   },
+   {
+    "id": "p5",
+    "kind": "body",
+    "text": "Adolescents sleep less than they did a generation ago [1]. Short sleep is linked to poorer next-day recall of new material [2]. Sleep spindles strongly improve memory consolidation in every age group [3]. About 70% of high school students report insufficient sleep. Later school start times raised average attendance by 9% in a large district trial [4]."
+   },
+   {
+    "id": "p6",
+    "kind": "heading",
+    "level": 2,
+    "text": "2. Discussion"
+   },
+   {
+    "id": "p7",
+    "kind": "body",
+    "text": "Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2]. We therefore recommend delaying the first bell."
+   },
+   {
+    "id": "p8",
+    "kind": "heading",
+    "level": 2,
+    "text": "References"
+   }
+  ],
+  "problems": [],
+  "refs": [
+   {
+    "citation": "Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology",
+    "cited_by": [
+     "c1",
+     "c6"
+    ],
+    "discrepancies": [],
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "1",
+    "link": null,
+    "local_file": "sources/1.txt",
+    "match_score": null,
+    "matched_source": null,
+    "matched_title": null,
+    "matched_url": null,
+    "raw": "Alvarez, M., Chen, L. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology.",
+    "retracted": false,
+    "retraction_notes": [],
+    "search": {
+     "scholar": "https://scholar.google.com/scholar?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M.",
+     "worldcat": "https://search.worldcat.org/search?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M."
+    },
+    "status": "user_provided",
+    "suggestions": [],
+    "why_missing": []
+   },
+   {
+    "citation": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+    "cited_by": [
+     "c2",
+     "c6"
+    ],
+    "discrepancies": [],
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "2",
+    "link": null,
+    "local_file": "sources/2.txt",
+    "match_score": null,
+    "matched_source": null,
+    "matched_title": null,
+    "matched_url": null,
+    "raw": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research.",
+    "retracted": false,
+    "retraction_notes": [],
+    "search": {
+     "scholar": "https://scholar.google.com/scholar?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T.",
+     "worldcat": "https://search.worldcat.org/search?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T."
+    },
+    "status": "user_provided",
+    "suggestions": [],
+    "why_missing": []
+   },
+   {
+    "citation": "Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal",
+    "cited_by": [
+     "c3"
+    ],
+    "discrepancies": [],
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "3",
+    "link": null,
+    "local_file": "sources/3.txt",
+    "match_score": null,
+    "matched_source": null,
+    "matched_title": null,
+    "matched_url": null,
+    "raw": "Brandt, K., Silva, R. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal.",
+    "retracted": false,
+    "retraction_notes": [],
+    "search": {
+     "scholar": "https://scholar.google.com/scholar?q=Sleep%20spindles%20and%20overnight%20retention%20across%20the%20lifespan%20Brandt%2C%20K.",
+     "worldcat": "https://search.worldcat.org/search?q=Sleep%20spindles%20and%20overnight%20retention%20across%20the%20lifespan%20Brandt%2C%20K."
+    },
+    "status": "user_provided",
+    "suggestions": [],
+    "why_missing": []
+   },
+   {
+    "citation": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly",
+    "cited_by": [
+     "c5"
+    ],
+    "discrepancies": [],
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_level": "none",
+    "exists": "unchecked",
+    "id": "4",
+    "link": null,
+    "local_file": null,
+    "match_score": null,
+    "matched_source": null,
+    "matched_title": null,
+    "matched_url": null,
+    "raw": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly.",
+    "retracted": false,
+    "retraction_notes": [],
+    "search": {
+     "scholar": "https://scholar.google.com/scholar?q=School%20start%20times%20and%20attendance%3A%20a%20district%20trial%20Novak%2C%20P.",
+     "worldcat": "https://search.worldcat.org/search?q=School%20start%20times%20and%20attendance%3A%20a%20district%20trial%20Novak%2C%20P."
+    },
+    "status": "missing",
+    "suggestions": [
+     "s1"
+    ],
+    "why_missing": [
+     "no open-access copy is listed for it",
+     "offline.test: could not be reached"
+    ]
+   }
+  ],
+  "sources_needed": {
+   "abstract_only": 0,
+   "claims_relying": 1,
+   "folder": "~/Downloads/Test",
+   "need_source": 1,
+   "no_text": 1,
+   "references": 4
+  },
+  "suggestions": [
+   {
+    "add_refs": [],
+    "claim_id": null,
+    "diff": [
+     [
+      "=",
+      "[4] Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly"
+     ],
+     [
+      "+",
+      ", 12(3), 1-20"
+     ],
+     [
+      "=",
+      "."
+     ]
+    ],
+    "id": "s1",
+    "kind": "reference",
+    "original": "[4] Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly.",
+    "para": "p12",
+    "rationale": "Volume and pages confirmed by the publisher page.",
+    "refs": [
+     "4"
+    ],
+    "suggested": "[4] Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly, 12(3), 1-20.",
+    "where": "Reference list"
+   },
+   {
+    "add_refs": [],
+    "claim_id": "c3",
+    "diff": [
+     [
+      "=",
+      "Sleep spindles "
+     ],
+     [
+      "-",
+      "strongly improve memory consolidation"
+     ],
+     [
+      "+",
+      "were associated with overnight retention"
+     ],
+     [
+      "=",
+      " in "
+     ],
+     [
+      "-",
+      "every age group"
+     ],
+     [
+      "+",
+      "adults"
+     ],
+     [
+      "=",
+      " [3]."
+     ]
+    ],
+    "id": "s2",
+    "kind": "rewrite",
+    "original": "Sleep spindles strongly improve memory consolidation in every age group [3].",
+    "para": "p5",
+    "rationale": "The source found no association in children.",
+    "refs": [
+     "3"
+    ],
+    "suggested": "Sleep spindles were associated with overnight retention in adults [3].",
+    "where": "Text"
+   }
+  ],
+  "tables": []
+ },
+ "candidate_from_crossref": {
+  "abstract": "Forty-eight teenagers learned a list.",
+  "authors": [
+   "Okafor"
+  ],
+  "doi": "10.1000/okafor",
+  "retraction_notes": [
+   "retraction"
+  ],
+  "source": "crossref",
+  "title": "Restricted sleep and word recall in teenagers",
+  "venue": "Learning and Sleep Research",
+  "year": 2020
+ },
+ "candidate_from_openalex": {
+  "abstract": "Forty-eight teenagers",
+  "authors": [
+   "Okafor"
+  ],
+  "doi": "10.1000/okafor",
+  "is_retracted": true,
+  "oa_url": "https://oa.example/page",
+  "openalex_id": "https://openalex.org/W1",
+  "pdf_urls": [
+   "https://oa.example/best.pdf",
+   "https://oa.example/p.pdf"
+  ],
+  "pmcid": "PMC123",
+  "source": "openalex",
+  "title": "Restricted sleep and word recall in teenagers",
+  "venue": "LSR",
+  "year": 2020
+ },
+ "carry_over": {
+  "claims_carried": 5,
+  "claims_not_found": 1,
+  "references_with_prior_sources": 4,
+  "source_files_copied": 6,
+  "suggestions_already_applied": 0,
+  "suggestions_carried": 2,
+  "suggestions_obsolete": 0,
+  "verdicts_carried": 5
+ },
+ "carry_over_claims": [
+  {
+   "cites": [
+    "1"
+   ],
+   "id": "c1",
+   "para": "p5",
+   "text": "Adolescents sleep less than they did a generation ago [1].",
+   "type": "empirical"
+  },
+  {
+   "cites": [
+    "2"
+   ],
+   "id": "c2",
+   "para": "p5",
+   "text": "Short sleep is linked to poorer next-day recall of new material [2].",
+   "type": "empirical"
+  },
+  {
+   "cites": [
+    "3"
+   ],
+   "id": "c3",
+   "para": "p5",
+   "text": "Sleep spindles strongly improve memory consolidation in every age group [3].",
+   "type": "empirical"
+  },
+  {
+   "cites": [],
+   "id": "c4",
+   "para": "p5",
+   "text": "About 70% of high school students report insufficient sleep.",
+   "type": "numeric"
+  },
+  {
+   "cites": [
+    "1",
+    "2"
+   ],
+   "id": "c5",
+   "para": "p7",
+   "text": "Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2].",
+   "type": "empirical"
+  }
+ ],
+ "carry_over_manifest": {
+  "refs": {
+   "1": {
+    "citation": "Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 499,
+    "evidence_file": "sources/_text/1.txt",
+    "evidence_hash": "digest:0fb9dbdae8e90025",
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "1",
+    "link": null,
+    "local_file": "sources/1.txt",
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "user_provided"
+   },
+   "2": {
+    "citation": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 462,
+    "evidence_file": "sources/_text/2.txt",
+    "evidence_hash": "digest:699db883a221f6dc",
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "2",
+    "link": null,
+    "local_file": "sources/2.txt",
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "user_provided"
+   },
+   "3": {
+    "citation": "Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 536,
+    "evidence_file": "sources/_text/3.txt",
+    "evidence_hash": "digest:88fe00b710d60963",
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "3",
+    "link": null,
+    "local_file": "sources/3.txt",
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "user_provided"
+   },
+   "4": {
+    "citation": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 0,
+    "evidence_file": null,
+    "evidence_hash": "none",
+    "evidence_level": "none",
+    "exists": "unchecked",
+    "id": "4",
+    "link": null,
+    "local_file": null,
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "missing"
+   }
+  }
+ },
+ "carry_over_suggestions": [
+  {
+   "claim_id": null,
+   "id": "s1",
+   "kind": "reference",
+   "original": "[4] Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly.",
+   "para": "p12",
+   "rationale": "Volume and pages confirmed by the publisher page.",
+   "refs": [
+    "4"
+   ],
+   "suggested": "[4] Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly, 12(3), 1-20."
+  },
+  {
+   "claim_id": "c3",
+   "id": "s2",
+   "kind": "rewrite",
+   "original": "Sleep spindles strongly improve memory consolidation in every age group [3].",
+   "para": "p5",
+   "rationale": "The source found no association in children.",
+   "refs": [
+    "3"
+   ],
+   "suggested": "Sleep spindles were associated with overnight retention in adults [3]."
+  }
+ ],
+ "carry_over_verdicts": {
+  "items": [
+   {
+    "analysis": "The pooled survey data show a decline in adolescent sleep between 1990 and 2010.",
+    "claim_hash": "digest:9a6c90239e554bc7",
+    "claim_id": "c1",
+    "confidence": 0.92,
+    "evidence": {
+     "end": 247,
+     "match": "exact",
+     "page": null,
+     "score": 1.0,
+     "start": 160,
+     "text": "mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample"
+    },
+    "evidence_hash": "digest:0fb9dbdae8e90025",
+    "evidence_level": "full_text",
+    "evidence_quote": "mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample",
+    "evidence_quotes": [
+     "mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample"
+    ],
+    "evidences": [
+     {
+      "end": 247,
+      "match": "exact",
+      "page": null,
+      "score": 1.0,
+      "start": 160,
+      "text": "mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample"
+     }
+    ],
+    "flags": [],
+    "original_verdict": "supported",
+    "ref_id": "1",
+    "verdict": "supported"
+   },
+   {
+    "analysis": "FABRICATED on purpose to test the quote check. [Downgraded from 'supported': the quoted evidence could not be found in the source text.]",
+    "claim_hash": "digest:2f57ec86f39e1316",
+    "claim_id": "c2",
+    "confidence": 0.9,
+    "evidence": null,
+    "evidence_hash": "digest:699db883a221f6dc",
+    "evidence_level": "full_text",
+    "evidence_quote": "participants recalled 30% fewer words the morning after restricted sleep in a field study",
+    "evidence_quotes": [
+     "participants recalled 30% fewer words the morning after restricted sleep in a field study"
+    ],
+    "evidences": [],
+    "flags": [
+     "quote_not_found"
+    ],
+    "original_verdict": "supported",
+    "ref_id": "2",
+    "verdict": "unverifiable"
+   },
+   {
+    "analysis": "The source finds no association in children and only a modest one in adults, so the claim about every age group is contradicted.",
+    "claim_hash": "digest:728c55efaeab3a67",
+    "claim_id": "c3",
+    "confidence": 0.93,
+    "evidence": {
+     "end": 275,
+     "match": "exact",
+     "page": null,
+     "score": 1.0,
+     "start": 183,
+     "text": "In children under 12 we found no association between spindle density and overnight retention"
+    },
+    "evidence_hash": "digest:88fe00b710d60963",
+    "evidence_level": "full_text",
+    "evidence_quote": "In children under 12 we found no association between spindle density and overnight retention.",
+    "evidence_quotes": [
+     "In children under 12 we found no association between spindle density and overnight retention."
+    ],
+    "evidences": [
+     {
+      "end": 275,
+      "match": "exact",
+      "page": null,
+      "score": 1.0,
+      "start": 183,
+      "text": "In children under 12 we found no association between spindle density and overnight retention"
+     }
+    ],
+    "flags": [],
+    "original_verdict": "contradicted",
+    "ref_id": "3",
+    "verdict": "contradicted"
+   },
+   {
+    "analysis": "Supports less sleep, not that sleep drives learning.",
+    "claim_hash": "digest:8634cacc50bdbf66",
+    "claim_id": "c5",
+    "confidence": 0.7,
+    "evidence": {
+     "end": 446,
+     "match": "exact",
+     "page": null,
+     "score": 1.0,
+     "start": 366,
+     "text": "These findings suggest that adolescents now sleep less than previous generations"
+    },
+    "evidence_hash": "digest:0fb9dbdae8e90025",
+    "evidence_level": "full_text",
+    "evidence_quote": "These findings suggest that adolescents now sleep less than previous generations",
+    "evidence_quotes": [
+     "These findings suggest that adolescents now sleep less than previous generations"
+    ],
+    "evidences": [
+     {
+      "end": 446,
+      "match": "exact",
+      "page": null,
+      "score": 1.0,
+      "start": 366,
+      "text": "These findings suggest that adolescents now sleep less than previous generations"
+     }
+    ],
+    "flags": [],
+    "original_verdict": "supported",
+    "ref_id": "1",
+    "verdict": "supported"
+   },
+   {
+    "analysis": "Lab evidence of lower recall after restricted sleep, in one night only.",
+    "claim_hash": "digest:8634cacc50bdbf66",
+    "claim_id": "c5",
+    "confidence": 0.8,
+    "evidence": {
+     "end": 259,
+     "match": "exact",
+     "page": null,
+     "score": 1.0,
+     "start": 183,
+     "text": "recalled 12% fewer words the next morning than after a night of normal sleep"
+    },
+    "evidence_hash": "digest:699db883a221f6dc",
+    "evidence_level": "full_text",
+    "evidence_quote": "recalled 12% fewer words the next morning than after a night of normal sleep",
+    "evidence_quotes": [
+     "recalled 12% fewer words the next morning than after a night of normal sleep"
+    ],
+    "evidences": [
+     {
+      "end": 259,
+      "match": "exact",
+      "page": null,
+      "score": 1.0,
+      "start": 183,
+      "text": "recalled 12% fewer words the next morning than after a night of normal sleep"
+     }
+    ],
+    "flags": [],
+    "original_verdict": "partially_supported",
+    "ref_id": "2",
+    "verdict": "partially_supported"
+   }
+  ]
+ },
+ "chunk_passages": [
+  {
+   "end": 113,
+   "start": 0
+  },
+  {
+   "end": 172,
+   "start": 51
+  },
+  {
+   "end": 201,
+   "start": 85
+  }
+ ],
+ "citation_string": [
+  "Okafor (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+  "Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal",
+  "Smith et al.",
+  "Smith & Doe",
+  "NICHD Early Child Care Research Network",
+  "WHO",
+  "only-id",
+  "(1999). T & U"
+ ],
+ "clean_extracted": "ab\nc\nd\n\ne",
+ "clean_raw": "Smith (2020). Title. Venue.",
+ "cmd_status": {
+  "metadata_problems": [],
+  "needs_source": [
+   {
+    "citation": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly",
+    "claims_affected": 1,
+    "id": "4",
+    "status": "missing",
+    "why": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ]
+   }
+  ],
+  "reference_discrepancies": [],
+  "references_by_status": {
+   "missing": 1,
+   "user_provided": 3
+  },
+  "retracted": [],
+  "verdicts_recorded": 6
+ },
+ "config_file": {
+  "download_folder": "~/Downloads/X",
+  "email": "me@example.org"
+ },
+ "config_stdout": "Saved contact email to <tmp>/home/config.json\nSaved download_folder = '~/Downloads/X' to <tmp>/home/config.json\nSaved library_doi_proxy = None to <tmp>/home/config.json\n{\n  \"email\": \"m***@example.org\",\n  \"download_folder\": \"~/Downloads/X\"\n}\n",
+ "context_window": {
+  "after": "thing. Third sentence follows. Fourth.",
+  "before": "First sentence here. Second",
+  "match": "one says the key"
+ },
+ "coverage": {
+  "citation_markers": 5,
+  "items": [],
+  "uncovered_markers": 0,
+  "uncovered_sentences": 0
+ },
+ "display_fields": [
+  [
+   "Okafor (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+   "https://doi.org/10.1000/okafor",
+   "10.1000/okafor"
+  ],
+  [
+   "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+   null,
+   null
+  ],
+  [
+   "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+   "https://u",
+   null
+  ]
+ ],
+ "doctor": {
+  "contact_email": "me@example.org",
+  "network": {
+   "arxiv": "blocked or down: network error for offline.test: stubbed",
+   "crossref": "blocked or down: network error for offline.test: stubbed",
+   "eric": "blocked or down: network error for offline.test: stubbed",
+   "europepmc": "blocked or down: network error for offline.test: stubbed",
+   "openalex": "blocked or down: network error for offline.test: stubbed",
+   "semanticscholar": "blocked or down: network error for offline.test: stubbed"
+  },
+  "notes": [
+   "Some services are unreachable from this environment. Sources from those hosts will be marked missing; ask the user to supply them."
+  ],
+  "xml_parser": "defusedxml"
+ },
+ "docx_apply": [
+  {
+   "applied": true,
+   "id": "s1"
+  },
+  {
+   "applied": false,
+   "id": "s6",
+   "reason": "overlaps another suggestion in the same paragraph"
+  },
+  {
+   "applied": true,
+   "id": "s2"
+  },
+  {
+   "applied": false,
+   "id": "s4",
+   "reason": "text not found exactly once in the paragraph"
+  },
+  {
+   "applied": true,
+   "id": "s3"
+  },
+  {
+   "applied": false,
+   "id": "s5",
+   "reason": "paragraph not found in the .docx (was the manuscript edited after ingest?)"
+  }
+ ],
+ "docx_comments": "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n<w:comments xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:comment w:id=\"0\" w:author=\"Test\" w:date=\"<d>\" w:initials=\"T\"><w:p><w:pPr><w:spacing w:after=\"40\"/></w:pPr><w:r><w:annotationRef/></w:r><w:r><w:rPr><w:b/></w:rPr><w:t xml:space=\"preserve\">Athetize s1</w:t></w:r></w:p><w:p><w:pPr><w:spacing w:after=\"40\"/></w:pPr><w:r><w:rPr><w:b/><w:color w:val=\"1F4E79\"/></w:rPr><w:t xml:space=\"preserve\">Why: </w:t></w:r><w:r><w:rPr/><w:t xml:space=\"preserve\">one lab study. </w:t></w:r></w:p><w:p><w:pPr><w:spacing w:after=\"40\"/></w:pPr></w:p></w:comment></w:comments>",
+ "docx_document": "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n<w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:body><w:p><w:pPr><w:pStyle w:val=\"Title\"/></w:pPr><w:r><w:t>Docx title</w:t></w:r></w:p><w:p><w:r><w:t xml:space=\"preserve\">Short sleep </w:t></w:r><w:commentRangeStart w:id=\"0\"/><w:del w:id=\"1004\" w:author=\"Test\" w:date=\"<d>\"><w:r><w:delText xml:space=\"preserve\">is </w:delText></w:r></w:del><w:del w:id=\"1005\" w:author=\"Test\" w:date=\"<d>\"><w:r><w:rPr><w:i/></w:rPr><w:delText xml:space=\"preserve\">always</w:delText></w:r></w:del><w:ins w:id=\"1006\" w:author=\"Test\" w:date=\"<d>\"><w:r><w:rPr><w:i/></w:rPr><w:t xml:space=\"preserve\">was</w:t></w:r></w:ins><w:r><w:t xml:space=\"preserve\"> linked to </w:t></w:r><w:del w:id=\"1002\" w:author=\"Test\" w:date=\"<d>\"><w:r><w:delText xml:space=\"preserve\">poor</w:delText></w:r></w:del><w:ins w:id=\"1003\" w:author=\"Test\" w:date=\"<d>\"><w:r><w:t xml:space=\"preserve\">poorer</w:t></w:r></w:ins><w:r><w:t xml:space=\"preserve\"> recall</w:t></w:r><w:ins w:id=\"1001\" w:author=\"Test\" w:date=\"<d>\"><w:r><w:t xml:space=\"preserve\"> in one lab study</w:t></w:r></w:ins><w:commentRangeEnd w:id=\"0\"/><w:r><w:commentReference w:id=\"0\"/></w:r><w:r><w:t xml:space=\"preserve\"> (Lee, 2020).</w:t></w:r></w:p><w:p><w:r><w:t>Second</w:t></w:r><w:r><w:tab/></w:r><w:r><w:t xml:space=\"preserve\">paragraph with </w:t></w:r><w:ins w:id=\"1010\" w:author=\"Test\" w:date=\"<d>\"><w:r><w:t xml:space=\"preserve\">a </w:t></w:r></w:ins><w:r><w:t xml:space=\"preserve\">tab</w:t></w:r><w:ins w:id=\"1009\" w:author=\"Test\" w:date=\"<d>\"><w:r><w:t xml:space=\"preserve\"> added</w:t></w:r></w:ins><w:r><w:t xml:space=\"preserve\">.</w:t></w:r></w:p><w:p><w:pPr><w:rPr><w:del w:id=\"1008\" w:author=\"Test\" w:date=\"<d>\"/></w:rPr></w:pPr><w:del w:id=\"1007\" w:author=\"Test\" w:date=\"<d>\"><w:r><w:delText xml:space=\"preserve\">Orphan fragment.</w:delText></w:r></w:del></w:p></w:body></w:document>",
+ "docx_files": [
+  "[Content_Types].xml",
+  "word/_rels/document.xml.rels",
+  "word/comments.xml",
+  "word/document.xml"
+ ],
+ "doi_slug": "10.1000_a.b-c_d",
+ "download_a": {
+  "calls": [
+   "https://api.unpaywall.org/v2/10.1000/novak?email=a%40b.org",
+   "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/novak?fields=openAccessPdf",
+   "https://api.ies.ed.gov/eric/?search=title%3A%22School+start+times+and+attendance%3A+a+district+trial%22&format=json&fields=id%2Ctitle%2Ce_fulltextauth&rows=3",
+   "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI%3A10.1000%2Fnovak&format=json&resultType=core&pageSize=1",
+   "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC9/fullTextXML"
+  ],
+  "errors": [],
+  "file": "<tmp>/dl-a/4.xml",
+  "how": "europepmc",
+  "text": "School start times and attendance: a district trial\n\nWe tested later start times.\n\nMethods\n\nParagraph 0 describes the district trial of later start times and attendance outcomes in detail, with number"
+ },
+ "download_b": {
+  "calls": [
+   "https://api.unpaywall.org/v2/10.1000/novak?email=a%40b.org",
+   "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/novak?fields=openAccessPdf",
+   "https://api.ies.ed.gov/eric/?search=title%3A%22School+start+times+and+attendance%3A+a+district+trial%22&format=json&fields=id%2Ctitle%2Ce_fulltextauth&rows=3",
+   "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI%3A10.1000%2Fnovak&format=json&resultType=core&pageSize=1",
+   "https://oa.example/novak.pdf",
+   "https://pdf.example/best.pdf",
+   "https://page.example/oa",
+   "https://pub.example/novak"
+  ],
+  "errors": [
+   "semanticscholar: network error for https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/novak?fields=openAccessPdf: stubbed",
+   "eric: network error for https://api.ies.ed.gov/eric/?search=title%3A%22School+start+times+and+attendance%3A+a+district+trial%22&format=json&fields=id%2Ctitle%2Ce_fulltextauth&rows=3: stubbed",
+   "europepmc: HTTP 503 for epmc",
+   "openalex download: network error for https://oa.example/novak.pdf: stubbed",
+   "unpaywall download: network error for https://pdf.example/best.pdf: stubbed",
+   "unpaywall-page download: network error for https://page.example/oa: stubbed"
+  ],
+  "file": "<tmp>/dl-b/4.html",
+  "how": "reference-url-html",
+  "text": "School start times and attendance: a district trial\nSchool start times and attendance: a district trial\n\nword0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial wor"
+ },
+ "download_untrusted": [
+  [
+   null,
+   null,
+   null
+  ],
+  [
+   "unpaywall skipped: no contact email configured (run: pl.py config set-email you@example.org)",
+   "semanticscholar: network error for https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/novak?fields=openAccessPdf: stubbed",
+   "eric: network error for https://api.ies.ed.gov/eric/?search=title%3A%22School+start+times+and+attendance%3A+a+district+trial%22&format=json&fields=id%2Ctitle%2Ce_fulltextauth&rows=3: stubbed",
+   "europepmc: network error for https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI%3A10.1000%2Fnovak&format=json&resultType=core&pageSize=1: stubbed",
+   "reference-url download: network error for https://pub.example/novak: stubbed"
+  ],
+  [
+   "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/novak?fields=openAccessPdf",
+   "https://api.ies.ed.gov/eric/?search=title%3A%22School+start+times+and+attendance%3A+a+district+trial%22&format=json&fields=id%2Ctitle%2Ce_fulltextauth&rows=3",
+   "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI%3A10.1000%2Fnovak&format=json&resultType=core&pageSize=1",
+   "https://pub.example/novak",
+   "https://api.ies.ed.gov/eric/?search=title%3A%22x%22&format=json&fields=id%2Ctitle%2Ce_fulltextauth&rows=3",
+   "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI%3A10.1%2Fx&format=json&resultType=core&pageSize=1"
+  ]
+ ],
+ "eric_fulltext_urls": [],
+ "eric_id": [
+  "ED677055",
+  null
+ ],
+ "europe_pmc_lookup": [
+  null,
+  ""
+ ],
+ "extract_bad_xml_text": "not jats & not closed",
+ "extract_docx_text": "Docx title\n\nShort sleep is always linked to poor recall (Lee, 2020).\n\nSecond paragraph with tab.\n\nOrphan fragment.",
+ "extract_html_text": "Page title\nPage title\n\nword0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial\n\nDiscussion of the results.",
+ "extract_xml_text": "School start times and attendance: a district trial\n\nWe tested later start times.\n\nMethods\n\nParagraph 0 describes the district trial of later start times and attendance outcomes in detail, with numbers such as 9% and 12 schools.\n\nParagraph 1 describes the district trial of later start times and atte",
+ "find_span": [
+  [
+   0,
+   4
+  ],
+  [
+   3,
+   6
+  ],
+  null,
+  [
+   0,
+   0
+  ]
+ ],
+ "find_user_file": [
+  "<tmp>/sample-check/sources/1.txt",
+  "None",
+  "None"
+ ],
+ "first_surname": [
+  "alvarez",
+  "",
+  "fanon",
+  ""
+ ],
+ "html_to_text": "A title\nA title\n\nword0 attendance trial word1 attendance trial word2 attendance trial word3 attendance trial word4 attendance trial\n\nDiscussion of the results.",
+ "import_sources": {
+  "already_imported": [
+   "1.txt"
+  ],
+  "ambiguous": [],
+  "dry_run": false,
+  "duplicates": [],
+  "files_seen": 3,
+  "matched": [
+   {
+    "characters": 1760,
+    "file": "Novak 2018 school start times.txt",
+    "how": "content",
+    "ref": "4",
+    "status": "user_provided"
+   }
+  ],
+  "still_need_source": [],
+  "unmatched": [
+   {
+    "file": "random.txt",
+    "why": "has almost no text (a scan, or a saved sign-in page?)"
+   }
+  ]
+ },
+ "import_sources_dry": {
+  "already_imported": [
+   "1.txt"
+  ],
+  "ambiguous": [],
+  "dry_run": true,
+  "duplicates": [],
+  "files_seen": 3,
+  "matched": [
+   {
+    "file": "Novak 2018 school start times.txt",
+    "how": "content",
+    "ref": "4"
+   }
+  ],
+  "still_need_source": [],
+  "unmatched": [
+   {
+    "file": "random.txt",
+    "why": "has almost no text (a scan, or a saved sign-in page?)"
+   }
+  ]
+ },
+ "ingest_docx": {
+  "paragraphs": [
+   {
+    "id": "p1",
+    "kind": "heading",
+    "level": 1,
+    "text": "Docx title"
+   },
+   {
+    "fmt": [
+     [
+      15,
+      21,
+      "i"
+     ]
+    ],
+    "id": "p2",
+    "kind": "body",
+    "text": "Short sleep is always linked to poor recall (Lee, 2020)."
+   },
+   {
+    "id": "p3",
+    "kind": "body",
+    "text": "Second paragraph with tab."
+   },
+   {
+    "id": "p4",
+    "kind": "body",
+    "text": "Orphan fragment."
+   }
+  ],
+  "source_file": "paper.docx",
+  "title": "Docx title"
+ },
+ "ingest_md": {
+  "paragraphs": [
+   {
+    "id": "p1",
+    "kind": "heading",
+    "level": 1,
+    "text": "Sleep Duration and Memory Consolidation in Adolescents"
+   },
+   {
+    "id": "p2",
+    "kind": "heading",
+    "level": 2,
+    "text": "Abstract"
+   },
+   {
+    "id": "p3",
+    "kind": "body",
+    "text": "This short review summarises how sleep duration and sleep spindles relate to learning in teenagers. We argue that school start times should move later."
+   },
+   {
+    "id": "p4",
+    "kind": "heading",
+    "level": 2,
+    "text": "1. Introduction"
+   },
+   {
+    "id": "p5",
+    "kind": "body",
+    "text": "Adolescents sleep less than they did a generation ago [1]. Short sleep is linked to poorer next-day recall of new material [2]. Sleep spindles strongly improve memory consolidation in every age group [3]. About 70% of high school students report insufficient sleep. Later school start times raised average attendance by 9% in a large district trial [4]."
+   },
+   {
+    "id": "p6",
+    "kind": "heading",
+    "level": 2,
+    "text": "2. Discussion"
+   },
+   {
+    "id": "p7",
+    "kind": "body",
+    "text": "Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2]. We therefore recommend delaying the first bell."
+   },
+   {
+    "id": "p8",
+    "kind": "heading",
+    "level": 2,
+    "text": "References"
+   },
+   {
+    "id": "p9",
+    "kind": "reference",
+    "text": "[1] Alvarez, M., Chen, L. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology."
+   },
+   {
+    "id": "p10",
+    "kind": "reference",
+    "text": "[2] Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research."
+   },
+   {
+    "id": "p11",
+    "kind": "reference",
+    "text": "[3] Brandt, K., Silva, R. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal."
+   },
+   {
+    "id": "p12",
+    "kind": "reference",
+    "text": "[4] Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly."
+   }
+  ],
+  "sha256": "digest:dbb90cd8d96dc94016c1f31606295949c68afa623248eb27b0e50c1ec99a44d9",
+  "source_file": "paper.md",
+  "title": "Sleep Duration and Memory Consolidation in Adolescents"
+ },
+ "ingest_tex": {
+  "paragraphs": [
+   {
+    "id": "p1",
+    "kind": "heading",
+    "level": 1,
+    "text": "Intro"
+   },
+   {
+    "id": "p2",
+    "kind": "body",
+    "text": "Sleep matters [alvarez2019,okafor2020]. It was shown[brandt2021] that \"spindles\" help retention."
+   }
+  ],
+  "sha256": "digest:aa42d3dfc8d8104cbf5f9382db3b06ba8bcb287b50fbef3341ca4b9cf4507f8c",
+  "source_file": "paper.tex",
+  "title": "Intro"
+ },
+ "jats_to_text": "School start times and attendance: a district trial\n\nWe tested later start times.\n\nMethods\n\nParagraph 0 describes the district trial of later start times and attendance outcomes in detail, with numbers such as 9% and 12 schools.\n\nParagraph 1 describes the district trial of later start times and attendance outcomes in detail, with numbers such as 9% and 12 schools.\n\nParagraph 2 describes the district trial of later start times and attendance outcomes in detail, with numbers such as 9% and 12 schools.\n\nParagraph 3 describes the district trial of later start times and attendance outcomes in detai",
+ "link_cites": {
+  "added": 7,
+  "links": [
+   [
+    "c1",
+    "unicef2024b"
+   ],
+   [
+    "c2",
+    "unicef2024"
+   ],
+   [
+    "c3",
+    "liu2026"
+   ],
+   [
+    "c3",
+    "vaughn2020"
+   ],
+   [
+    "c4",
+    "cast2018"
+   ],
+   [
+    "c4",
+    "fanon2008"
+   ],
+   [
+    "c5",
+    "fanon2008"
+   ]
+  ],
+  "unmatched_markers": [
+   [
+    "c5",
+    "Nobody 1999"
+   ]
+  ]
+ },
+ "link_cites_claims": [
+  {
+   "cites": [
+    "unicef2024b"
+   ],
+   "id": "c1",
+   "para": "p1",
+   "text": "Gains are greatest (UNICEF Innocenti, 2024)."
+  },
+  {
+   "cites": [
+    "unicef2024"
+   ],
+   "id": "c2",
+   "para": "p1",
+   "text": "Design guidance follows (UNICEF, 2024)."
+  },
+  {
+   "cites": [
+    "liu2026",
+    "vaughn2020"
+   ],
+   "id": "c3",
+   "para": "p1",
+   "text": "Skipping rose (G. Liu et al., 2026) and agency matters (Vaughn, Jang, et al., 2020)."
+  },
+  {
+   "cites": [
+    "cast2018",
+    "fanon2008"
+   ],
+   "id": "c4",
+   "para": "p1",
+   "text": "Fanon (2008) argued; see also (e.g., CAST, 2018)."
+  },
+  {
+   "cites": [
+    "fanon2008"
+   ],
+   "id": "c5",
+   "para": "p1",
+   "text": "Unknown (Nobody, 1999) and Fanon's (2008) view."
+  }
+ ],
+ "link_cites_dry": {
+  "added": 7,
+  "links": [
+   [
+    "c1",
+    "unicef2024b"
+   ],
+   [
+    "c2",
+    "unicef2024"
+   ],
+   [
+    "c3",
+    "liu2026"
+   ],
+   [
+    "c3",
+    "vaughn2020"
+   ],
+   [
+    "c4",
+    "cast2018"
+   ],
+   [
+    "c4",
+    "fanon2008"
+   ],
+   [
+    "c5",
+    "fanon2008"
+   ]
+  ],
+  "unmatched_markers": [
+   [
+    "c5",
+    "Nobody 1999"
+   ]
+  ]
+ },
+ "locate_quote": [
+  {
+   "end": 48,
+   "mode": "exact",
+   "score": 1.0,
+   "start": 9
+  },
+  {
+   "end": 168,
+   "mode": "exact",
+   "score": 1.0,
+   "start": 124
+  },
+  null,
+  null,
+  null,
+  {
+   "end": 231,
+   "mode": "joined",
+   "score": 1.0,
+   "start": 193
+  },
+  {
+   "end": 133,
+   "mode": "fuzzy",
+   "score": 0.965,
+   "start": 51
+  },
+  {
+   "end": 133,
+   "mode": "fuzzy",
+   "score": 0.982,
+   "start": 51
+  },
+  null
+ ],
+ "looks_english": [
+  true,
+  true,
+  false
+ ],
+ "looks_like_heading": {
+  "": false,
+  "1. Introduction": true,
+  "2.1 Data:": true,
+  "A sentence ends.": false,
+  "RESULTS": true,
+  "References": true
+ },
+ "manifest": {
+  "refs": {
+   "1": {
+    "citation": "Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 499,
+    "evidence_file": "sources/_text/1.txt",
+    "evidence_hash": "digest:0fb9dbdae8e90025",
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "1",
+    "link": null,
+    "local_file": "sources/1.txt",
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "user_provided"
+   },
+   "2": {
+    "citation": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 462,
+    "evidence_file": "sources/_text/2.txt",
+    "evidence_hash": "digest:699db883a221f6dc",
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "2",
+    "link": null,
+    "local_file": "sources/2.txt",
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "user_provided"
+   },
+   "3": {
+    "citation": "Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 536,
+    "evidence_file": "sources/_text/3.txt",
+    "evidence_hash": "digest:88fe00b710d60963",
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "3",
+    "link": null,
+    "local_file": "sources/3.txt",
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "user_provided"
+   },
+   "4": {
+    "citation": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 0,
+    "evidence_file": null,
+    "evidence_hash": "none",
+    "evidence_level": "none",
+    "exists": "unchecked",
+    "id": "4",
+    "link": null,
+    "local_file": null,
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "missing"
+   }
+  }
+ },
+ "manifest_after_import": {
+  "refs": {
+   "1": {
+    "citation": "Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 499,
+    "evidence_file": "sources/_text/1.txt",
+    "evidence_hash": "digest:0fb9dbdae8e90025",
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "1",
+    "link": null,
+    "local_file": "sources/1.txt",
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "user_provided"
+   },
+   "2": {
+    "citation": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 462,
+    "evidence_file": "sources/_text/2.txt",
+    "evidence_hash": "digest:699db883a221f6dc",
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "2",
+    "link": null,
+    "local_file": "sources/2.txt",
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "user_provided"
+   },
+   "3": {
+    "citation": "Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 536,
+    "evidence_file": "sources/_text/3.txt",
+    "evidence_hash": "digest:88fe00b710d60963",
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "3",
+    "link": null,
+    "local_file": "sources/3.txt",
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "user_provided"
+   },
+   "4": {
+    "citation": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly",
+    "doi": null,
+    "errors": [
+     "crossref search: network error for offline.test: stubbed",
+     "openalex search: network error for offline.test: stubbed"
+    ],
+    "evidence_chars": 1760,
+    "evidence_file": "sources/_text/4.txt",
+    "evidence_hash": "digest:480cb7f77bc99af1",
+    "evidence_level": "full_text",
+    "exists": "unchecked",
+    "id": "4",
+    "link": null,
+    "local_file": "sources/4.txt",
+    "match_score": null,
+    "matched": null,
+    "metadata_done": false,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "user_provided"
+   }
+  }
+ },
+ "match_file_to_ref": [
+  [
+   "hall2010",
+   "filename",
+   []
+  ],
+  [
+   "hall2010",
+   "filename",
+   []
+  ],
+  [
+   "steele1997",
+   "content",
+   []
+  ],
+  [
+   null,
+   "no match",
+   []
+  ],
+  [
+   null,
+   "no match",
+   []
+  ],
+  [
+   "hall2010b",
+   "content",
+   []
+  ]
+ ],
+ "merge_claim_parts": [
+  3,
+  [
+   {
+    "checkworthy": true,
+    "cites": [],
+    "id": "c1",
+    "para": "p5",
+    "text": "About 70% of high school students report insufficient sleep.",
+    "type": "numeric"
+   },
+   {
+    "checkworthy": true,
+    "cites": [],
+    "id": "c2",
+    "para": "p7",
+    "text": "We therefore recommend delaying the first bell."
+   },
+   {
+    "checkworthy": true,
+    "cites": [],
+    "id": "c3",
+    "para": "p99",
+    "text": "x"
+   }
+  ]
+ ],
+ "merge_suggestions": 2,
+ "merge_suggestions_again": 0,
+ "misc_stdout": "[p5] (body) Adolescents sleep less than they did a generation ago [1]. Short sleep is linked to poorer next-day recall of new material [2]. Sleep spindles strongly improve memory consolidation in every age group [3]. About 70% of high school students report insufficient sleep. Later school start times raised average attendance by 9% in a large district trial [4].\n\n[p7] (body) Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2]. We therefore recommend delaying the first bell.\n\n{\n  \"citation_markers\": 5,\n  \"uncovered_sentences\": 0,\n  \"uncovered_markers\": 0,\n  \"items\": []\n}\nMerged 0 new suggestions (2 total).\nWrote <tmp>/sample-check/report.html (104 KB)\nProvisional: none. No result rests on an abstract only.\n",
+ "normalize_doi": [
+  null,
+  null,
+  "10.1000/abc",
+  "10.1000/x",
+  null,
+  null
+ ],
+ "page_at": [
+  1,
+  2
+ ],
+ "parse_markdown": [
+  {
+   "style": "Heading1",
+   "text": "Title here"
+  },
+  {
+   "style": "",
+   "text": "Intro paragraph with a link and bold text continued on a second line."
+  },
+  {
+   "style": "",
+   "text": "item one [1]"
+  },
+  {
+   "style": "",
+   "text": "item two"
+  },
+  {
+   "style": "Heading2",
+   "text": "References"
+  },
+  {
+   "style": "",
+   "text": "[1] Someone (2020). A thing."
+  }
+ ],
+ "parse_plain": [
+  {
+   "style": "",
+   "text": "One para."
+  },
+  {
+   "style": "",
+   "text": "Two lines."
+  }
+ ],
+ "parse_tex": [
+  {
+   "style": "Heading1",
+   "text": "Intro"
+  },
+  {
+   "style": "",
+   "text": "Sleep matters [alvarez2019,okafor2020]. It was shown[brandt2021] that \"spindles\" help retention."
+  }
+ ],
+ "passages_stdout": "{\n  \"ref\": \"4\",\n  \"evidence_level\": \"full_text\",\n  \"passages\": [\n    {\n      \"rank\": 1,\n      \"page\": null,\n      \"text\": \"attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose. attendance rose.\"\n    }\n  ]\n}\n{\n  \"ref\": \"zzz\",\n  \"evidence_level\": \"none\",\n  \"passages\": []\n}\n",
+ "prepare": {
+  "auto_unverifiable": 1,
+  "batches": 1,
+  "pending_claims": 4
+ },
+ "prepare_again": {
+  "auto_unverifiable": 0,
+  "batches": 0,
+  "pending_claims": 0
+ },
+ "ref_keys": [
+  [
+   "unicef",
+   2024,
+   "",
+   "unicef2024"
+  ],
+  [
+   "unicef innocenti – global office",
+   2024,
+   "",
+   "unicef2024b"
+  ],
+  [
+   "liu",
+   2026,
+   "",
+   "liu2026"
+  ],
+  [
+   "vaughn",
+   2020,
+   "",
+   "vaughn2020"
+  ],
+  [
+   "fanon",
+   2008,
+   "",
+   "fanon2008"
+  ],
+  [
+   "cast",
+   2018,
+   "",
+   "cast2018"
+  ],
+  [
+   "who",
+   null,
+   "",
+   "nd"
+  ]
+ ],
+ "ref_title": [
+  "Black skin, white masks",
+  "A threat in the air: How stereotypes shape intellectual identity and performance",
+  ""
+ ],
+ "ref_year": [
+  "2001",
+  "1997",
+  ""
+ ],
+ "report_page_data": "{\"meta\": {\"title\": \"Sleep Duration and Memory Consolidation in Adolescents\", \"source_file\": \"paper.md\", \"generated\": \"<scrubbed>\", \"version\": \"<scrubbed>\", \"homepage\": \"https://github.com/dividor/athetize-plugin-claude\", \"word_export\": null}, \"paragraphs\": [{\"id\": \"p1\", \"text\": \"Sleep Duration and Memory Consolidation in Adolescents\", \"kind\": \"heading\", \"level\": 1}, {\"id\": \"p2\", \"text\": \"Abstract\", \"kind\": \"heading\", \"level\": 2}, {\"id\": \"p3\", \"text\": \"This short review summarises how sleep duration and sleep spindles relate to learning in teenagers. We argue that school start times should move later.\", \"kind\": \"body\"}, {\"id\": \"p4\", \"text\": \"1. Introduction\", \"kind\": \"heading\", \"level\": 2}, {\"id\": \"p5\", \"text\": \"Adolescents sleep less than they did a generation ago [1]. Short sleep is linked to poorer next-day recall of new material [2]. Sleep spindles strongly improve memory consolidation in every age group [3]. About 70% of high school students report insufficient sleep. Later school start times raised average attendance by 9% in a large district trial [4].\", \"kind\": \"body\"}, {\"id\": \"p6\", \"text\": \"2. Discussion\", \"kind\": \"heading\", \"level\": 2}, {\"id\": \"p7\", \"text\": \"Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2]. We therefore recommend delaying the first bell.\", \"kind\": \"body\"}, {\"id\": \"p8\", \"text\": \"References\", \"kind\": \"heading\", \"level\": 2}], \"tables\": [], \"figures\": {}, \"suggestions\": [{\"id\": \"s1\", \"kind\": \"reference\", \"claim_id\": null, \"para\": \"p12\", \"refs\": [\"4\"], \"rationale\": \"Volume and pages confirmed by the publisher page.\", \"original\": \"[4] Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly.\", \"suggested\": \"[4] Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly, 12(3), 1-20.\", \"add_refs\": [], \"diff\": [[\"=\", \"[4] Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly\"], [\"+\", \", 12(3), 1-20\"], [\"=\", \".\"]], \"where\": \"Reference list\"}, {\"id\": \"s2\", \"kind\": \"rewrite\", \"claim_id\": \"c3\", \"para\": \"p5\", \"refs\": [\"3\"], \"rationale\": \"The source found no association in children.\", \"original\": \"Sleep spindles strongly improve memory consolidation in every age group [3].\", \"suggested\": \"Sleep spindles were associated with overnight retention in adults [3].\", \"add_refs\": [], \"diff\": [[\"=\", \"Sleep spindles \"], [\"-\", \"strongly improve memory consolidation\"], [\"+\", \"were associated with overnight retention\"], [\"=\", \" in \"], [\"-\", \"every age group\"], [\"+\", \"adults\"], [\"=\", \" [3].\"]], \"where\": \"Text\"}], \"claims\": [{\"id\": \"c1\", \"para\": \"p5\", \"start\": 0, \"end\": 58, \"text\": \"Adolescents sleep less than they did a generation ago [1].\", \"type\": \"empirical\", \"cites\": [\"1\"], \"verdict\": \"supported\", \"evidence_basis\": \"full_text\", \"provisional\": false, \"failing_refs\": [], \"items\": [{\"ref_id\": \"1\", \"citation\": \"Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology\", \"link\": null, \"raw\": \"Alvarez, M., Chen, L. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology.\", \"search\": {\"scholar\": \"https://scholar.google.com/scholar?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M.\", \"worldcat\": \"https://search.worldcat.org/search?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M.\"}, \"local_file\": \"sources/1.txt\", \"verdict\": \"supported\", \"confidence\": 0.92, \"analysis\": \"The pooled survey data show a decline in adolescent sleep between 1990 and 2010.\", \"quote\": \"mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample\", \"page\": null, \"match\": \"exact\", \"excerpts\": [{\"before\": \"Secular trends in adolescent sleep duration Methods. We pooled survey data from 12 countries collected between 1990 and 2010. Results. Between 1990 and 2010,\", \"match\": \"mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample\", \"after\": \". The decline was larger on school nights than on weekends. Weekend sleep duration was largely unchanged. Discussion. These findings suggest that adolescents now sleep less than previous generations, although self-report bias may affect the estimates.\", \"page\": null, \"mode\": \"exact\"}], \"evidence_level\": \"full_text\", \"flags\": [], \"retracted\": false, \"exists\": \"unchecked\", \"why_missing\": []}], \"retracted\": false, \"note\": \"\", \"suggestions\": []}, {\"id\": \"c2\", \"para\": \"p5\", \"start\": 59, \"end\": 127, \"text\": \"Short sleep is linked to poorer next-day recall of new material [2].\", \"type\": \"empirical\", \"cites\": [\"2\"], \"verdict\": \"unverifiable\", \"evidence_basis\": \"full_text\", \"provisional\": false, \"failing_refs\": [], \"items\": [{\"ref_id\": \"2\", \"citation\": \"Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research\", \"link\": null, \"raw\": \"Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research.\", \"search\": {\"scholar\": \"https://scholar.google.com/scholar?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T.\", \"worldcat\": \"https://search.worldcat.org/search?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T.\"}, \"local_file\": \"sources/2.txt\", \"verdict\": \"unverifiable\", \"confidence\": 0.9, \"analysis\": \"FABRICATED on purpose to test the quote check. [Downgraded from 'supported': the quoted evidence could not be found in the source text.]\", \"quote\": \"participants recalled 30% fewer words the morning after restricted sleep in a field study\", \"page\": null, \"match\": null, \"excerpts\": [], \"evidence_level\": \"full_text\", \"flags\": [\"quote_not_found\"], \"retracted\": false, \"exists\": \"unchecked\", \"why_missing\": []}], \"retracted\": false, \"note\": \"\", \"suggestions\": []}, {\"id\": \"c3\", \"para\": \"p5\", \"start\": 128, \"end\": 204, \"text\": \"Sleep spindles strongly improve memory consolidation in every age group [3].\", \"type\": \"empirical\", \"cites\": [\"3\"], \"verdict\": \"contradicted\", \"evidence_basis\": \"full_text\", \"provisional\": false, \"failing_refs\": [\"3\"], \"items\": [{\"ref_id\": \"3\", \"citation\": \"Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal\", \"link\": null, \"raw\": \"Brandt, K., Silva, R. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal.\", \"search\": {\"scholar\": \"https://scholar.google.com/scholar?q=Sleep%20spindles%20and%20overnight%20retention%20across%20the%20lifespan%20Brandt%2C%20K.\", \"worldcat\": \"https://search.worldcat.org/search?q=Sleep%20spindles%20and%20overnight%20retention%20across%20the%20lifespan%20Brandt%2C%20K.\"}, \"local_file\": \"sources/3.txt\", \"verdict\": \"contradicted\", \"confidence\": 0.93, \"analysis\": \"The source finds no association in children and only a modest one in adults, so the claim about every age group is contradicted.\", \"quote\": \"In children under 12 we found no association between spindle density and overnight retention\", \"page\": null, \"match\": \"exact\", \"excerpts\": [{\"before\": \"Sleep spindles and overnight retention across the lifespan Results. Spindle density showed a modest positive correlation with overnight retention in adults aged 20 to 35 (r = 0.21).\", \"match\": \"In children under 12 we found no association between spindle density and overnight retention\", \"after\": \". Among adolescents the correlation was weak and did not survive correction for multiple comparisons. Discussion. The relationship between spindles and memory consolidation appears to depend strongly on age and should not be assumed to hold in every age group.\", \"page\": null, \"mode\": \"exact\"}], \"evidence_level\": \"full_text\", \"flags\": [], \"retracted\": false, \"exists\": \"unchecked\", \"why_missing\": []}], \"retracted\": false, \"note\": \"\", \"suggestions\": [\"s2\"]}, {\"id\": \"c4\", \"para\": \"p5\", \"start\": 205, \"end\": 265, \"text\": \"About 70% of high school students report insufficient sleep.\", \"type\": \"numeric\", \"cites\": [], \"verdict\": \"uncited\", \"evidence_basis\": \"none\", \"provisional\": false, \"failing_refs\": [], \"items\": [], \"retracted\": false, \"note\": \"\", \"suggestions\": []}, {\"id\": \"c5\", \"para\": \"p5\", \"start\": 266, \"end\": 353, \"text\": \"Later school start times raised average attendance by 9% in a large district trial [4].\", \"type\": \"numeric\", \"cites\": [\"4\"], \"verdict\": \"unverifiable\", \"evidence_basis\": \"none\", \"provisional\": false, \"failing_refs\": [], \"items\": [{\"ref_id\": \"4\", \"citation\": \"Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly\", \"link\": null, \"raw\": \"Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly.\", \"search\": {\"scholar\": \"https://scholar.google.com/scholar?q=School%20start%20times%20and%20attendance%3A%20a%20district%20trial%20Novak%2C%20P.\", \"worldcat\": \"https://search.worldcat.org/search?q=School%20start%20times%20and%20attendance%3A%20a%20district%20trial%20Novak%2C%20P.\"}, \"local_file\": null, \"verdict\": \"unverifiable\", \"confidence\": 1.0, \"analysis\": \"No source text is available for this reference, so the claim could not be checked.\", \"quote\": \"\", \"page\": null, \"match\": null, \"excerpts\": [], \"evidence_level\": \"none\", \"flags\": [\"no_source\"], \"retracted\": false, \"exists\": \"unchecked\", \"why_missing\": [\"no open-access copy is listed for it\", \"offline.test: could not be reached\"]}], \"retracted\": false, \"note\": \"\", \"suggestions\": [\"s1\"]}, {\"id\": \"c6\", \"para\": \"p7\", \"start\": 0, \"end\": 91, \"text\": \"Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2].\", \"type\": \"empirical\", \"cites\": [\"1\", \"2\"], \"verdict\": \"supported\", \"evidence_basis\": \"full_text\", \"provisional\": false, \"failing_refs\": [], \"items\": [{\"ref_id\": \"1\", \"citation\": \"Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology\", \"link\": null, \"raw\": \"Alvarez, M., Chen, L. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology.\", \"search\": {\"scholar\": \"https://scholar.google.com/scholar?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M.\", \"worldcat\": \"https://search.worldcat.org/search?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M.\"}, \"local_file\": \"sources/1.txt\", \"verdict\": \"supported\", \"confidence\": 0.7, \"analysis\": \"Supports less sleep, not that sleep drives learning.\", \"quote\": \"These findings suggest that adolescents now sleep less than previous generations\", \"page\": null, \"match\": \"exact\", \"excerpts\": [{\"before\": \"Secular trends in adolescent sleep duration Methods. We pooled survey data from 12 countries collected between 1990 and 2010. Results. Between 1990 and 2010, mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample. The decline was larger on school nights than on weekends. Weekend sleep duration was largely unchanged. Discussion.\", \"match\": \"These findings suggest that adolescents now sleep less than previous generations\", \"after\": \", although self-report bias may affect the estimates.\", \"page\": null, \"mode\": \"exact\"}], \"evidence_level\": \"full_text\", \"flags\": [], \"retracted\": false, \"exists\": \"unchecked\", \"why_missing\": []}, {\"ref_id\": \"2\", \"citation\": \"Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research\", \"link\": null, \"raw\": \"Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research.\", \"search\": {\"scholar\": \"https://scholar.google.com/scholar?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T.\", \"worldcat\": \"https://search.worldcat.org/search?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T.\"}, \"local_file\": \"sources/2.txt\", \"verdict\": \"partially_supported\", \"confidence\": 0.8, \"analysis\": \"Lab evidence of lower recall after restricted sleep, in one night only.\", \"quote\": \"recalled 12% fewer words the next morning than after a night of normal sleep\", \"page\": null, \"match\": \"exact\", \"excerpts\": [{\"before\": \"Restricted sleep and word recall in teenagers Abstract. Forty-eight teenagers learned a list of 60 words in the evening. After a night of restricted sleep (five hours), participants\", \"match\": \"recalled 12% fewer words the next morning than after a night of normal sleep\", \"after\": \"(nine hours). The effect was present in both boys and girls. Discussion. Because the design was a within-subject laboratory study, we cannot say whether chronic short sleep at home has the same effect.\", \"page\": null, \"mode\": \"exact\"}], \"evidence_level\": \"full_text\", \"flags\": [], \"retracted\": false, \"exists\": \"unchecked\", \"why_missing\": []}], \"retracted\": false, \"note\": \"\", \"suggestions\": []}], \"notes\": [{\"id\": \"n1\", \"para\": \"p7\", \"kind\": \"overreach\", \"severity\": \"warn\", \"message\": \"The recommendation leans on spindle and attendance claims that the cited sources do not support (see c3 and c5).\", \"start\": 92, \"end\": 139}], \"refs\": [{\"id\": \"1\", \"raw\": \"Alvarez, M., Chen, L. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology.\", \"citation\": \"Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology\", \"search\": {\"scholar\": \"https://scholar.google.com/scholar?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M.\", \"worldcat\": \"https://search.worldcat.org/search?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez%2C%20M.\"}, \"status\": \"user_provided\", \"exists\": \"unchecked\", \"link\": null, \"retracted\": false, \"retraction_notes\": [], \"discrepancies\": [], \"matched_source\": null, \"matched_url\": null, \"why_missing\": [], \"local_file\": \"sources/1.txt\", \"evidence_level\": \"full_text\", \"match_score\": null, \"matched_title\": null, \"errors\": [\"crossref search: network error for offline.test: stubbed\", \"openalex search: network error for offline.test: stubbed\"], \"cited_by\": [\"c1\", \"c6\"], \"suggestions\": []}, {\"id\": \"2\", \"raw\": \"Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research.\", \"citation\": \"Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research\", \"search\": {\"scholar\": \"https://scholar.google.com/scholar?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T.\", \"worldcat\": \"https://search.worldcat.org/search?q=Restricted%20sleep%20and%20word%20recall%20in%20teenagers%20Okafor%2C%20T.\"}, \"status\": \"user_provided\", \"exists\": \"unchecked\", \"link\": null, \"retracted\": false, \"retraction_notes\": [], \"discrepancies\": [], \"matched_source\": null, \"matched_url\": null, \"why_missing\": [], \"local_file\": \"sources/2.txt\", \"evidence_level\": \"full_text\", \"match_score\": null, \"matched_title\": null, \"errors\": [\"crossref search: network error for offline.test: stubbed\", \"openalex search: network error for offline.test: stubbed\"], \"cited_by\": [\"c2\", \"c6\"], \"suggestions\": []}, {\"id\": \"3\", \"raw\": \"Brandt, K., Silva, R. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal.\", \"citation\": \"Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal\", \"search\": {\"scholar\": \"https://scholar.google.com/scholar?q=Sleep%20spindles%20and%20overnight%20retention%20across%20the%20lifespan%20Brandt%2C%20K.\", \"worldcat\": \"https://search.worldcat.org/search?q=Sleep%20spindles%20and%20overnight%20retention%20across%20the%20lifespan%20Brandt%2C%20K.\"}, \"status\": \"user_provided\", \"exists\": \"unchecked\", \"link\": null, \"retracted\": false, \"retraction_notes\": [], \"discrepancies\": [], \"matched_source\": null, \"matched_url\": null, \"why_missing\": [], \"local_file\": \"sources/3.txt\", \"evidence_level\": \"full_text\", \"match_score\": null, \"matched_title\": null, \"errors\": [\"crossref search: network error for offline.test: stubbed\", \"openalex search: network error for offline.test: stubbed\"], \"cited_by\": [\"c3\"], \"suggestions\": []}, {\"id\": \"4\", \"raw\": \"Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly.\", \"citation\": \"Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly\", \"search\": {\"scholar\": \"https://scholar.google.com/scholar?q=School%20start%20times%20and%20attendance%3A%20a%20district%20trial%20Novak%2C%20P.\", \"worldcat\": \"https://search.worldcat.org/search?q=School%20start%20times%20and%20attendance%3A%20a%20district%20trial%20Novak%2C%20P.\"}, \"status\": \"missing\", \"exists\": \"unchecked\", \"link\": null, \"retracted\": false, \"retraction_notes\": [], \"discrepancies\": [], \"matched_source\": null, \"matched_url\": null, \"why_missing\": [\"no open-access copy is listed for it\", \"offline.test: could not be reached\"], \"local_file\": null, \"evidence_level\": \"none\", \"match_score\": null, \"matched_title\": null, \"errors\": [\"crossref search: network error for offline.test: stubbed\", \"openalex search: network error for offline.test: stubbed\"], \"cited_by\": [\"c5\"], \"suggestions\": [\"s1\"]}], \"sources_needed\": {\"references\": 4, \"need_source\": 1, \"abstract_only\": 0, \"no_text\": 1, \"claims_relying\": 1, \"request_file\": \"source_request.md\", \"folder\": \"~/Downloads/Test\"}, \"problems\": []}",
+ "request_sources": {
+  "count": 1,
+  "folder": "~/Downloads/Test",
+  "items": [
+   {
+    "citation": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly.",
+    "claims_affected": 1,
+    "id": "4",
+    "n": 1,
+    "short": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly",
+    "status": "missing"
+   }
+  ],
+  "summary": {
+   "abstract_only": 0,
+   "claims_relying": 1,
+   "need_source": 1,
+   "no_text": 1,
+   "references": 4
+  }
+ },
+ "resolve_metadata_calls": [
+  "https://api.crossref.org/works/10.1000/okafor?mailto=a%40b.org",
+  "https://api.openalex.org/works/doi:10.1000/okafor?mailto=a%40b.org",
+  "https://api.crossref.org/works?query.bibliographic=Restricted+sleep+and+word+recall+in+teenagers+okafor&rows=4&select=DOI%2Ctitle%2Cauthor%2Cissued%2Ccontainer-title%2Cabstract%2Cupdated-by",
+  "https://api.openalex.org/works/doi:10.1000/okafor",
+  "https://api.crossref.org/works?query.bibliographic=Zzz+qqq.+%281999%29.+Nothing+like+it.&rows=4&select=DOI%2Ctitle%2Cauthor%2Cissued%2Ccontainer-title%2Cabstract%2Cupdated-by",
+  "https://api.openalex.org/works?search=Zzz+qqq.+%281999%29.+Nothing+like+it.&per-page=4",
+  "https://api.crossref.org/works/10.1000/okafor?mailto=a%40b.org",
+  "https://api.openalex.org/works/doi:10.1000/okafor?mailto=a%40b.org",
+  "https://api.unpaywall.org/v2/10.1000/okafor?email=a%40b.org",
+  "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/okafor?fields=openAccessPdf",
+  "https://api.ies.ed.gov/eric/?search=title%3A%22Restricted+sleep+and+word+recall+in+teenagers%22&format=json&fields=id%2Ctitle%2Ce_fulltextauth&rows=3",
+  "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC123/fullTextXML",
+  "https://oa.example/best.pdf",
+  "https://oa.example/p.pdf",
+  "https://oa.example/page",
+  "https://api.crossref.org/works?query.bibliographic=Restricted+sleep+and+word+recall+in+teenagers+okafor&rows=4&select=DOI%2Ctitle%2Cauthor%2Cissued%2Ccontainer-title%2Cabstract%2Cupdated-by",
+  "https://api.openalex.org/works/doi:10.1000/okafor",
+  "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/okafor?fields=openAccessPdf",
+  "https://api.ies.ed.gov/eric/?search=title%3A%22Restricted+sleep+and+word+recall+in+teenagers%22&format=json&fields=id%2Ctitle%2Ce_fulltextauth&rows=3",
+  "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC123/fullTextXML",
+  "https://oa.example/best.pdf",
+  "https://oa.example/p.pdf",
+  "https://oa.example/page"
+ ],
+ "resolve_metadata_doi": [
+  {
+   "abstract": "Forty-eight teenagers learned a list.",
+   "authors": [
+    "Okafor"
+   ],
+   "doi": "10.1000/okafor",
+   "is_retracted": true,
+   "oa_url": "https://oa.example/page",
+   "openalex_id": "https://openalex.org/W1",
+   "pdf_urls": [
+    "https://oa.example/best.pdf",
+    "https://oa.example/p.pdf"
+   ],
+   "pmcid": "PMC123",
+   "retraction_notes": [
+    "retraction"
+   ],
+   "source": "crossref",
+   "title": "Restricted sleep and word recall in teenagers",
+   "venue": "Learning and Sleep Research",
+   "year": 2020
+  },
+  1.0,
+  []
+ ],
+ "resolve_metadata_none": [
+  null,
+  null
+ ],
+ "resolve_metadata_title": [
+  {
+   "abstract": "Forty-eight teenagers learned a list.",
+   "authors": [
+    "Okafor"
+   ],
+   "doi": "10.1000/okafor",
+   "is_retracted": true,
+   "oa_url": "https://oa.example/page",
+   "openalex_id": "https://openalex.org/W1",
+   "pdf_urls": [
+    "https://oa.example/best.pdf",
+    "https://oa.example/p.pdf"
+   ],
+   "pmcid": "PMC123",
+   "retraction_notes": [
+    "retraction"
+   ],
+   "source": "crossref",
+   "title": "Restricted sleep and word recall in teenagers",
+   "venue": "Learning and Sleep Research",
+   "year": 2020
+  },
+  1.0,
+  []
+ ],
+ "resolve_metadata_weak": [
+  null,
+  null,
+  []
+ ],
+ "resolve_one_broken_ref": {
+  "refs": {
+   "bad": {
+    "citation": "bad",
+    "doi": null,
+    "errors": [
+     "metadata match is not_found: links from the matched record were not used"
+    ],
+    "evidence_chars": 0,
+    "evidence_file": null,
+    "evidence_hash": "none",
+    "evidence_level": "none",
+    "exists": "not_found",
+    "id": "bad",
+    "link": null,
+    "local_file": null,
+    "match_score": null,
+    "matched": null,
+    "metadata_done": true,
+    "retracted": false,
+    "retraction_notes": [],
+    "status": "missing"
+   }
+  }
+ },
+ "resolve_one_doi": {
+  "citation": "Okafor (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+  "discrepancies": [],
+  "doi": "10.1000/okafor",
+  "errors": [
+   "unpaywall: network error for https://api.unpaywall.org/v2/10.1000/okafor?email=a%40b.org: stubbed",
+   "semanticscholar: network error for https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/okafor?fields=openAccessPdf: stubbed",
+   "eric: network error for https://api.ies.ed.gov/eric/?search=title%3A%22Restricted+sleep+and+word+recall+in+teenagers%22&format=json&fields=id%2Ctitle%2Ce_fulltextauth&rows=3: stubbed",
+   "europepmc fulltext: network error for https://www.ebi.ac.uk/europepmc/webservices/rest/PMC123/fullTextXML: stubbed",
+   "openalex download: network error for https://oa.example/best.pdf: stubbed",
+   "openalex download: network error for https://oa.example/p.pdf: stubbed",
+   "openalex-oa download: network error for https://oa.example/page: stubbed"
+  ],
+  "evidence_chars": 0,
+  "evidence_file": null,
+  "evidence_hash": "none",
+  "evidence_level": "none",
+  "exists": "verified",
+  "id": "2",
+  "link": "https://doi.org/10.1000/okafor",
+  "local_file": null,
+  "match_score": 1.0,
+  "matched": {
+   "authors": [
+    "Okafor"
+   ],
+   "doi": "10.1000/okafor",
+   "source": "crossref",
+   "title": "Restricted sleep and word recall in teenagers",
+   "venue": "Learning and Sleep Research",
+   "year": 2020
+  },
+  "metadata_done": true,
+  "oa_urls": [
+   "https://oa.example/best.pdf",
+   "https://oa.example/p.pdf"
+  ],
+  "pmcid": "PMC123",
+  "retracted": true,
+  "retraction_notes": [
+   "retraction"
+  ],
+  "status": "missing"
+ },
+ "resolve_one_offline": {
+  "citation": "Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal",
+  "doi": null,
+  "errors": [
+   "crossref search: network error for offline.test: stubbed",
+   "openalex search: network error for offline.test: stubbed"
+  ],
+  "evidence_chars": 0,
+  "evidence_file": null,
+  "evidence_hash": "none",
+  "evidence_level": "none",
+  "exists": "unchecked",
+  "id": "3",
+  "link": null,
+  "local_file": null,
+  "match_score": null,
+  "matched": null,
+  "metadata_done": false,
+  "retracted": false,
+  "retraction_notes": [],
+  "status": "missing"
+ },
+ "resolve_one_reuse": {
+  "citation": "Okafor (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+  "discrepancies": [],
+  "doi": "10.1000/okafor",
+  "errors": [
+   "unpaywall: network error for https://api.unpaywall.org/v2/10.1000/okafor?email=a%40b.org: stubbed",
+   "semanticscholar: network error for https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/okafor?fields=openAccessPdf: stubbed",
+   "eric: network error for https://api.ies.ed.gov/eric/?search=title%3A%22Restricted+sleep+and+word+recall+in+teenagers%22&format=json&fields=id%2Ctitle%2Ce_fulltextauth&rows=3: stubbed",
+   "europepmc fulltext: network error for https://www.ebi.ac.uk/europepmc/webservices/rest/PMC123/fullTextXML: stubbed",
+   "openalex download: network error for https://oa.example/best.pdf: stubbed",
+   "openalex download: network error for https://oa.example/p.pdf: stubbed",
+   "openalex-oa download: network error for https://oa.example/page: stubbed"
+  ],
+  "evidence_chars": 0,
+  "evidence_file": null,
+  "evidence_hash": "none",
+  "evidence_level": "none",
+  "exists": "verified",
+  "id": "2",
+  "link": "https://doi.org/10.1000/okafor",
+  "local_file": null,
+  "match_score": 1.0,
+  "matched": {
+   "authors": [
+    "Okafor"
+   ],
+   "doi": "10.1000/okafor",
+   "source": "crossref",
+   "title": "Restricted sleep and word recall in teenagers",
+   "venue": "Learning and Sleep Research",
+   "year": 2020
+  },
+  "metadata_done": true,
+  "oa_urls": [
+   "https://oa.example/best.pdf",
+   "https://oa.example/p.pdf"
+  ],
+  "pmcid": "PMC123",
+  "retracted": true,
+  "retraction_notes": [
+   "retraction"
+  ],
+  "status": "missing"
+ },
+ "resolve_one_reuse_mismatch": {
+  "citation": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+  "discrepancies": [],
+  "doi": "10.1000/okafor",
+  "errors": [
+   "first author of the matched record differs from the reference; match downgraded"
+  ],
+  "evidence_chars": 0,
+  "evidence_file": null,
+  "evidence_hash": "none",
+  "evidence_level": "none",
+  "exists": "partial_match",
+  "id": "2",
+  "link": "https://doi.org/10.1000/okafor",
+  "local_file": null,
+  "match_score": 1.0,
+  "matched": {
+   "authors": [
+    "Someone"
+   ],
+   "doi": "10.1000/okafor",
+   "source": "crossref",
+   "title": "Restricted sleep and word recall in teenagers",
+   "venue": "Learning and Sleep Research",
+   "year": 2020
+  },
+  "metadata_done": true,
+  "oa_urls": [
+   "https://oa.example/best.pdf",
+   "https://oa.example/p.pdf"
+  ],
+  "pmcid": "PMC123",
+  "record_title": "Restricted sleep and word recall in teenagers",
+  "retracted": true,
+  "retraction_notes": [
+   "retraction"
+  ],
+  "status": "missing"
+ },
+ "resolve_one_title_offline_dl": {
+  "citation": "Okafor (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+  "discrepancies": [
+   "DOI: the reference prints none, the record has 10.1000/okafor"
+  ],
+  "doi": "10.1000/okafor",
+  "errors": [
+   "unpaywall skipped: no contact email configured (run: pl.py config set-email you@example.org)",
+   "semanticscholar: network error for https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/okafor?fields=openAccessPdf: stubbed",
+   "eric: network error for https://api.ies.ed.gov/eric/?search=title%3A%22Restricted+sleep+and+word+recall+in+teenagers%22&format=json&fields=id%2Ctitle%2Ce_fulltextauth&rows=3: stubbed",
+   "europepmc fulltext: network error for https://www.ebi.ac.uk/europepmc/webservices/rest/PMC123/fullTextXML: stubbed",
+   "openalex download: network error for https://oa.example/best.pdf: stubbed",
+   "openalex download: network error for https://oa.example/p.pdf: stubbed",
+   "openalex-oa download: network error for https://oa.example/page: stubbed"
+  ],
+  "evidence_chars": 0,
+  "evidence_file": null,
+  "evidence_hash": "none",
+  "evidence_level": "none",
+  "exists": "verified",
+  "id": "2",
+  "link": "https://doi.org/10.1000/okafor",
+  "local_file": null,
+  "match_score": 1.0,
+  "matched": {
+   "authors": [
+    "Okafor"
+   ],
+   "doi": "10.1000/okafor",
+   "source": "crossref",
+   "title": "Restricted sleep and word recall in teenagers",
+   "venue": "Learning and Sleep Research",
+   "year": 2020
+  },
+  "metadata_done": true,
+  "oa_urls": [
+   "https://oa.example/best.pdf",
+   "https://oa.example/p.pdf"
+  ],
+  "pmcid": "PMC123",
+  "retracted": true,
+  "retraction_notes": [
+   "retraction"
+  ],
+  "status": "missing"
+ },
+ "safe_json": "{\"x\": \"\\u003c/script\\u003e\\u003cb\\u003e\\u0026\\u2028\"}",
+ "score_candidate": [
+  1.0,
+  0.30636363636363634,
+  0.92,
+  1.0
+ ],
+ "search_urls": {
+  "scholar": "https://scholar.google.com/scholar?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez",
+  "worldcat": "https://search.worldcat.org/search?q=Secular%20trends%20in%20adolescent%20sleep%20duration%20Alvarez"
+ },
+ "semantic_scholar_pdf": [],
+ "short_hash": "digest:ba7816bf8f01cfea",
+ "source_request_md": "# Sources needed: 1 reference\n\nThis list covers 1 of the paper's 4 references: 1 has no text at all. 1 claim relies on at least one of them and cannot be fully checked until it is added. The list is ordered by how many claims depend on each work, so the first few matter most.\n\nGet what you can, in any order. Keep whatever file names you get. Then point Claude at the folder they are in, or pick the files, and each one is read and matched to its reference. PDF is best; a saved web page, Word file or text file also works, and for a book the cited pages are enough. Skip anything you cannot get: those claims stay marked \"can't verify\". The Library links go through your library sign-in.\n\n| Reference | Claims | Text so far | Get it |\n|---|---|---|---|\n| [4] Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly | 1 | nothing | [Google Scholar](https://scholar.google.com/scholar?q=School%20start%20times%20and%20attendance%3A%20a%20district%20trial%20Novak%2C%20P.) · [WorldCat](https://search.worldcat.org/search?q=School%20start%20times%20and%20attendance%3A%20a%20district%20trial%20Novak%2C%20P.) |\n",
+ "status_rows": [
+  {
+   "citation": "Alvarez, M. et al. (2019). Secular trends in adolescent sleep duration. Journal of Sleep Epidemiology",
+   "claims_affected": 2,
+   "discrepancies": [],
+   "errors": [
+    "crossref search: network error for offline.test: stubbed",
+    "openalex search: network error for offline.test: stubbed"
+   ],
+   "exists": "unchecked",
+   "id": "1",
+   "retracted": false,
+   "status": "user_provided"
+  },
+  {
+   "citation": "Okafor, T. (2020). Restricted sleep and word recall in teenagers. Learning and Sleep Research",
+   "claims_affected": 2,
+   "discrepancies": [],
+   "errors": [
+    "crossref search: network error for offline.test: stubbed",
+    "openalex search: network error for offline.test: stubbed"
+   ],
+   "exists": "unchecked",
+   "id": "2",
+   "retracted": false,
+   "status": "user_provided"
+  },
+  {
+   "citation": "Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal",
+   "claims_affected": 1,
+   "discrepancies": [],
+   "errors": [
+    "crossref search: network error for offline.test: stubbed",
+    "openalex search: network error for offline.test: stubbed"
+   ],
+   "exists": "unchecked",
+   "id": "3",
+   "retracted": false,
+   "status": "user_provided"
+  },
+  {
+   "citation": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly",
+   "claims_affected": 1,
+   "discrepancies": [],
+   "errors": [
+    "crossref search: network error for offline.test: stubbed",
+    "openalex search: network error for offline.test: stubbed"
+   ],
+   "exists": "unchecked",
+   "id": "4",
+   "retracted": false,
+   "status": "missing"
+  }
+ ],
+ "strip_tags": "Hi there x",
+ "suggest_batches": {
+  "suggest-001.json": {
+   "claims": [
+    {
+     "claim_id": "c3",
+     "claim_text": "Sleep spindles strongly improve memory consolidation in every age group [3].",
+     "para": "p5",
+     "paragraph_text": "Adolescents sleep less than they did a generation ago [1]. Short sleep is linked to poorer next-day recall of new material [2]. Sleep spindles strongly improve memory consolidation in every age group [3]. About 70% of high school students report insufficient sleep. Later school start times raised average attendance by 9% in a large district trial [4].",
+     "sources": [
+      {
+       "analysis": "The source finds no association in children and only a modest one in adults, so the claim about every age group is contradicted.",
+       "citation": "Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal",
+       "evidence_level": "full_text",
+       "excerpts": [
+        "Sleep spindles and overnight retention across the lifespan Results. Spindle density showed a modest positive correlation with overnight retention in adults aged 20 to 35 (r = 0.21). [[In children under 12 we found no association between spindle density and overnight retention]] . Among adolescents the correlation was weak and did not survive correction for multiple comparisons. Discussion. The relationship between spindles and memory consolidation appears to depend strongly on age and should not be assumed to hold in every age group."
+       ],
+       "ref_id": "3",
+       "verdict": "contradicted"
+      }
+     ],
+     "verdict": "contradicted"
+    }
+   ],
+   "output_file": "suggest_parts/suggest-001.json"
+  }
+ },
+ "suggest_prepare": {
+  "already_have_suggestions": 0,
+  "batches": 1,
+  "dropped_outdated": [],
+  "flagged_claims": 1
+ },
+ "suggest_prepare_again": {
+  "already_have_suggestions": 1,
+  "batches": 0,
+  "dropped_outdated": [],
+  "flagged_claims": 0
+ },
+ "suggestion_notes": {
+  "s1": [
+   [
+    {
+     "b": true,
+     "size": 22,
+     "t": "Athetize · Reference list fix"
+    },
+    {
+     "color": "6B7280",
+     "t": "  (s1)"
+    }
+   ],
+   [],
+   [
+    {
+     "b": true,
+     "color": "1F4E79",
+     "t": "Why this edit"
+    }
+   ],
+   [
+    {
+     "t": "Volume and pages confirmed by the publisher page."
+    }
+   ],
+   [],
+   [
+    {
+     "b": true,
+     "color": "1F4E79",
+     "t": "Reference as written"
+    }
+   ],
+   [
+    {
+     "t": "Novak, P. (2018). School start times and attendance: a district trial. Education Policy Quarterly."
+    }
+   ],
+   [],
+   [
+    {
+     "color": "6B7280",
+     "i": true,
+     "t": "Screening aid: check the source before accepting this change."
+    }
+   ]
+  ],
+  "s2": [
+   [
+    {
+     "b": true,
+     "size": 22,
+     "t": "Athetize · Suggested rewording"
+    },
+    {
+     "color": "6B7280",
+     "t": "  (s2)"
+    }
+   ],
+   [
+    {
+     "color": "6B7280",
+     "t": "Claim verdict: "
+    },
+    {
+     "b": true,
+     "color": "C0392B",
+     "t": "Contradicted"
+    }
+   ],
+   [],
+   [
+    {
+     "b": true,
+     "color": "1F4E79",
+     "t": "Why this edit"
+    }
+   ],
+   [
+    {
+     "t": "The source found no association in children."
+    }
+   ],
+   [],
+   [
+    {
+     "b": true,
+     "color": "1F4E79",
+     "t": "Source"
+    }
+   ],
+   [
+    {
+     "b": true,
+     "t": "Brandt, K. et al. (2021). Sleep spindles and overnight retention across the lifespan. Memory Systems Journal"
+    }
+   ],
+   [
+    {
+     "b": true,
+     "color": "C0392B",
+     "t": "Contradicted"
+    },
+    {
+     "color": "6B7280",
+     "t": " · 93% confidence"
+    }
+   ],
+   [],
+   [
+    {
+     "b": true,
+     "color": "1F4E79",
+     "t": "Analysis"
+    }
+   ],
+   [
+    {
+     "t": "The source finds no association in children and only a modest one in adults, so the claim about every age group is contradicted."
+    }
+   ],
+   [],
+   [
+    {
+     "b": true,
+     "color": "1F4E79",
+     "t": "Evidence"
+    }
+   ],
+   [
+    {
+     "color": "6B7280",
+     "i": true,
+     "t": "…Sleep spindles and overnight retention across the lifespan Results. Spindle density showed a modest positive correlation with overnight retention in adults aged 20 to 35 (r = 0.21). "
+    },
+    {
+     "b": true,
+     "i": true,
+     "t": "“In children under 12 we found no association between spindle density and overnight retention”"
+    },
+    {
+     "color": "6B7280",
+     "i": true,
+     "t": " . Among adolescents the correlation was weak and did not survive correction for multiple comparisons. Discussion. The relationship between spindles and memory consolidation appears to depend strongly on age and should no…"
+    }
+   ],
+   [],
+   [
+    {
+     "color": "6B7280",
+     "i": true,
+     "t": "Screening aid: check the source before accepting this change."
+    }
+   ]
+  ]
+ },
+ "surname": [
+  "alvarez",
+  "alvarez",
+  "",
+  "alvarez"
+ ],
+ "title_in_text": [
+  true,
+  false,
+  true
+ ],
+ "title_similarity": [
+  1.0,
+  0.4375,
+  0.0
+ ],
+ "validate": [
+  [],
+  []
+ ],
+ "validate_with_suggestions": [
+  [],
+  []
+ ],
+ "verdicts": {
+  "items": [
+   {
+    "analysis": "No source text is available for this reference, so the claim could not be checked.",
+    "claim_hash": "digest:2ab9c6de9a888c38",
+    "claim_id": "c5",
+    "confidence": 1.0,
+    "evidence": null,
+    "evidence_hash": "none",
+    "evidence_level": "none",
+    "evidence_quote": "",
+    "flags": [
+     "no_source"
+    ],
+    "original_verdict": "unverifiable",
+    "ref_id": "4",
+    "verdict": "unverifiable"
+   },
+   {
+    "analysis": "The pooled survey data show a decline in adolescent sleep between 1990 and 2010.",
+    "claim_hash": "digest:9a6c90239e554bc7",
+    "claim_id": "c1",
+    "confidence": 0.92,
+    "evidence": {
+     "end": 247,
+     "match": "exact",
+     "page": null,
+     "score": 1.0,
+     "start": 160,
+     "text": "mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample"
+    },
+    "evidence_hash": "digest:0fb9dbdae8e90025",
+    "evidence_level": "full_text",
+    "evidence_quote": "mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample",
+    "evidence_quotes": [
+     "mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample"
+    ],
+    "evidences": [
+     {
+      "end": 247,
+      "match": "exact",
+      "page": null,
+      "score": 1.0,
+      "start": 160,
+      "text": "mean sleep duration among adolescents fell by 18 minutes per night in the pooled sample"
+     }
+    ],
+    "flags": [],
+    "original_verdict": "supported",
+    "ref_id": "1",
+    "verdict": "supported"
+   },
+   {
+    "analysis": "FABRICATED on purpose to test the quote check. [Downgraded from 'supported': the quoted evidence could not be found in the source text.]",
+    "claim_hash": "digest:2f57ec86f39e1316",
+    "claim_id": "c2",
+    "confidence": 0.9,
+    "evidence": null,
+    "evidence_hash": "digest:699db883a221f6dc",
+    "evidence_level": "full_text",
+    "evidence_quote": "participants recalled 30% fewer words the morning after restricted sleep in a field study",
+    "evidence_quotes": [
+     "participants recalled 30% fewer words the morning after restricted sleep in a field study"
+    ],
+    "evidences": [],
+    "flags": [
+     "quote_not_found"
+    ],
+    "original_verdict": "supported",
+    "ref_id": "2",
+    "verdict": "unverifiable"
+   },
+   {
+    "analysis": "The source finds no association in children and only a modest one in adults, so the claim about every age group is contradicted.",
+    "claim_hash": "digest:728c55efaeab3a67",
+    "claim_id": "c3",
+    "confidence": 0.93,
+    "evidence": {
+     "end": 275,
+     "match": "exact",
+     "page": null,
+     "score": 1.0,
+     "start": 183,
+     "text": "In children under 12 we found no association between spindle density and overnight retention"
+    },
+    "evidence_hash": "digest:88fe00b710d60963",
+    "evidence_level": "full_text",
+    "evidence_quote": "In children under 12 we found no association between spindle density and overnight retention.",
+    "evidence_quotes": [
+     "In children under 12 we found no association between spindle density and overnight retention."
+    ],
+    "evidences": [
+     {
+      "end": 275,
+      "match": "exact",
+      "page": null,
+      "score": 1.0,
+      "start": 183,
+      "text": "In children under 12 we found no association between spindle density and overnight retention"
+     }
+    ],
+    "flags": [],
+    "original_verdict": "contradicted",
+    "ref_id": "3",
+    "verdict": "contradicted"
+   },
+   {
+    "analysis": "Supports less sleep, not that sleep drives learning.",
+    "claim_hash": "digest:8634cacc50bdbf66",
+    "claim_id": "c6",
+    "confidence": 0.7,
+    "evidence": {
+     "end": 446,
+     "match": "exact",
+     "page": null,
+     "score": 1.0,
+     "start": 366,
+     "text": "These findings suggest that adolescents now sleep less than previous generations"
+    },
+    "evidence_hash": "digest:0fb9dbdae8e90025",
+    "evidence_level": "full_text",
+    "evidence_quote": "These findings suggest that adolescents now sleep less than previous generations",
+    "evidence_quotes": [
+     "These findings suggest that adolescents now sleep less than previous generations"
+    ],
+    "evidences": [
+     {
+      "end": 446,
+      "match": "exact",
+      "page": null,
+      "score": 1.0,
+      "start": 366,
+      "text": "These findings suggest that adolescents now sleep less than previous generations"
+     }
+    ],
+    "flags": [],
+    "original_verdict": "supported",
+    "ref_id": "1",
+    "verdict": "supported"
+   },
+   {
+    "analysis": "Lab evidence of lower recall after restricted sleep, in one night only.",
+    "claim_hash": "digest:8634cacc50bdbf66",
+    "claim_id": "c6",
+    "confidence": 0.8,
+    "evidence": {
+     "end": 259,
+     "match": "exact",
+     "page": null,
+     "score": 1.0,
+     "start": 183,
+     "text": "recalled 12% fewer words the next morning than after a night of normal sleep"
+    },
+    "evidence_hash": "digest:699db883a221f6dc",
+    "evidence_level": "full_text",
+    "evidence_quote": "recalled 12% fewer words the next morning than after a night of normal sleep",
+    "evidence_quotes": [
+     "recalled 12% fewer words the next morning than after a night of normal sleep"
+    ],
+    "evidences": [
+     {
+      "end": 259,
+      "match": "exact",
+      "page": null,
+      "score": 1.0,
+      "start": 183,
+      "text": "recalled 12% fewer words the next morning than after a night of normal sleep"
+     }
+    ],
+    "flags": [],
+    "original_verdict": "partially_supported",
+    "ref_id": "2",
+    "verdict": "partially_supported"
+   }
+  ]
+ },
+ "verify": {
+  "by_verdict": {
+   "contradicted": 1,
+   "partially_supported": 1,
+   "supported": 2,
+   "unverifiable": 2
+  },
+  "downgraded_by_checks": 1,
+  "merged_now": 5
+ },
+ "verify_verdict_cases": [
+  {
+   "analysis": "Nothing found.",
+   "claim_hash": "h",
+   "claim_id": "cx",
+   "confidence": 0.9,
+   "evidence": null,
+   "evidence_hash": "digest:88fe00b710d60963",
+   "evidence_level": "full_text",
+   "evidence_quote": "",
+   "evidence_quotes": [],
+   "evidences": [],
+   "flags": [],
+   "original_verdict": "unsupported",
+   "ref_id": "3",
+   "verdict": "unsupported"
+  },
+  {
+   "analysis": "a",
+   "claim_hash": "h",
+   "claim_id": "cx",
+   "confidence": 0.5,
+   "evidence": {
+    "end": 275,
+    "match": "exact",
+    "page": null,
+    "score": 1.0,
+    "start": 213,
+    "text": "no association between spindle density and overnight retention"
+   },
+   "evidence_hash": "digest:88fe00b710d60963",
+   "evidence_level": "full_text",
+   "evidence_quote": "no association between spindle density and overnight retention",
+   "evidence_quotes": [
+    "no association between spindle density and overnight retention",
+    "Spindle density was measured",
+    "7"
+   ],
+   "evidences": [
+    {
+     "end": 275,
+     "match": "exact",
+     "page": null,
+     "score": 1.0,
+     "start": 213,
+     "text": "no association between spindle density and overnight retention"
+    }
+   ],
+   "flags": [
+    "some_quotes_not_found"
+   ],
+   "original_verdict": "supported",
+   "ref_id": "3",
+   "verdict": "supported"
+  },
+  {
+   "analysis": "",
+   "claim_hash": "h",
+   "claim_id": "cx",
+   "confidence": 1.0,
+   "evidence": null,
+   "evidence_hash": "digest:88fe00b710d60963",
+   "evidence_level": "full_text",
+   "evidence_quote": "not in the source at all, definitely",
+   "evidence_quotes": [
+    "not in the source at all, definitely"
+   ],
+   "evidences": [],
+   "flags": [
+    "invalid_verdict"
+   ],
+   "original_verdict": "made_up",
+   "ref_id": "3",
+   "verdict": "unverifiable"
+  },
+  {
+   "analysis": "",
+   "claim_hash": "h",
+   "claim_id": "cx",
+   "confidence": 0.0,
+   "evidence": {
+    "end": 275,
+    "match": "exact",
+    "page": null,
+    "score": 1.0,
+    "start": 213,
+    "text": "no association between spindle density and overnight retention"
+   },
+   "evidence_hash": "digest:88fe00b710d60963",
+   "evidence_level": "full_text",
+   "evidence_quote": "",
+   "evidence_quotes": [
+    "no association between spindle density and overnight retention"
+   ],
+   "evidences": [
+    {
+     "end": 275,
+     "match": "exact",
+     "page": null,
+     "score": 1.0,
+     "start": 213,
+     "text": "no association between spindle density and overnight retention"
+    }
+   ],
+   "flags": [],
+   "original_verdict": "contradicted",
+   "ref_id": "3",
+   "verdict": "contradicted"
+  },
+  {
+   "analysis": "Nothing found. The abstract alone cannot show that the full paper lacks support.",
+   "claim_hash": "h",
+   "claim_id": "cx",
+   "confidence": 0.9,
+   "evidence": null,
+   "evidence_hash": "digest:88fe00b710d60963",
+   "evidence_level": "abstract",
+   "evidence_quote": "",
+   "evidence_quotes": [],
+   "evidences": [],
+   "flags": [
+    "abstract_only",
+    "abstract_cannot_refute"
+   ],
+   "original_verdict": "unsupported",
+   "ref_id": "3",
+   "verdict": "unverifiable"
+  },
+  {
+   "analysis": "a",
+   "claim_hash": "h",
+   "claim_id": "cx",
+   "confidence": 0.5,
+   "evidence": null,
+   "evidence_hash": "digest:88fe00b710d60963",
+   "evidence_level": "none",
+   "evidence_quote": "no association between spindle density and overnight retention",
+   "evidence_quotes": [
+    "no association between spindle density and overnight retention",
+    "Spindle density was measured",
+    "7"
+   ],
+   "evidences": [],
+   "flags": [
+    "no_source"
+   ],
+   "original_verdict": "supported",
+   "ref_id": "3",
+   "verdict": "unverifiable"
+  }
+ ],
+ "word_diff": [
+  [
+   "=",
+   "systems "
+  ],
+  [
+   "-",
+   "hear, score, and represent"
+  ],
+  [
+   "+",
+   "transcribe speech of"
+  ],
+  [
+   "=",
+   " children"
+  ]
+ ],
+ "word_edits": [
+  [
+   [
+    8,
+    34,
+    "transcribe speech of"
+   ]
+  ],
+  [],
+  [
+   [
+    0,
+    0,
+    "added"
+   ]
+  ],
+  [
+   [
+    1,
+    3,
+    ""
+   ],
+   [
+    7,
+    7,
+    " e"
+   ]
+  ]
+ ]
+}
