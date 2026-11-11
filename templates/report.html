@@ -95,20 +95,24 @@ a.textbtn{text-decoration:none}
 
 /* ---------- title band ---------- */
 .hero{background:var(--surface);padding:18px 0 18px}
-.summary{background:var(--surface);padding:18px 0 6px}
+.summary{background:var(--surface);padding:16px 0 14px}
 /* The document name is a label for what was checked, not the page's headline: it is smaller and
    lighter than the product name above it. */
 .hero .eyebrow{margin:0 0 2px;font:500 12.5px/1.4 var(--font-heading);color:var(--muted)}
 .hero h1{font-size:clamp(17px,2.2vw,20px);font-weight:500;line-height:1.35;margin:0;color:var(--ink);overflow-wrap:anywhere}
-.bar{display:flex;height:6px;background:var(--line-light);margin:0;gap:2px}
-.bar button{border:0;padding:0;cursor:pointer;background:var(--c);min-width:6px;transition:flex-grow .4s}
-.bar button:hover{filter:brightness(1.12)}
 
 /* ---------- sticky filter row ---------- */
 .tabs{position:sticky;top:0;z-index:30;background:var(--surface);border-top:1px solid var(--line-light);border-bottom:1px solid var(--line)}
 .tabs .in{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:50px}
-.summary .chips{flex-wrap:wrap;overflow:visible;margin-top:8px}
-.summary .chip{padding:6px 10px 5px}
+/* The results are filters: outlined, rounded chips that fill in when switched on. The shape
+   sets them apart from the square action buttons and from the page tabs. */
+.summary .chips{flex-wrap:wrap;overflow:visible;align-items:center;gap:8px;margin:0}
+.filterlbl{font:500 12.5px/1 var(--font-heading);color:var(--muted);margin-right:2px}
+.summary .chip{height:32px;padding:0 13px 0 11px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);font-size:13.5px;transition:background-color .12s,border-color .12s}
+.summary .chip::before{border-radius:50%}
+.summary .chip:hover{background:var(--hover);border-color:var(--muted)}
+.summary .chip[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 16%,var(--surface));border-color:var(--c);box-shadow:inset 0 0 0 1px var(--c);font-weight:400}
+.summary .chip:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 .chips{display:flex;overflow-x:auto;scrollbar-width:none;flex:1;margin-left:-10px}
 .chips::-webkit-scrollbar{display:none}
 .chip{--c:var(--unv);display:inline-flex;align-items:center;gap:7px;border:0;border-bottom:3px solid transparent;background:none;padding:13px 10px 10px;cursor:pointer;white-space:nowrap;font:400 14px/1.4 var(--font-heading);color:var(--muted)}
@@ -165,7 +169,6 @@ a.textbtn{text-decoration:none}
 /* judged from an abstract only: striped, because only part of the source was read */
 .claim.prov{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--c) 20%,transparent) 0 4px,transparent 4px 8px)}
 .claim.prov:hover,.claim.prov.active{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--c) 34%,transparent) 0 4px,color-mix(in srgb,var(--c) 10%,transparent) 4px 8px)}
-.bar button.prov{background:repeating-linear-gradient(135deg,var(--c) 0 3px,color-mix(in srgb,var(--c) 30%,var(--surface)) 3px 6px)}
 .chip.g-prov{--c:var(--muted)}
 .chip.g-prov::before{background:repeating-linear-gradient(135deg,var(--muted) 0 2px,transparent 2px 4px);outline:1px solid var(--muted)}
 .provline{margin:6px 0 2px;font-size:13px;color:var(--muted)}
@@ -300,7 +303,7 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
   .tabs .in{min-height:0;justify-content:flex-end;padding-top:8px;padding-bottom:8px}
   .ptab{flex:1;min-width:0;padding:0 10px}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.bar button{transition:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.summary .chip{transition:none}}
 @media print{.tabs,.nav,.rail,.card,.iconbtn,.about,.hint,.pagetabs,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
 </style>
 </head>
@@ -316,7 +319,7 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
       <div class="about" id="about" role="dialog" aria-label="What Athetize does" hidden>
         <h2>What Athetize does</h2>
         <p>Athetize checks each claim in your paper against the source it cites. Every claim gets a result, the passage in the source that the result rests on, and a link to that source. Where a claim goes further than its source, it suggests a rewording.</p>
-        <p>The checking is done by AI and can be wrong. Use a result as a pointer to read the evidence, not as the last word.</p>
+        <p>The checking is done by AI and can be wrong. Read the quoted evidence yourself before you change your paper.</p>
         <p>Athetize runs inside Claude, which reads your paper and the sources. Apart from that, only reference details, such as titles and DOIs, are sent out, to public indexes that help find the sources.</p>
       </div>
     <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>
@@ -340,8 +343,7 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
 
 <section class="summary" id="summary">
   <div class="in">
-    <div class="bar" id="bar" aria-hidden="true"></div>
-    <div class="chips" id="chips" role="group" aria-label="Filter claims by result"></div>
+    <div class="chips" id="chips" role="group" aria-label="Filter claims by result"><span class="filterlbl" aria-hidden="true">Filter</span></div>
     <p class="provline" id="provLine" hidden></p>
   </div>
 </section>
@@ -530,7 +532,7 @@ items.forEach(function(it){counts[it.group]++;});
 function inGroup(it,g){return it.group===g||(g==='bad'&&it.failing)||(g==='prov'&&it.prov);}
 function shown(it){return Object.keys(active).some(function(g){return active[g]&&inGroup(it,g);});}
 var alsoFailing=items.filter(function(it){return it.failing;}).length;
-var chips=$('#chips'), bar=$('#bar');
+var chips=$('#chips');
 Object.keys(GLABEL).forEach(function(g){
   var b=el('button','chip g-'+g);b.type='button';b.setAttribute('aria-pressed','false');b.dataset.g=g;
   var n=counts[g]+(g==='bad'?alsoFailing:0);
@@ -538,17 +540,6 @@ Object.keys(GLABEL).forEach(function(g){
   if(g==='bad'&&alsoFailing)b.title='Includes '+alsoFailing+(alsoFailing===1?' claim that another source supports in part, but one':' claims that another source supports in part, but one')+' cited source does not support';
   b.addEventListener('click',function(){active[g]=!active[g];applyFilter();});
   chips.append(b);
-  /* The bar shows each group in two parts: read in full (solid), and judged from an
-     abstract only (striped), which is provisional. */
-  var part=items.filter(function(it){return it.group===g&&it.prov;}).length;
-  [[counts[g]-part,''],[part,' prov']].forEach(function(x){
-    if(!x[0])return;
-    var s=el('button','g-'+g+x[1]);s.type='button';s.style.flexGrow=x[0];
-    s.title=GLABEL[g]+(x[1]?', '+PROV_LABEL:'')+': '+x[0];
-    if(!x[1])s.style.background='var('+GVAR[g]+')';
-    s.addEventListener('click',function(){active[x[1]?'prov':g]=!active[x[1]?'prov':g];applyFilter();});
-    bar.append(s);
-  });
 });
 var provCount=items.filter(function(it){return it.prov;}).length;
 var judgedCount=items.filter(function(it){return it.group==='ok'||it.group==='part'||it.group==='bad';}).length;
@@ -561,12 +552,11 @@ if(provCount){
   var pl=$('#provLine');pl.hidden=false;
   pl.textContent=provCount+' of '+count(judgedCount,'result rests','results rest')+' on an abstract only (striped). '+(provCount===1?'It is':'They are')+' provisional: the full text is what settles '+(provCount===1?'it.':'them.');
 }
-bar.removeAttribute('aria-hidden');
 function anyActive(){return Object.keys(active).some(function(k){return active[k];});}
 function applyFilter(){
   var any=anyActive();
   items.forEach(function(it){it.el.classList.toggle('dim',any&&!shown(it));});
-  [].forEach.call(chips.children,function(c){c.setAttribute('aria-pressed',active[c.dataset.g]?'true':'false');});
+  [].forEach.call(chips.querySelectorAll('.chip'),function(c){c.setAttribute('aria-pressed',active[c.dataset.g]?'true':'false');});
   updateNav();placeRail();
 }
 
@@ -1151,11 +1141,8 @@ function renderNeedSrc(){
   if(!box||!n||!n.need_source)return;
   box.hidden=false;
   var txt=el('div','txt');
-  var kinds=[];
-  if(n.abstract_only)kinds.push(count(n.abstract_only,'has','have')+' only an abstract');
-  if(n.no_text)kinds.push(count(n.no_text,'has','have')+' nothing');
-  txt.append(el('b',null,n.need_source+' of '+count(n.references,'source has','sources have')+' no full text'));
-  txt.append(document.createTextNode(': '+kinds.join(' and ')+'. '+count(n.claims_relying,'claim relies','claims rely')+' on them, so '+(n.claims_relying===1?'it is':'they are')+' marked \u201ccan\u2019t verify\u201d or, where only an abstract was read, provisional.'));
+  txt.append(el('b',null,n.need_source+' of '+count(n.references,'source has','sources have')+' no full text.'));
+  txt.append(document.createTextNode(' '+count(n.claims_relying,'claim','claims')+' can\u2019t be fully checked yet.'));
   box.append(txt);
   var act=el('div','act');
   var b=el('button',null,'Review Missing Sources');b.type='button';

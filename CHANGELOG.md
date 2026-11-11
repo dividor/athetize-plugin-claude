@@ -2,6 +2,13 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.12] - 2026-11-10
+
+### Changed
+- The coloured bar above the results is removed. The results (Supported, Partial and so on) are now filter chips: outlined and rounded, with a "Filter" label, and they fill in when switched on
+- The box about missing sources is one short line: how many sources have no full text and how many claims cannot be fully checked yet
+- The information panel says plainly to read the quoted evidence before changing the paper
+
 ## [0.7.11] - 2026-11-10
 
 ### Added
