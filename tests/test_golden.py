@@ -33,6 +33,7 @@ from pl_core import Work, jload, jsave
 
 ROOT = Path(__file__).resolve().parent.parent
 FIX = ROOT / "tests" / "fixtures" / "sample"
+REPORT_TEMPLATE = ROOT / "templates" / "report.html"
 GOLDEN = FIX / "golden.json"
 
 VOLATILE_KEYS = {
@@ -336,10 +337,20 @@ class GoldenTest(unittest.TestCase):
         out["suggest_prepare_again"] = pl_core.suggest_prepare(s.w)
         out["build_data"] = pl_core.build_data(s.w)
         out["suggestion_notes"] = pl_core.suggestion_notes(s.w)
-        report = pl_core.build_report(s.w).read_text("utf-8")
-        out["report_html"] = re.sub(
-            r'"(generated|version)": "[^"]*"', r'"\1": "<scrubbed>"', report
-        )
+        out["report_page_data"] = cls._data_in_page(pl_core.build_report(s.w).read_text("utf-8"))
+
+    @staticmethod
+    def _data_in_page(report: str) -> str:
+        """The data a built report carries, after checking the page around it is the template.
+
+        The template is a file of its own under version control, so the golden file keeps
+        only what the build puts into it.
+        """
+        head, tail = REPORT_TEMPLATE.read_text("utf-8").split("/*__ATHETIZE_DATA__*/null")
+        if not (report.startswith(head) and report.endswith(tail)):
+            raise AssertionError("the built report is not the template around its data")
+        data = report[len(head) : len(report) - len(tail)]
+        return re.sub(r'"(generated|version)": "[^"]*"', r'"\1": "<scrubbed>"', data)
 
     @classmethod
     def _collect_carry_over(cls, out, s):

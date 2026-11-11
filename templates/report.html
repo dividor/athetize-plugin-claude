@@ -96,8 +96,12 @@ a.textbtn{text-decoration:none}
 
 /* ---------- title band ---------- */
 .hero{background:var(--surface);padding:18px 0 18px}
-.hero .in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px}
-.hero .doc{flex:1 1 260px;min-width:0}
+.docrow{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 24px}
+.docrow h1{flex:1 1 260px;min-width:0}
+/* the download is a plain link on the document's own line, its text level with the name */
+.dl{flex:none;display:inline-flex;align-items:baseline;gap:6px;font:500 14px/1.35 var(--font-heading);color:var(--link);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.dl:hover{color:var(--primary-dark)}
+.dl svg.ic{width:15px;height:15px;align-self:center}
 /* The document name is a label for what was checked, not the page's headline: it is smaller and
    lighter than the product name above it. */
 .hero .eyebrow{margin:0 0 2px;font:500 12.5px/1.4 var(--font-heading);color:var(--muted)}
@@ -361,11 +365,11 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
 
 <section class="hero">
   <div class="in">
-    <div class="doc">
-      <p class="eyebrow">Document checked</p>
+    <p class="eyebrow">Document checked</p>
+    <div class="docrow">
       <h1 id="title"></h1>
+      <a class="dl" id="wordReport" hidden title="Download the report as a Word document: your paper with every suggested edit as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download Report</a>
     </div>
-    <a class="textbtn primary" id="wordReport" hidden title="Download the report as a Word document: your paper with every suggested edit as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Download Report</span></a>
   </div>
 </section>
 
@@ -1155,8 +1159,8 @@ function showAddMenu(open){addMenu.hidden=!open;addBtn.setAttribute('aria-expand
    together. Elsewhere the browser's two dialogs are offered, since a page cannot do both. */
 function chooseOnThisComputer(){
   if(adding)return;
-  adding=true;addBtn.disabled=true;
-  addNote('Adding sources',['Choose the papers, or a folder that holds them, in the window that has opened. Each file is read and matched to its reference.']);
+  /* the system's own chooser is all that opens: no box on the page while it is up */
+  adding=true;addBtn.disabled=true;addBox.hidden=true;
   api('choose',{method:'POST'}).then(function(res){
     if(res.cancelled){addBox.hidden=true;return;}
     res.skipped={other:res.other_files||0,same:[],known:[]};

@@ -2,6 +2,15 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.20] - 2026-11-10
+
+### Changed
+- Download Report is a plain link on the document's own line, its text level with the document's name, where it was a button
+- Pressing Add sources opens the chooser and nothing else. The box of text that appeared on the Sources page while the chooser was open is gone; what was added is still shown afterwards
+
+### Fixed
+- The golden test file had grown past the repository's 256 KB limit for text files, because it kept a full copy of the report template. The test now checks that a built report is the template around its data and keeps only that data
+
 ## [0.7.19] - 2026-11-10
 
 ### Changed
