@@ -2,6 +2,16 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.21] - 2026-11-10
+
+### Added
+- A cog at the top opens Settings, with one setting: the contact email that Unpaywall asks for. It is saved or removed through the helper, checked to be a plain address, and shown back only with the name masked. A source that was not looked up on Unpaywall for want of an email has an "Add email" link that opens it
+- On the Sources page, "Found in Crossref" and "Found in OpenAlex" are links to the record there
+
+### Changed
+- On the Sources page the label "Cited for" reads "Citations", and Upload document sits at the right of that same line
+- The command `config set-email` uses the same strict check of the address
+
 ## [0.7.20] - 2026-11-10
 
 ### Changed

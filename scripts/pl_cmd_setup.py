@@ -12,6 +12,7 @@ import pl_core
 import pl_http
 import pl_ingest
 import pl_text
+import pl_workspace
 from pl_core import Work, jsave
 
 # Services that `doctor` tries to reach, in the order they are tried and reported.
@@ -90,11 +91,10 @@ def cmd_doctor(args):
 def cmd_config(args):
     cfg = pl_core.load_config()
     if args.action == "set-email":
-        if not args.value or "@" not in args.value:
-            raise SystemExit("Give a valid email address.")
-        stored = pl_core.jload(pl_core.config_path(), {}) or {}
-        stored["email"] = args.value
-        pl_core.save_config(stored)
+        try:
+            pl_workspace.set_email(pl_workspace.clean_email(args.value or ""))
+        except ValueError as exc:
+            raise SystemExit(str(exc)) from exc
         print(f"Saved contact email to {pl_core.config_path()}")
     elif args.action in ("set-folder", "set-proxy"):
         key = "download_folder" if args.action == "set-folder" else "library_doi_proxy"
@@ -108,8 +108,7 @@ def cmd_config(args):
     else:
         shown = dict(cfg)
         if shown.get("email"):
-            user, _, domain = shown["email"].partition("@")
-            shown["email"] = user[:1] + "***@" + domain
+            shown["email"] = pl_workspace.masked_email(shown["email"])
         out(shown)
 
 

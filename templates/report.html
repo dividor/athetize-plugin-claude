@@ -74,6 +74,13 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 .about h2{font-size:1rem;margin:0 0 8px}
 .about p{margin:0 0 10px;font-size:13.5px;line-height:1.55;color:var(--ink)}
 .about p.quiet{color:var(--muted)}
+.setlbl{display:block;margin:0 0 4px;font:500 12.5px/1.4 var(--font-heading);color:var(--muted)}
+.setin{display:block;width:100%;height:36px;padding:0 10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:14px/1 var(--font-body)}
+.setin:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
+.setin:disabled{background:var(--soft);color:var(--muted)}
+.setact{display:flex;gap:8px;margin:10px 0 0}
+.about p.setmsg{margin:8px 0 10px;min-height:1.2em;font-size:13px;color:var(--muted)}
+.about p.setmsg.bad{color:var(--bad)}
 .about p.more{margin:12px 0 0;padding-top:10px;border-top:1px solid var(--line-light);font-size:13px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 /* ---------- page tabs ---------- */
@@ -318,7 +325,10 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
 .srow .why{grid-column:2;font-size:12.5px;color:var(--muted)}
 .srow.flag{border-left:3px solid var(--part)}
 /* a row's own action is outlined, so the one filled button on the page stays Add sources */
-.srow .rowact{grid-column:2;margin-top:10px}
+.srow .citeline{grid-column:2;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-top:6px}
+.srow .citeline .used{flex:1 1 auto;margin:0}
+.pill a{color:inherit}
+.pill a:hover{color:var(--ink)}
 .textbtn.small{height:30px;padding:0 11px;font-size:12.5px;gap:6px}
 .textbtn.small svg.ic{width:15px;height:15px}
 .srow .rownote{grid-column:2;margin-top:8px;font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
@@ -350,6 +360,15 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
       <span class="brand-name">Athetize <span class="brand-sub">Fact Checker</span></span>
     </div>
     <div class="topact">
+      <button class="iconbtn" id="settingsBtn" type="button" aria-label="Settings" title="Settings" aria-expanded="false" aria-controls="settings"><svg class="ic" viewBox="0 0 24 24" style="stroke-width:1.7" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      <div class="about" id="settings" role="dialog" aria-label="Settings" hidden>
+        <h2>Settings</h2>
+        <label class="setlbl" for="setEmail">Contact email</label>
+        <input class="setin" type="email" id="setEmail" autocomplete="email" spellcheck="false" placeholder="name@university.edu">
+        <div class="setact"><button class="textbtn primary" id="setSave" type="button">Save</button><button class="textbtn" id="setRemove" type="button" hidden>Remove</button></div>
+        <p class="setmsg" id="setMsg" role="status"></p>
+        <p class="quiet">Unpaywall, a free index of open-access papers, asks for a contact email with each lookup. With one saved, Athetize can look there for the sources it could not find. The address is kept on this computer and sent with lookups to Unpaywall and the other public indexes Athetize uses.</p>
+      </div>
       <button class="iconbtn" id="aboutBtn" type="button" aria-label="What Athetize does" title="What Athetize does" aria-expanded="false" aria-controls="about"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.2"/></svg></button>
       <div class="about" id="about" role="dialog" aria-label="What Athetize does" hidden>
         <h2>What Athetize does</h2>
@@ -438,9 +457,23 @@ var EXISTS={verified:'Found in a citation database',partial_match:'Database reco
 var EXISTS_MEANS={verified:'A record matching this reference was found, so the work exists as cited.',partial_match:'The closest record differs from the reference in part, so it was not relied on.',mismatch:'The record behind the printed DOI is a different work.',not_found:'No record of this work was found in Crossref or OpenAlex.'};
 function existsPill(r){
   var text=r.exists==='verified'&&DATABASE[r.matched_source]?'Found in '+DATABASE[r.matched_source]:(EXISTS[r.exists]||r.exists);
-  var p=pill(text,r.exists==='verified'?'var(--ok)':'var(--part)');if(EXISTS_MEANS[r.exists])p.title=EXISTS_MEANS[r.exists];return p;
+  var url=r.exists==='verified'?safeUrl(r.matched_url):null;
+  var p=pill(url?'':text,r.exists==='verified'?'var(--ok)':'var(--part)');if(EXISTS_MEANS[r.exists])p.title=EXISTS_MEANS[r.exists];
+  /* the label leads to the record itself in that database */
+  if(url){var a=el('a','ext',text);a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.title='See the record. Opens in a new tab';p.append(a);}
+  return p;
 }
-function whyLine(reasons,cls){return el('div',cls,'Why there is no full text: '+reasons.join('; ')+'.');}
+/* True when a source was not looked up on Unpaywall because no contact email is set. */
+function needsEmail(reasons){return !hasEmail&&reasons.some(function(t){return /Unpaywall/.test(t)&&/no contact email/.test(t);});}
+function whyLine(reasons,cls){
+  var d=el('div',cls,'Why there is no full text: '+reasons.join('; ')+'.');
+  if(needsEmail(reasons)){
+    var a=el('a',null,'Add email');a.href='#';
+    a.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();openSettings();});
+    d.append(document.createTextNode(' '),a);
+  }
+  return d;
+}
 
 function $(s,r){return (r||document).querySelector(s);}
 function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
@@ -895,7 +928,7 @@ window.addEventListener('resize',function(){placeRail();if(openIdx>=0&&!sheetMod
 window.addEventListener('load',placeRail);
 
 /* ---------- sources page ---------- */
-var srcList=$('#srcList'), needsOnly=false, rowNote={};
+var srcList=$('#srcList'), needsOnly=false, rowNote={}, hasEmail=false;
 function count(n,one,many){return n+' '+(n===1?one:many);}
 function needsSource(r){return r.status==='missing'||r.status==='abstract_only'||r.status==='unresolved';}
 function needCount(){return DATA.refs.filter(needsSource).length;}
@@ -924,18 +957,20 @@ function renderSources(){
     row.append(pills);
     if(r.matched_title&&(r.exists==='partial_match'||r.exists==='mismatch')){row.append(el('div','more','Closest database record: \u201c'+r.matched_title+'\u201d. Not used: the citation and link above are the paper\u2019s own.'));}
     if(r.why_missing&&r.why_missing.length)row.append(whyLine(r.why_missing,'why'));
+    var ub=null;
     if(needs){
       /* the person says which reference the file is for by pressing its row: nothing is matched */
-      var ub=el('button','textbtn small');ub.type='button';ub.append(icon('plus'),document.createTextNode('Upload document'));
+      ub=el('button','textbtn small');ub.type='button';ub.append(icon('plus'),document.createTextNode('Upload document'));
       ub.setAttribute('aria-label','Upload the document for reference '+r.id);
       ub.disabled=adding===true;
       ub.addEventListener('click',function(){uploadFor(r);});
-      var act=el('div','rowact');act.append(ub);row.append(act);
     }
-    if(rowNote[r.id])row.append(el('div','rownote'+(rowNote[r.id].bad?' bad':''),rowNote[r.id].text));
-    if(r.cited_by&&r.cited_by.length){
-      var used=el('div','used','Cited for ');
-      r.cited_by.forEach(function(cid){
+    var cited=r.cited_by&&r.cited_by.length;
+    if(cited||ub){
+      /* one line: the claims that cite this source on the left, its upload on the right */
+      var line=el('div','citeline'),used=el('div','used',cited?'Citations ':'');
+      line.append(used);if(ub)line.append(ub);
+      (r.cited_by||[]).forEach(function(cid){
         var idx=items.findIndex(function(it){return it.kind==='claim'&&it.d.id===cid;});
         if(idx<0)return;
         /* coloured by what this source did for the claim, with the legend's colours */
@@ -945,8 +980,9 @@ function renderSources(){
         a.addEventListener('click',function(ev){ev.preventDefault();if(openIdx===idx&&cardAnchor===a)closeCard();else openCard(idx,true,true,a);});
         used.append(a);
       });
-      row.append(used);
+      row.append(line);
     }
+    if(rowNote[r.id])row.append(el('div','rownote'+(rowNote[r.id].bad?' bad':''),rowNote[r.id].text));
     var fixes=(r.suggestions||[]).filter(function(id){return SUG[id];});
     var differs=r.discrepancies&&r.discrepancies.length;
     if(fixes.length||differs){
@@ -1197,7 +1233,7 @@ $('#sourcesView').addEventListener('drop',function(e){
 if(location.protocol==='http:'&&/^(127\.0\.0\.1|localhost)$/.test(location.hostname)){
   addBtn.disabled=true;
   api('ping').then(function(j){helper=j.ok===true;oneChooser=j.chooser===true;},function(){helper=false;})
-    .then(function(){addBtn.disabled=false;if(helper&&wordName)offerWord('word.docx');});
+    .then(function(){addBtn.disabled=false;if(helper&&wordName)offerWord('word.docx');if(helper)api('settings').then(function(j){gotSettings(j,false);},function(){});});
 }
 
 /* ---------- missing-sources notice ---------- */
@@ -1288,14 +1324,52 @@ document.addEventListener('click',function(e){
 },true);
 
 /* ---------- what Athetize does ---------- */
-var aboutBtn=$('#aboutBtn'),about=$('#about');
+var aboutBtn=$('#aboutBtn'),about=$('#about'),setBtn=$('#settingsBtn'),setBox=$('#settings');
 /* the plugin's page: its source code, its documentation and where to report a problem */
 var home=safeUrl(DATA.meta.homepage);
 if(home)$('#aboutLink').href=home;else $('#aboutMore').hidden=true;
-function showAbout(open){about.hidden=!open;aboutBtn.setAttribute('aria-expanded',open?'true':'false');}
+function showAbout(open){about.hidden=!open;aboutBtn.setAttribute('aria-expanded',open?'true':'false');if(open)showSettings(false);}
 aboutBtn.addEventListener('click',function(){showAbout(about.hidden);});
-document.addEventListener('click',function(e){if(!about.hidden&&!e.target.closest('.topact'))showAbout(false);});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!about.hidden){showAbout(false);aboutBtn.focus();}});
+document.addEventListener('click',function(e){if(e.target.closest('.topact'))return;if(!about.hidden)showAbout(false);if(!setBox.hidden)showSettings(false);});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape')return;
+  if(!about.hidden){showAbout(false);aboutBtn.focus();}
+  if(!setBox.hidden){showSettings(false);setBtn.focus();}
+});
+
+/* ---------- settings ----------
+   One setting: the contact email that Unpaywall asks for. It is saved by the plugin's helper
+   on this computer, so it can be changed only when the helper is showing the report. */
+function setSay(text,bad){var m=$('#setMsg');m.textContent=text;m.classList.toggle('bad',bad===true);}
+function showSettings(open){
+  setBox.hidden=!open;setBtn.setAttribute('aria-expanded',open?'true':'false');
+  if(!open)return;
+  showAbout(false);
+  $('#setEmail').disabled=!helper;$('#setSave').disabled=!helper;
+  if(!helper)setSay('Settings can be changed when Claude has opened this report for you.');
+  else $('#setEmail').focus();
+}
+function openSettings(){closeCard();window.scrollTo({top:0,behavior:'instant'});showSettings(true);}
+function gotSettings(j,saved){
+  hasEmail=j.has_email===true;
+  $('#setRemove').hidden=!hasEmail;$('#setEmail').value='';
+  setSay(hasEmail?(saved?'Saved: ':'An email is saved: ')+j.email+'.'+(saved?' It is used the next time Claude looks for the sources: tell Claude \u201clook for the sources again\u201d.':''):(saved?'The email was removed.':'No email is saved.'));
+  renderSources();
+}
+function saveEmail(value){
+  $('#setSave').disabled=true;
+  api('settings',{method:'POST',body:JSON.stringify({email:value})})
+    .then(function(j){gotSettings(j,true);},function(e){setSay(e.message,true);})
+    .then(function(){$('#setSave').disabled=false;});
+}
+setBtn.addEventListener('click',function(){showSettings(setBox.hidden);});
+$('#setSave').addEventListener('click',function(){
+  var v=$('#setEmail').value.trim();
+  if(!v){setSay('Type an email address first.',true);$('#setEmail').focus();return;}
+  saveEmail(v);
+});
+$('#setEmail').addEventListener('keydown',function(e){if(e.key==='Enter')$('#setSave').click();});
+$('#setRemove').addEventListener('click',function(){saveEmail('');});
 
 /* ---------- theme ---------- */
 $('#theme').addEventListener('click',function(){

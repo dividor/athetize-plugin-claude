@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import tempfile
 from pathlib import Path
 
@@ -84,6 +85,39 @@ def load_config() -> dict:
     if os.environ.get("ATHETIZE_EMAIL"):
         cfg["email"] = os.environ["ATHETIZE_EMAIL"]
     return cfg
+
+
+# An ordinary address and nothing else: it is sent in a request header, so spaces, line
+# breaks and brackets must never get through.
+_EMAIL = re.compile(
+    r"[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?"
+    r"(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+"
+)
+_EMAIL_MAX = 254
+
+
+def clean_email(value: str) -> str:
+    """The contact email as it will be stored; ValueError when it is not a plain address."""
+    email = value.strip()
+    if len(email) > _EMAIL_MAX or not _EMAIL.fullmatch(email):
+        raise ValueError("Give a valid email address, such as name@university.edu.")
+    return email
+
+
+def masked_email(email: str) -> str:
+    """An email with all but the first letter of its name hidden, for showing on screen."""
+    user, _, domain = email.partition("@")
+    return user[:1] + "***@" + domain
+
+
+def set_email(value: str) -> None:
+    """Store the contact email in the configuration file; an empty value removes it."""
+    stored = jload(config_path(), {}) or {}
+    if value.strip():
+        stored["email"] = clean_email(value)
+    else:
+        stored.pop("email", None)
+    save_config(stored)
 
 
 def save_config(cfg: dict) -> None:

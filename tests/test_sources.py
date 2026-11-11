@@ -18,6 +18,7 @@ import pl_core
 import pl_http
 import pl_identify
 import pl_ingest
+import pl_report
 import pl_resolve
 import pl_text
 from pl_core import Work, jload, jsave
@@ -385,6 +386,27 @@ class AddSourceTests(unittest.TestCase):
             )
 
 
+class RecordLinkTests(unittest.TestCase):
+    """The label that says where a reference was found leads to its record there."""
+
+    def test_record_page_for_each_database(self):
+        doi = "10.1029/2007je003031"
+        self.assertEqual(
+            pl_report.record_url({"source": "crossref", "doi": doi}),
+            "https://search.crossref.org/search/works?from_ui=yes&q=10.1029/2007je003031",
+        )
+        self.assertEqual(
+            pl_report.record_url({"source": "openalex", "doi": doi}),
+            "https://openalex.org/works?filter=doi:10.1029/2007je003031",
+        )
+        self.assertIn("%3C", pl_report.record_url({"source": "crossref", "doi": "10.1/a<b"}))
+
+    def test_no_link_without_a_doi_or_a_known_database(self):
+        self.assertIsNone(pl_report.record_url(None))
+        self.assertIsNone(pl_report.record_url({"source": "crossref"}))
+        self.assertIsNone(pl_report.record_url({"source": "elsewhere", "doi": "10.1/x"}))
+
+
 class SourcesNeededTests(unittest.TestCase):
     """The counts used to ask the person for sources that could not be downloaded."""
 
@@ -611,6 +633,9 @@ class SourcesNeededTests(unittest.TestCase):
         self.assertNotIn("drop them on this page", html)
         self.assertIn('id="foot"', html)
         self.assertIn('<a class="dl" id="wordReport"', html)
+        self.assertIn('id="settingsBtn"', html)
+        self.assertIn("'Citations '", html)
+        self.assertNotIn("Cited for", html)
         self.assertIn("Download Report</a>", html)
         self.assertNotIn("in the window that has opened", html)
         self.assertIn("Review Missing Sources", html)

@@ -26,6 +26,7 @@ from typing import cast
 
 import pl_core
 import pl_resolve
+import pl_workspace
 from pl_cmd_setup import out
 from pl_cmd_sources import NotAdded, add_file_for, import_paths, source_hashes
 from pl_identify import _ref_title
@@ -43,6 +44,8 @@ _DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document
 _CHUNK = 64 * 1024
 # Largest list of file hashes the page may send, in bytes.
 _MAX_LIST = 1024 * 1024
+# Largest settings message the page may send, in bytes.
+_MAX_SETTING = 2048
 _RESULT_LISTS = ("matched", "ambiguous", "unmatched", "duplicates", "already_imported")
 
 
@@ -123,6 +126,7 @@ class AddSources:
         self.added: list[dict] = []
         self.left: dict[str, str] = {}
         self.chosen: list[str] = []
+        self.email_changed = False
         self.finished = False
         self.last_seen = time.monotonic()
 
@@ -259,6 +263,27 @@ class AddSources:
             m["title"] = self._title(refs[m["ref"]])
             self.added.append({k: m[k] for k in ("file", "ref", "status")})
 
+    def settings(self) -> dict:
+        """The settings the page can show: whether a contact email is stored, never the address."""
+        email = pl_workspace.load_config().get("email") or ""
+        shown = pl_workspace.masked_email(email) if email else ""
+        return {"has_email": bool(email), "email": shown}
+
+    def save_settings(self, body: bytes) -> dict:
+        """Store the contact email the person typed; an empty one removes it."""
+        try:
+            value = json.loads(body.decode("utf-8"))["email"]
+        except (ValueError, KeyError, TypeError) as exc:
+            raise Refused(400, "The setting could not be read.") from exc
+        if not isinstance(value, str):
+            raise Refused(400, "The setting could not be read.")
+        try:
+            pl_workspace.set_email(value)
+        except ValueError as refused:
+            raise Refused(422, str(refused)) from refused
+        self.email_changed = True
+        return self.settings()
+
     def known(self, body: bytes) -> dict:
         """Which of the content hashes the page asks about are already among the sources."""
         try:
@@ -287,8 +312,18 @@ class AddSources:
             "not_recognised": [{"file": f, "why": why} for f, why in sorted(self.left.items())],
             "not_recognised_folder": str(waiting) if waiting.is_dir() else None,
             "chosen_in_system_chooser": self.chosen,
-            "next": "Run the recheck step." if self.added else "Nothing was added.",
+            "email_changed": self.email_changed,
+            "next": self._next_step(),
         }
+
+    def _next_step(self) -> str:
+        """What Claude should do once the helper has stopped."""
+        if self.email_changed:
+            return (
+                "The contact email changed. Run resolve again so open-access copies are "
+                "looked up with it, then the recheck step."
+            )
+        return "Run the recheck step." if self.added else "Nothing was added."
 
 
 class _Handler(BaseHTTPRequestHandler):
@@ -333,6 +368,7 @@ class _Handler(BaseHTTPRequestHandler):
                 "api/ping": lambda app, q: self._json(
                     200, {"ok": True, "chooser": has_system_chooser()}
                 ),
+                "api/settings": lambda app, q: self._json(200, app.settings()),
                 "word.docx": self._word,
             },
         )
@@ -344,6 +380,7 @@ class _Handler(BaseHTTPRequestHandler):
                 "api/upload": self._upload,
                 "api/upload-for": self._upload_for,
                 "api/known": self._known,
+                "api/settings": self._settings,
                 "api/choose": lambda app, q: self._json(200, app.choose()),
                 "api/import": lambda app, q: self._json(200, app.take_in()),
                 "api/done": self._done,
@@ -374,6 +411,12 @@ class _Handler(BaseHTTPRequestHandler):
         if not length.isdigit() or int(length) > _MAX_LIST:
             raise Refused(413, "The list of files is too long.")
         self._json(200, app.known(self.rfile.read(int(length))))
+
+    def _settings(self, app: AddSources, query: dict) -> None:
+        length = self.headers.get("Content-Length") or ""
+        if not length.isdigit() or int(length) > _MAX_SETTING:
+            raise Refused(413, "The setting is too long.")
+        self._json(200, app.save_settings(self.rfile.read(int(length))))
 
     def _done(self, app: AddSources, query: dict) -> None:
         app.finished = True

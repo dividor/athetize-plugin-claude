@@ -415,6 +415,22 @@ def missing_reasons(entry: dict) -> list[str]:
     return reasons[:4]
 
 
+# The page of each citation database that shows the record for a DOI.
+_RECORD_PAGES = {
+    "crossref": "https://search.crossref.org/search/works?from_ui=yes&q={doi}",
+    "openalex": "https://openalex.org/works?filter=doi:{doi}",
+}
+
+
+def record_url(matched: dict | None) -> str | None:
+    """Where the database record a reference was matched to can be seen; None without a DOI."""
+    page = _RECORD_PAGES.get((matched or {}).get("source") or "")
+    doi = (matched or {}).get("doi")
+    if not page or not doi:
+        return None
+    return page.format(doi=urllib.parse.quote(doi, safe="/"))
+
+
 def _report_ref(rid: str, r: dict, e: dict, out_claims: list[dict], sugs: list[dict]) -> dict:
     """Report entry for one reference: how it was resolved and which claims cite it."""
     return {
@@ -429,6 +445,7 @@ def _report_ref(rid: str, r: dict, e: dict, out_claims: list[dict], sugs: list[d
         "retraction_notes": e.get("retraction_notes", []),
         "discrepancies": e.get("discrepancies", []),
         "matched_source": (e.get("matched") or {}).get("source"),
+        "matched_url": record_url(e.get("matched")),
         "why_missing": missing_reasons(e) if e.get("status") in NEEDS_SOURCE else [],
         "local_file": e.get("local_file"),
         "evidence_level": e.get("evidence_level", "none"),

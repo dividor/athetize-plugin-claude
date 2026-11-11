@@ -19,6 +19,7 @@ from unittest import mock
 import pl_http
 import pl_ingest
 import pl_serve
+import pl_workspace
 from pl_core import Work, jsave
 
 FIX = Path(__file__).resolve().parent / "fixtures" / "sample"
@@ -40,6 +41,8 @@ def _offline(*a, **k):
 PLAIN = (
     "The harbour ledger lists cargo, tides and berths for each week of the season. " * 12
 ).encode()
+
+NO_EMAIL = {"has_email": False, "email": ""}
 
 
 class HelperTests(unittest.TestCase):
@@ -298,12 +301,57 @@ class HelperTests(unittest.TestCase):
         self.assertEqual(self.app.added, [])
         self.assertEqual(self.post_json("api/upload-for?ref=3&name=tool.exe", PLAIN)[0], 415)
 
+    def test_contact_email_is_saved_shown_masked_and_removed(self):
+        self.assertEqual(self.ask("GET", "api/settings")[0], 200)
+        self.assertEqual(self.post_json("api/settings", b"{}")[0], 400)
+        self.assertEqual(json.loads(self.ask("GET", "api/settings")[1]), NO_EMAIL)
+        status, got = self.post_json("api/settings", b'{"email": " reader@example.org "}')
+        self.assertEqual((status, got), (200, {"has_email": True, "email": "r***@example.org"}))
+        self.assertEqual(pl_workspace.load_config()["email"], "reader@example.org")
+        self.assertEqual(json.loads(self.ask("GET", "api/settings")[1]), got)
+        self.assertEqual(self.post_json("api/settings", b'{"email": ""}'), (200, NO_EMAIL))
+        self.assertNotIn("email", pl_workspace.load_config())
+
+    def test_only_a_plain_address_is_accepted_as_the_contact_email(self):
+        # the address goes into a request header, so nothing that could break one is stored
+        for bad in ("reader", "reader@host", "a b@example.org", "x@example.org\r\nX-Evil: 1", 7):
+            body = json.dumps({"email": bad}).encode()
+            status, got = self.post_json("api/settings", body)
+            self.assertIn(status, (400, 422), bad)
+            self.assertIn("error", got)
+        self.assertNotIn("email", pl_workspace.load_config())
+        self.assertFalse(self.app.email_changed)
+        self.assertEqual(self.post_json("api/settings", b"x" * 5000)[0], 413)
+
+    def test_a_changed_email_tells_claude_to_look_for_the_sources_again(self):
+        self.post_json("api/settings", b'{"email": "reader@example.org"}')
+        self.post_json("api/done")
+        self.thread.join(5)
+        self.assertTrue(self.summary["email_changed"])
+        self.assertIn("resolve again", self.summary["next"])
+
     def test_importing_with_nothing_waiting_adds_nothing(self):
         status, result = self.post_json("api/import")
         self.assertEqual((status, result["matched"], result["unmatched"]), (200, [], []))
 
 
 class HelperPiecesTests(unittest.TestCase):
+    def test_email_check_and_mask(self):
+        self.assertEqual(
+            pl_workspace.clean_email(" a.b+c@uni.example.edu "), "a.b+c@uni.example.edu"
+        )
+        for bad in (
+            "",
+            "a@b",
+            "@example.org",
+            "a@@example.org",
+            "a@example..org",
+            "a" * 250 + "@x.org",
+        ):
+            with self.assertRaises(ValueError):
+                pl_workspace.clean_email(bad)
+        self.assertEqual(pl_workspace.masked_email("reader@example.org"), "r***@example.org")
+
     def test_helper_stops_by_itself_when_nothing_asks(self):
         with tempfile.TemporaryDirectory() as d:
             work = Work(d)
