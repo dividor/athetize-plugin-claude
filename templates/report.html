@@ -104,15 +104,14 @@ a.textbtn{text-decoration:none}
 /* ---------- sticky filter row ---------- */
 .tabs{position:sticky;top:0;z-index:30;background:var(--surface);border-top:1px solid var(--line-light);border-bottom:1px solid var(--line)}
 .tabs .in{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:50px}
-/* The results are filters: outlined, rounded chips that fill in when switched on. The shape
-   sets them apart from the square action buttons and from the page tabs. */
-.summary .chips{flex-wrap:wrap;overflow:visible;align-items:center;gap:8px;margin:0}
-.filterlbl{font:500 12.5px/1 var(--font-heading);color:var(--muted);margin-right:2px}
-.summary .chip{height:32px;padding:0 13px 0 11px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);font-size:13.5px;transition:background-color .12s,border-color .12s}
-.summary .chip::before{border-radius:50%}
-.summary .chip:hover{background:var(--hover);border-color:var(--muted)}
-.summary .chip[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 16%,var(--surface));border-color:var(--c);box-shadow:inset 0 0 0 1px var(--c);font-weight:400}
-.summary .chip:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+/* The results are filters, set as one ruled strip of square toggles. A filter that is on
+   takes the look of the highlight it picks out in the paper: a soft tint over a coloured rule. */
+.summary .chips{flex-wrap:wrap;overflow:visible;margin:0;padding:0 1px 1px 0}
+.summary .chip{position:relative;height:36px;padding:0 16px 0 14px;margin:0 -1px -1px 0;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:13.5px;transition:background-color .12s}
+.summary .chip::before{width:8px;height:8px}
+.summary .chip:hover{background:var(--hover)}
+.summary .chip[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 12%,var(--surface));box-shadow:inset 0 -2px 0 var(--c);border-color:var(--line);font-weight:400}
+.summary .chip:focus-visible{outline:2px solid var(--primary);outline-offset:-2px;z-index:1}
 .chips{display:flex;overflow-x:auto;scrollbar-width:none;flex:1;margin-left:-10px}
 .chips::-webkit-scrollbar{display:none}
 .chip{--c:var(--unv);display:inline-flex;align-items:center;gap:7px;border:0;border-bottom:3px solid transparent;background:none;padding:13px 10px 10px;cursor:pointer;white-space:nowrap;font:400 14px/1.4 var(--font-heading);color:var(--muted)}
@@ -343,7 +342,7 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
 
 <section class="summary" id="summary">
   <div class="in">
-    <div class="chips" id="chips" role="group" aria-label="Filter claims by result"><span class="filterlbl" aria-hidden="true">Filter</span></div>
+    <div class="chips" id="chips" role="group" aria-label="Filter claims by result"></div>
     <p class="provline" id="provLine" hidden></p>
   </div>
 </section>
@@ -537,6 +536,7 @@ Object.keys(GLABEL).forEach(function(g){
   var b=el('button','chip g-'+g);b.type='button';b.setAttribute('aria-pressed','false');b.dataset.g=g;
   var n=counts[g]+(g==='bad'?alsoFailing:0);
   b.append(document.createTextNode(GLABEL[g]+' '));b.append(el('b',null,String(n)));
+  b.title='Show only: '+GLABEL[g];
   if(g==='bad'&&alsoFailing)b.title='Includes '+alsoFailing+(alsoFailing===1?' claim that another source supports in part, but one':' claims that another source supports in part, but one')+' cited source does not support';
   b.addEventListener('click',function(){active[g]=!active[g];applyFilter();});
   chips.append(b);

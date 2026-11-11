@@ -2,6 +2,11 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.13] - 2026-11-10
+
+### Changed
+- The result filters are one ruled strip of square toggles, with no rounded corners and no "Filter" label. A filter that is on takes the look of the highlight it picks out in the paper: a soft tint over a coloured rule
+
 ## [0.7.12] - 2026-11-10
 
 ### Changed
