@@ -36,15 +36,11 @@ To try it without a paper of your own, check the sample in [examples](examples/R
 
 ## Requirements
 
-Python 3.9 or newer with `defusedxml`, `lxml` and `pypdf`, the libraries Claude's own Word and PDF skills use. Claude checks for them when a check starts. If one is missing:
-
-```bash
-pip install defusedxml lxml pypdf
-```
+Python 3.9 or newer. Athetize also uses three small Python packages, `defusedxml`, `lxml` and `pypdf`, the ones Claude's own Word and PDF skills use. If any is missing, Claude offers to install it when a check starts.
 
 ## What it runs, sends and fetches
 
-- **Runs.** Python scripts in `athetize/scripts`, where Claude runs commands. If they are installed, the `pdftotext`, `pdftoppm` and `tesseract` tools to read PDFs. While you add sources from the report, a small web server on `127.0.0.1` that only the report page can reach; on a Mac it opens the system file chooser through `osascript`. It stops when you finish, or after two hours.
+- **Runs.** Python scripts in `athetize/scripts`, where Claude runs commands. With your agreement, `pip` to install any of the three Python packages that are missing, from PyPI (`pypi.org`). If they are installed, the `pdftotext`, `pdftoppm` and `tesseract` tools to read PDFs. While you add sources from the report, a small web server on `127.0.0.1` that only the report page can reach; on a Mac it opens the system file chooser through `osascript`. It stops when you finish, or after two hours.
 - **Sends.** Reference details only (titles, authors, DOIs), to find the sources: Crossref (`api.crossref.org`), OpenAlex (`api.openalex.org`), Europe PMC (`www.ebi.ac.uk`), arXiv (`arxiv.org`, `export.arxiv.org`), ERIC (`api.ies.ed.gov`, `files.eric.ed.gov`), Semantic Scholar (`api.semanticscholar.org`) and, if you set a contact email, Unpaywall (`api.unpaywall.org`). The email, when set, goes to these services as their contact address.
 - **Fetches.** Full text from open-access copies, from addresses printed in a reference, and from files or addresses you provide.
 - **Writes.** A `<paper>-check` folder next to your paper, and `~/.athetize/config.json` for settings.

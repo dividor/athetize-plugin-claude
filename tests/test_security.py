@@ -99,7 +99,8 @@ class DoctorTests(unittest.TestCase):
         with mock.patch.dict(sys.modules, {"defusedxml": None}):
             info = self._doctor()
         self.assertIsNone(info["xml_parser"])
-        self.assertTrue(any("pip install defusedxml" in note for note in info["notes"]))
+        self.assertIn("defusedxml", info["missing_packages"])
+        self.assertTrue(any("pl.py install-packages" in note for note in info["notes"]))
 
 
 class NoBrowserAutomationTests(unittest.TestCase):

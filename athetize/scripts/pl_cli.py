@@ -7,12 +7,14 @@ import argparse
 import pl_cmd_report
 import pl_cmd_setup
 import pl_cmd_sources
+import pl_packages
 import pl_serve
 
 
 def _add_setup_commands(sub) -> None:
     """Add the subcommands that set up a check (doctor to merge-claims)."""
     sub.add_parser("doctor").set_defaults(fn=pl_cmd_setup.cmd_doctor)
+    sub.add_parser("install-packages").set_defaults(fn=pl_packages.cmd_install_packages)
     c = sub.add_parser("config")
     c.add_argument("action", choices=["set-email", "set-folder", "set-proxy", "show"])
     c.add_argument("value", nargs="?")

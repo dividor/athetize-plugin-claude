@@ -2,6 +2,14 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.8.5] - 2026-11-11
+
+### Added
+- When a Python package Athetize needs is missing, the check asks once at the start and installs it with `pl.py install-packages`. That installs only the missing ones, into the Python that runs the scripts: the active virtual environment, or else the person's user folder. It checks each one afterwards in a fresh process, and says what will not work if any is still missing
+
+### Changed
+- The README no longer has an install step for Python packages. The `pip` line remains in Troubleshooting
+
 ## [0.8.4] - 2026-11-11
 
 ### Added

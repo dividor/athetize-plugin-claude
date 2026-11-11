@@ -11,6 +11,7 @@ from pathlib import Path
 import pl_core
 import pl_http
 import pl_ingest
+import pl_packages
 import pl_text
 import pl_workspace
 from pl_core import Work, jsave
@@ -50,15 +51,11 @@ def _check_services(email) -> dict[str, str]:
 def _doctor_notes(info: dict) -> list[str]:
     """Advice for the person, based on what the environment check found."""
     notes = []
-    if not info["pdf_extractor"]:
+    if info["missing_packages"]:
         notes.append(
-            "No PDF text extractor: run `pip install pymupdf` or `pip install pypdf` (add "
-            "--break-system-packages if needed), or install poppler-utils."
-        )
-    if not info["xml_parser"]:
-        notes.append(
-            "No safe XML parser: Word (.docx) and XML files cannot be read until you run "
-            "`pip install defusedxml` (add --break-system-packages if needed)."
+            "Missing Python packages: "
+            + ", ".join(info["missing_packages"])
+            + ". Ask the person, then run `pl.py install-packages`."
         )
     if not info["contact_email"]:
         notes.append(
@@ -83,6 +80,7 @@ def cmd_doctor(args):
         "network": {},
     }
     info["pdf_extractor"] = pl_text.pdf_extractor()
+    info["missing_packages"] = pl_packages.missing_packages()
     info["network"] = _check_services(cfg.get("email"))
     info["notes"] = _doctor_notes(info)
     out(info)

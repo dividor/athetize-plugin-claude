@@ -1317,6 +1317,7 @@
  ],
  "doctor": {
   "contact_email": "me@example.org",
+  "missing_packages": [],
   "network": {
    "arxiv": "blocked or down: network error for offline.test: stubbed",
    "crossref": "blocked or down: network error for offline.test: stubbed",
