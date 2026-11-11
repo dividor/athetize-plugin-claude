@@ -2,6 +2,12 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.14] - 2026-11-10
+
+### Changed
+- The top of the report is simpler. The Word download sits beside the document's name and reads "Updated Document"
+- The result filters are plain square chips on a soft fill, with no outlines, in one toolbar under the tabs. The hint and the previous and next stepper share the line below them, and the stepper has no boxes
+
 ## [0.7.13] - 2026-11-10
 
 ### Changed

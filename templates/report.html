@@ -95,23 +95,28 @@ a.textbtn{text-decoration:none}
 
 /* ---------- title band ---------- */
 .hero{background:var(--surface);padding:18px 0 18px}
-.summary{background:var(--surface);padding:16px 0 14px}
+.hero .in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px}
+.hero .doc{flex:1 1 260px;min-width:0}
 /* The document name is a label for what was checked, not the page's headline: it is smaller and
    lighter than the product name above it. */
 .hero .eyebrow{margin:0 0 2px;font:500 12.5px/1.4 var(--font-heading);color:var(--muted)}
 .hero h1{font-size:clamp(17px,2.2vw,20px);font-weight:500;line-height:1.35;margin:0;color:var(--ink);overflow-wrap:anywhere}
 
 /* ---------- sticky filter row ---------- */
-.tabs{position:sticky;top:0;z-index:30;background:var(--surface);border-top:1px solid var(--line-light);border-bottom:1px solid var(--line)}
-.tabs .in{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:50px}
-/* The results are filters, set as one ruled strip of square toggles. A filter that is on
-   takes the look of the highlight it picks out in the paper: a soft tint over a coloured rule. */
-.summary .chips{flex-wrap:wrap;overflow:visible;margin:0;padding:0 1px 1px 0}
-.summary .chip{position:relative;height:36px;padding:0 16px 0 14px;margin:0 -1px -1px 0;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:13.5px;transition:background-color .12s}
-.summary .chip::before{width:8px;height:8px}
-.summary .chip:hover{background:var(--hover)}
-.summary .chip[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 12%,var(--surface));box-shadow:inset 0 -2px 0 var(--c);border-color:var(--line);font-weight:400}
-.summary .chip:focus-visible{outline:2px solid var(--primary);outline-offset:-2px;z-index:1}
+/* One quiet toolbar under the tabs: the result filters, then a line with the hint on the
+   left and the stepper on the right. */
+.toolbar{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
+.toolbar .in{display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px;min-height:52px;padding-top:8px;padding-bottom:8px}
+.toolbar .nav{margin-left:auto} /* stays at the right edge, also when it wraps under the filters */
+/* The filters are plain square chips on a soft fill, with no outlines. A filter that is on
+   takes the look of the highlight it picks out in the paper: a tint over a coloured rule. */
+.toolbar .chips{flex:1 0 100%;flex-wrap:wrap;overflow:visible;gap:6px;margin:0}
+.toolbar .hint{flex:1 1 260px;min-width:0;margin:0;font-size:13px}
+.toolbar .chip{height:32px;padding:0 12px;border:0;background:var(--soft);color:var(--ink);font-size:13.5px;transition:background-color .12s}
+.toolbar .chip::before{width:8px;height:8px}
+.toolbar .chip:hover{background:var(--hover)}
+.toolbar .chip[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 14%,var(--surface));box-shadow:inset 0 -2px 0 var(--c);font-weight:400}
+.toolbar .chip:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
 .chips{display:flex;overflow-x:auto;scrollbar-width:none;flex:1;margin-left:-10px}
 .chips::-webkit-scrollbar{display:none}
 .chip{--c:var(--unv);display:inline-flex;align-items:center;gap:7px;border:0;border-bottom:3px solid transparent;background:none;padding:13px 10px 10px;cursor:pointer;white-space:nowrap;font:400 14px/1.4 var(--font-heading);color:var(--muted)}
@@ -121,7 +126,7 @@ a.textbtn{text-decoration:none}
 .chip[aria-pressed="true"]{border-bottom-color:var(--c);color:var(--ink);font-weight:600}
 .g-ok{--c:var(--ok)} .g-part{--c:var(--part)} .g-bad{--c:var(--bad)} .g-unv{--c:var(--unv)} .g-unc{--c:var(--unc)}
 .nav{display:flex;align-items:center;gap:6px;flex:none}
-.nav button{border:1px solid var(--line);background:var(--surface);color:var(--muted);width:34px;height:34px;display:grid;place-items:center;cursor:pointer}
+.nav button{border:0;background:none;color:var(--muted);width:32px;height:32px;display:grid;place-items:center;cursor:pointer}
 .nav button:hover{background:var(--hover);color:var(--ink)}
 .nav span{font-size:13px;color:var(--muted);min-width:92px;text-align:center;white-space:nowrap}
 
@@ -170,7 +175,7 @@ a.textbtn{text-decoration:none}
 .claim.prov:hover,.claim.prov.active{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--c) 34%,transparent) 0 4px,color-mix(in srgb,var(--c) 10%,transparent) 4px 8px)}
 .chip.g-prov{--c:var(--muted)}
 .chip.g-prov::before{background:repeating-linear-gradient(135deg,var(--muted) 0 2px,transparent 2px 4px);outline:1px solid var(--muted)}
-.provline{margin:6px 0 2px;font-size:13px;color:var(--muted)}
+.provline{margin:0 0 8px;font-size:13px;color:var(--muted)}
 .provnote{margin:0 0 12px;padding:8px 12px;font-size:13.5px;border:1px solid var(--note-line);background:var(--note-bg)}
 .failnote{margin:0 0 12px;font-size:13.5px;font-weight:600;color:var(--bad)}
 .v-supported{--c:var(--ok)}
@@ -296,14 +301,14 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
   .chip{padding:13px 10px 10px;font-size:13.5px}
   .nav{position:fixed;left:0;right:0;bottom:0;z-index:35;justify-content:center;gap:10px;background:var(--surface);border-top:1px solid var(--line);
     padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px))}
-  .nav button{width:44px;height:40px}
+  .nav button{width:44px;height:40px;border:1px solid var(--line);background:var(--surface)}
   body.sheet-open .nav{display:none}
-  .tabs{position:static}
-  .tabs .in{min-height:0;justify-content:flex-end;padding-top:8px;padding-bottom:8px}
+  .toolbar{position:static}
+  .toolbar .in{min-height:0}
   .ptab{flex:1;min-width:0;padding:0 10px}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.summary .chip{transition:none}}
-@media print{.tabs,.nav,.rail,.card,.iconbtn,.about,.hint,.pagetabs,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.toolbar .chip{transition:none}}
+@media print{.toolbar,.nav,.rail,.card,.iconbtn,.about,.hint,.pagetabs,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
 </style>
 </head>
 <body>
@@ -328,8 +333,11 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
 
 <section class="hero">
   <div class="in">
-    <p class="eyebrow">Document checked</p>
-    <h1 id="title"></h1>
+    <div class="doc">
+      <p class="eyebrow">Document checked</p>
+      <h1 id="title"></h1>
+    </div>
+    <a class="textbtn primary" id="wordReport" hidden title="Download your Word document with every suggested edit as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Updated Document</span></a>
   </div>
 </section>
 
@@ -340,22 +348,16 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
   </div></div>
 </nav>
 
-<section class="summary" id="summary">
+<div class="toolbar">
   <div class="in">
     <div class="chips" id="chips" role="group" aria-label="Filter claims by result"></div>
-    <p class="provline" id="provLine" hidden></p>
-  </div>
-</section>
-
-<div class="tabs">
-  <div class="in">
+    <p class="hint">Hover a highlight, or tap it on a phone, to see the analysis and the source.</p>
     <div class="nav" id="nav"><button type="button" id="prev" aria-label="Previous claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span id="navLabel"></span><button type="button" id="next" aria-label="Next claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
-    <a class="textbtn primary" id="wordReport" hidden title="Download a copy of your Word file with every suggested fix as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Word document with suggested edits</span></a>
   </div>
 </div>
 
 <main class="wrap in" id="docView">
-  <p class="hint">Hover a highlight, or tap it on a phone, to see the analysis and the source.</p>
+  <p class="provline" id="provLine" hidden></p>
   <div class="notice need" id="needSrc" hidden></div>
   <article class="sheet" id="paper"></article>
   <div class="sugsum" id="sugSum"></div>
@@ -941,7 +943,7 @@ function renderSrcLead(){
 var wordName=DATA.meta.word_export;
 function offerWord(href){
   var a=$('#wordReport');a.href=href;a.setAttribute('download',wordName);
-  a.setAttribute('aria-label','Download the Word document with suggested edits: '+wordName);a.hidden=false;
+  a.setAttribute('aria-label','Download the updated Word document, with the suggested edits: '+wordName);a.hidden=false;
 }
 if(wordName&&location.protocol==='file:'&&/^[^\/\\]+\.docx$/.test(wordName))offerWord(encodeURI(wordName));
 
@@ -1159,7 +1161,7 @@ function showView(sources){
   if(sources===!srcView.hidden)return;
   closeCard();
   if(sources)paperY=window.scrollY;
-  [$('#summary'),$('.tabs'),docView,rail].forEach(function(e){e.hidden=sources;});
+  [$('.toolbar'),docView,rail].forEach(function(e){e.hidden=sources;});
   $(sources?'#openSources':'#openResults').setAttribute('aria-current','page');
   $(sources?'#openResults':'#openSources').removeAttribute('aria-current');
   srcView.hidden=!sources;
