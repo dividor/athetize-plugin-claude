@@ -14,6 +14,7 @@ from pathlib import Path
 
 import pl_http
 import pl_text
+from pl_metadata import normalize_pmcid
 from pl_refmatch import eric_id, normalize_doi, strip_tags, title_in_text
 
 PREVIEW_MARKERS = re.compile(
@@ -186,7 +187,8 @@ def _gather_urls(
 
 def _europe_pmc_fulltext(job: _Job, cand: dict, doi: str | None, trusted: bool):
     """Europe PMC full-text XML (open access subset). Returns (text, how, file) or None."""
-    pmcid = cand.get("pmcid") if trusted else None
+    # ids stored by earlier versions may lack the "PMC" prefix
+    pmcid = normalize_pmcid(cand.get("pmcid")) if trusted else None
     if not pmcid and doi:
         pmcid, _ = europe_pmc_lookup(doi, None, job.email, job.errors)
     if pmcid:

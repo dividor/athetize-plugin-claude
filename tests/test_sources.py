@@ -15,9 +15,11 @@ from unittest import mock
 
 import pl
 import pl_core
+import pl_download
 import pl_http
 import pl_identify
 import pl_ingest
+import pl_metadata
 import pl_report
 import pl_resolve
 import pl_text
@@ -384,6 +386,41 @@ class AddSourceTests(unittest.TestCase):
                 w.p("sources", "1.txt").read_text("utf-8"),
                 (FIX / "sources" / "1.txt").read_text("utf-8"),
             )
+
+
+class PubMedCentralIdTests(unittest.TestCase):
+    """Europe PMC serves full text only for an id written "PMC" then digits."""
+
+    def test_openalex_address_without_the_prefix_gets_it(self):
+        work = {"ids": {"pmcid": "https://www.ncbi.nlm.nih.gov/pmc/articles/6521425"}}
+        self.assertEqual(pl_metadata.candidate_from_openalex(work)["pmcid"], "PMC6521425")
+
+    def test_every_form_of_the_id_is_normalised(self):
+        for given in (
+            "PMC6521425",
+            "pmc6521425",
+            "6521425",
+            "https://x.org/pmc/articles/PMC6521425/",
+        ):
+            self.assertEqual(pl_metadata.normalize_pmcid(given), "PMC6521425", given)
+        for given in (None, "", "PMC", "not-an-id", "https://x.org/articles/abc"):
+            self.assertIsNone(pl_metadata.normalize_pmcid(given), given)
+
+    def test_full_text_is_asked_for_with_the_prefixed_id(self):
+        asked = []
+
+        def fake_get(url, *args, **kwargs):
+            asked.append(url)
+            raise pl_http.HttpError("stubbed")
+
+        job = pl_download._Job(
+            ref={"id": "4"}, dest_dir=Path("."), title="x", email=None, errors=[]
+        )
+        with mock.patch.object(pl_http, "http_get", fake_get):
+            pl_download._europe_pmc_fulltext(job, {"pmcid": "6521425"}, None, True)
+        self.assertEqual(
+            asked, ["https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6521425/fullTextXML"]
+        )
 
 
 class RecordLinkTests(unittest.TestCase):

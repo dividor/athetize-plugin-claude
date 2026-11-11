@@ -50,6 +50,14 @@ Then run `PL coverage --work W`. Every citation marker in the body should sit in
 
 Run `PL resolve --work W`. It looks each reference up, flags retractions and metadata mismatches, and downloads open-access full text where it can: Unpaywall, OpenAlex, Europe PMC, arXiv, ERIC, Semantic Scholar, and any URL printed in the reference. Links from a doubtful metadata match are not used, so a wrong paper is not downloaded. Then read the `needs_source` list from the output. The output also has `reference_discrepancies`: references whose database record was accepted but disagrees with the paper on the year, the title or the DOI. They are likely errors in the reference list; carry them into the reference fixes of the `suggest-edits` skill.
 
+**Reports and web documents.** Some references are not journal articles: agency reports, working papers, standards, web pages. They may have no record in the citation databases, which is not a sign that they do not exist. For each reference that `resolve` leaves without full text and that looks like such a document:
+
+1. If the reference prints a web address, `resolve` has already tried it. Go on only if that failed.
+2. When a web search tool is available, search for the exact title in quotes with the issuing organisation, then the title with the year.
+3. Accept a result only when the page or file itself shows the same title and the same organisation, and the year or edition matches. Prefer the issuing organisation's own site. If several editions exist and the reference does not say which, ask the person.
+4. Add it with `PL add-source --work W REF URL`, then run `PL passages --work W --ref REF --query "<title>"` and confirm the saved text carries that title. If it does not, say so and do not rely on it.
+5. Never present a lookalike as the source. A reference that cannot be found goes into the missing list like any other. In the final summary, name the references that were found on the web this way.
+
 If any references need a source, do these in order:
 
 1. **Write the short list first, every time.** Run `PL request-sources --work W`. It writes `W/source_request.md`: one table row per reference, most-cited first, with a link to each. Send it as a file with SendUserFile (without that tool, give its full path). Do not paste its rows into the chat. Keep what the command prints: the `summary` (`need_source`, `references`, `abstract_only`, `no_text`, `claims_relying`) and `items`, which is ordered most-cited first.

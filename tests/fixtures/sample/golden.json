@@ -2035,7 +2035,7 @@
  ],
  "merge_suggestions": 2,
  "merge_suggestions_again": 0,
- "misc_stdout": "[p5] (body) Adolescents sleep less than they did a generation ago [1]. Short sleep is linked to poorer next-day recall of new material [2]. Sleep spindles strongly improve memory consolidation in every age group [3]. About 70% of high school students report insufficient sleep. Later school start times raised average attendance by 9% in a large district trial [4].\n\n[p7] (body) Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2]. We therefore recommend delaying the first bell.\n\n{\n  \"citation_markers\": 5,\n  \"uncovered_sentences\": 0,\n  \"uncovered_markers\": 0,\n  \"items\": []\n}\nMerged 0 new suggestions (2 total).\nWrote <tmp>/sample-check/report.html (102 KB)\nProvisional: none. No result rests on an abstract only.\n",
+ "misc_stdout": "[p5] (body) Adolescents sleep less than they did a generation ago [1]. Short sleep is linked to poorer next-day recall of new material [2]. Sleep spindles strongly improve memory consolidation in every age group [3]. About 70% of high school students report insufficient sleep. Later school start times raised average attendance by 9% in a large district trial [4].\n\n[p7] (body) Taken together, these results suggest that sleep is a modifiable driver of learning [1, 2]. We therefore recommend delaying the first bell.\n\n{\n  \"citation_markers\": 5,\n  \"uncovered_sentences\": 0,\n  \"uncovered_markers\": 0,\n  \"items\": []\n}\nMerged 0 new suggestions (2 total).\nWrote <tmp>/sample-check/report.html (104 KB)\nProvisional: none. No result rests on an abstract only.\n",
  "normalize_doi": [
   null,
   null,

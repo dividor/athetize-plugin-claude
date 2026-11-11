@@ -19,6 +19,26 @@ It is a screening aid for authors, reviewers and editors, not a judge. Every fla
 - For Word manuscripts, a copy of the paper with every suggested edit as a tracked change. Each change has a comment explaining it: the verdict, why the edit is needed, the source's analysis, evidence excerpts with page numbers, and the link. Your original file is never modified.
 - Source list with status per reference: full text, abstract only, provided by you, or missing. Retracted works and references whose metadata does not match are flagged.
 
+## What it looks like
+
+These pictures come from a check of the made-up sample paper in [examples/bananas](examples/README.md), which you can run yourself.
+
+The report shows your paper with each claim highlighted by its result. A striped highlight means only the abstract of the source could be read, and a dotted one marks a claim that needs a citation.
+
+![The report: the sample paper with each claim highlighted by its result](docs/images/report-highlights.jpg)
+
+Hover or click a claim to see why: the analysis, the passage in the source it rests on, and a suggested rewording where the claim goes further than its source.
+
+![A claim's card: the result, the analysis and the evidence quoted from the source](docs/images/report-claim-card.jpg)
+
+The Sources tab lists every reference, how its text was obtained and which claims cite it. Sources that could not be read can be added there.
+
+![The Sources tab: each reference, where its text came from and the claims that cite it](docs/images/report-sources.jpg)
+
+For a Word manuscript, Download Report gives a copy with every suggested edit as a tracked change and a comment that says why. It is shown here opened in LibreOffice.
+
+![The Word copy: tracked changes with a comment explaining each one](docs/images/word-export.png)
+
 ## Install
 
 In Claude Code, add this repository as a plugin marketplace and install the plugin:

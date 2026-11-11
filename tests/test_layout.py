@@ -162,6 +162,33 @@ class ReadLayoutTests(LayoutCase):
         self.assertEqual(self.by_text["Centred line of text"]["align"], "center")
         self.assertNotIn("align", self.by_text["1. Introduction"])
 
+    def test_paragraph_centred_by_its_style_or_its_styles_parent(self):
+        styles = (
+            f'<w:styles xmlns:w="{W_NS}">'
+            '<w:style w:type="paragraph" w:styleId="Mid">'
+            '<w:pPr><w:jc w:val="center"/></w:pPr></w:style>'
+            '<w:style w:type="paragraph" w:styleId="Child"><w:basedOn w:val="Mid"/></w:style>'
+            '<w:style w:type="paragraph" w:styleId="Plain"/>'
+            "</w:styles>"
+        )
+        body = (
+            para(run("by style"), props='<w:pStyle w:val="Mid"/>')
+            + para(run("by parent"), props='<w:pStyle w:val="Child"/>')
+            + para(run("plain"), props='<w:pStyle w:val="Plain"/>')
+            + para(run("own left"), props='<w:pStyle w:val="Mid"/><w:jc w:val="left"/>')
+        )
+        path = self.dir / "styled.docx"
+        with zipfile.ZipFile(path, "w") as z:
+            z.writestr(
+                "word/document.xml",
+                f"<w:document {NAMESPACES}><w:body>{body}</w:body></w:document>",
+            )
+            z.writestr("word/styles.xml", styles)
+        got = {p["text"]: p.get("align") for p in pl_docx_read.read_docx_paragraphs(path)}
+        self.assertEqual(
+            got, {"by style": "center", "by parent": "center", "plain": None, "own left": None}
+        )
+
     def test_picture_travels_with_the_paragraph_after_it(self):
         caption = self.by_text["Figure 1: Densities."]
         self.assertEqual(

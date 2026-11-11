@@ -261,7 +261,7 @@ def _table_shape(table: ET.Element, ruled: set[str]) -> dict:
     return shape
 
 
-def _layout(p: ET.Element, parents: dict, tables: dict, pieces: list) -> dict:
+def _layout(p: ET.Element, parents: dict, tables: dict, pieces: list, centred: set[str]) -> dict:
     """What the report needs to lay the paragraph out as the author did."""
     styled = _styled(pieces)
     info: dict = {}
@@ -278,11 +278,44 @@ def _layout(p: ET.Element, parents: dict, tables: dict, pieces: list) -> dict:
     cell = _table_cell(p, parents, tables)
     if cell:
         info["tbl"] = cell
-    ppr = p.find(W + "pPr")
-    jc = ppr.find(W + "jc") if ppr is not None else None
-    if jc is not None and jc.get(W + "val") == "center":
+    if _is_centred(p, centred):
         info["align"] = "center"
     return info
+
+
+def _is_centred(p: ET.Element, centred: set[str]) -> bool:
+    """True when a paragraph is centred, by its own setting or else by its style."""
+    ppr = p.find(W + "pPr")
+    jc = ppr.find(W + "jc") if ppr is not None else None
+    if jc is not None:
+        return jc.get(W + "val") == "center"
+    return paragraph_style(p) in centred
+
+
+def _centred_styles(z: zipfile.ZipFile) -> set[str]:
+    """Names of the paragraph styles that centre their text, directly or through their parent."""
+    if "word/styles.xml" not in z.namelist():
+        return set()
+    own: dict[str, str | None] = {}
+    parent: dict[str, str] = {}
+    for style in parse_xml(z.read("word/styles.xml")).iter(W + "style"):
+        if style.get(W + "type") != "paragraph":
+            continue
+        name = style.get(W + "styleId") or ""
+        ppr = style.find(W + "pPr")
+        jc = ppr.find(W + "jc") if ppr is not None else None
+        own[name] = jc.get(W + "val") if jc is not None else None
+        based = style.find(W + "basedOn")
+        if based is not None:
+            parent[name] = based.get(W + "val") or ""
+    centred = set()
+    for name in own:
+        at, steps = name, 0
+        while own.get(at) is None and at in parent and steps < len(own):
+            at, steps = parent[at], steps + 1
+        if own.get(at) == "center":
+            centred.add(name)
+    return centred
 
 
 def read_docx(path: Path) -> tuple[list[dict], list[dict]]:
@@ -295,6 +328,7 @@ def read_docx(path: Path) -> tuple[list[dict], list[dict]]:
         root = parse_xml(z.read("word/document.xml"))
         files = _picture_files(z)
         ruled = _ruled_styles(z)
+        centred = _centred_styles(z)
     parents = {child: parent for parent in root.iter() for child in parent}
     tables: dict = {}
     seen: set = set()
@@ -306,7 +340,7 @@ def read_docx(path: Path) -> tuple[list[dict], list[dict]]:
         if not text:
             continue
         entry: dict = {"text": text, "style": paragraph_style(p)}
-        entry.update(_layout(p, parents, tables, _pieces(p, parents)))
+        entry.update(_layout(p, parents, tables, _pieces(p, parents), centred))
         if waiting:
             # a picture has no text of its own, so it travels with the paragraph after it
             entry["figures"], waiting = waiting, []

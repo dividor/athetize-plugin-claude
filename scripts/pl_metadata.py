@@ -18,6 +18,17 @@ _RETRACTION_TYPES = ("retraction", "withdrawal", "removal", "expression_of_conce
 _OPENALEX_EXTRA_KEYS = ("is_retracted", "pdf_urls", "pmcid", "oa_url", "openalex_id")
 
 
+def normalize_pmcid(value) -> str | None:
+    """A PubMed Central id in the form Europe PMC expects, "PMC" then digits; None otherwise.
+
+    OpenAlex gives the id as an address ending in the bare number, and the full-text service
+    answers an error for a number without its prefix.
+    """
+    tail = str(value or "").rstrip("/").rsplit("/", 1)[-1].strip().upper()
+    digits = tail[3:] if tail.startswith("PMC") else tail
+    return "PMC" + digits if digits.isdigit() else None
+
+
 def candidate_from_crossref(msg: dict) -> dict:
     """Candidate record built from one Crossref work."""
     title = clean_title((msg.get("title") or [""])[0])
@@ -78,7 +89,7 @@ def candidate_from_openalex(w: dict) -> dict:
         "abstract": abstract_from_inverted(w.get("abstract_inverted_index")),
         "is_retracted": bool(w.get("is_retracted")),
         "pdf_urls": pdf_urls,
-        "pmcid": (ids.get("pmcid") or "").rsplit("/", 1)[-1] or None,
+        "pmcid": normalize_pmcid(ids.get("pmcid")),
         "oa_url": (w.get("open_access") or {}).get("oa_url"),
         "openalex_id": w.get("id"),
     }

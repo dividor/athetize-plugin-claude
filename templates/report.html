@@ -70,10 +70,17 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 .iconbtn[aria-expanded="true"]{background:var(--hover);color:var(--ink)}
 .topact{position:relative;display:flex;gap:8px;flex:none}
 /* a short note on what the product does, kept behind a button so the page stays clear */
-.about{position:absolute;right:0;top:calc(100% + 8px);z-index:50;width:min(380px,calc(100vw - 32px));padding:16px 18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+.about{position:absolute;right:0;top:calc(100% + 8px);z-index:50;width:min(400px,calc(100vw - 32px));padding:16px 18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
 .about h2{font-size:1rem;margin:0 0 8px}
 .about p{margin:0 0 10px;font-size:13.5px;line-height:1.55;color:var(--ink)}
 .about p.quiet{color:var(--muted)}
+/* the diagram in the information panel: square boxes and hairlines, in the page's own colours */
+.flow{display:block;width:100%;height:auto;margin:2px 0 14px}
+.flow .fbox rect{fill:var(--soft);stroke:var(--line);stroke-width:1}
+.flow .fline path{fill:none;stroke:var(--primary);stroke-width:1.2}
+.flow text{text-anchor:middle;font-family:var(--font-heading)}
+.flow .fhead text{font-size:12.5px;font-weight:600;fill:var(--ink)}
+.flow .fsub text{font-size:10.5px;fill:var(--muted)}
 .setlbl{display:block;margin:0 0 4px;font:500 12.5px/1.4 var(--font-heading);color:var(--muted)}
 .setin{display:block;width:100%;height:36px;padding:0 10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:14px/1 var(--font-body)}
 .setin:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
@@ -367,14 +374,20 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
         <input class="setin" type="email" id="setEmail" autocomplete="email" spellcheck="false" placeholder="name@university.edu">
         <div class="setact"><button class="textbtn primary" id="setSave" type="button">Save</button><button class="textbtn" id="setRemove" type="button" hidden>Remove</button></div>
         <p class="setmsg" id="setMsg" role="status"></p>
-        <p class="quiet">Unpaywall, a free index of open-access papers, asks for a contact email with each lookup. With one saved, Athetize can look there for the sources it could not find. The address is kept on this computer and sent with lookups to Unpaywall and the other public indexes Athetize uses.</p>
+        <p class="quiet">Lets Athetize look for free copies on Unpaywall. Saved on this computer and sent only with lookups to public indexes.</p>
       </div>
       <button class="iconbtn" id="aboutBtn" type="button" aria-label="What Athetize does" title="What Athetize does" aria-expanded="false" aria-controls="about"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.2"/></svg></button>
       <div class="about" id="about" role="dialog" aria-label="What Athetize does" hidden>
         <h2>What Athetize does</h2>
-        <p>Athetize checks each claim in your paper against the source it cites. Every claim gets a result, the passage in the source that the result rests on, and a link to that source. Where a claim goes further than its source, it suggests a rewording.</p>
-        <p>The checking is done by AI and can be wrong. Read the quoted evidence yourself before you change your paper.</p>
-        <p class="quiet">Athetize runs inside Claude, which reads your paper and the sources. Apart from that, only reference details, such as titles and DOIs, are sent out, to public indexes that help find the sources.</p>
+        <svg class="flow" viewBox="0 0 344 204" role="img" aria-label="Your paper and its sources go to Claude, which compares each claim with its source and produces a report and a Word document.">
+          <g class="fbox"><rect x="0.5" y="0.5" width="159" height="58"/><rect x="184.5" y="0.5" width="159" height="58"/><rect x="52.5" y="88.5" width="239" height="44"/><rect x="0.5" y="160.5" width="159" height="43"/><rect x="184.5" y="160.5" width="159" height="43"/></g>
+          <g class="fline"><path d="M80 59v14h184V59M172 73v11"/><path d="M168 80l4 5 4-5"/><path d="M172 133v13M80 156v-10h184v10"/><path d="M76 152l4 5 4-5M260 152l4 5 4-5"/></g>
+          <g class="fhead"><text x="80" y="22">Your paper</text><text x="264" y="22">Sources</text><text x="172" y="107">Claude compares each claim</text><text x="80" y="179">Report</text><text x="264" y="179">Word document</text></g>
+          <g class="fsub"><text x="80" y="38">each claim and</text><text x="80" y="51">the source it cites</text><text x="264" y="38">open copies found online</text><text x="264" y="51">and files you add</text><text x="172" y="123">with the text of its source</text><text x="80" y="194">results and evidence</text><text x="264" y="194">suggested edits</text></g>
+        </svg>
+        <p>Athetize identifies each claim in your paper and the source it cites. It retrieves open-access copies of the sources where they are available and uses any files you provide. A source that cannot be read is marked “can’t verify”; no result is inferred.</p>
+        <p>The assessment is performed by AI and may contain errors. Review the quoted evidence before revising your paper.</p>
+        <p class="quiet">Claude reads your paper and the sources. The only other information transmitted is reference metadata, such as titles and DOIs, which is sent to public indexes to locate the sources.</p>
         <p class="more" id="aboutMore"><a class="ext" id="aboutLink" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">Athetize on GitHub</a></p>
       </div>
     <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>

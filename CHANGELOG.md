@@ -2,6 +2,21 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.23] - 2026-11-10
+
+### Added
+- A sample paper about bananas under `examples/`, with figures and a builder that makes its Word file with a SAMPLE watermark. Its claims were written to produce every kind of result
+- Screenshots of a check of that sample in the README
+- The information panel has a small diagram of what Athetize does, and its wording is more formal
+- The check-paper skill looks on the web for references that are reports or web documents and have no record in the citation databases
+
+### Fixed
+- Full text from Europe PMC was never fetched when the PubMed Central id came from OpenAlex, which gives it without its "PMC" prefix. The id is now put in the form Europe PMC expects, so more open-access papers are downloaded
+- A paragraph centred by its Word style, and not only by its own setting, is centred in the report
+
+### Changed
+- The help under the contact email in Settings is one short line
+
 ## [0.7.22] - 2026-11-10
 
 ### Changed
