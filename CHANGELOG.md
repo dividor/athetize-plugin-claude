@@ -2,6 +2,14 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.8] - 2026-11-10
+
+### Changed
+- Statuses are quiet text with a small square in their colour, not boxes, so they do not read as buttons. A source with full text says how it got it: "Full text, downloaded" or "Full text, provided by you"
+- The line under the All and Need full text tabs starts at the edge of the cards
+- The box about missing sources on the main page is calmer: a soft border, one sentence and its button beside it
+- The Word button reads "Word copy with suggested edits"
+
 ## [0.7.7] - 2026-11-10
 
 ### Changed

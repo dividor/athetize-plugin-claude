@@ -115,9 +115,10 @@ a.textbtn{text-decoration:none}
 .hint{font-size:13.5px;color:var(--muted);margin:0 0 14px}
 .notice{margin:0 0 20px;padding:14px 18px;border:1px solid var(--note-line);background:var(--note-bg);font-size:14px}
 .notice b{font-family:var(--font-heading);font-weight:600}
-.notice.need{border-color:var(--part)}
-.notice.need .act{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.notice.need .act a,.notice.need .act button{font:400 12.5px/1.6 var(--font-body);padding:3px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none}
+.notice.need{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px}
+.notice.need .txt{flex:1 1 420px}
+.notice.need .act{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.notice.need .act a,.notice.need .act button{font:600 13px/1.6 var(--font-heading);padding:5px 14px;white-space:nowrap;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none}
 .notice.need .act a:hover,.notice.need .act button:hover{background:var(--hover)}
 .sheet{background:var(--surface);border:1px solid var(--line);padding:clamp(20px,6vw,60px)}
 .sheet h2.h{font-size:1.15rem;line-height:1.35;margin:1.9em 0 .6em}
@@ -173,8 +174,10 @@ a.textbtn{text-decoration:none}
 .claimtxt{margin:0 0 12px;font-size:14px;line-height:1.6;font-style:italic;color:var(--muted);border-left:2px solid var(--line);padding-left:12px}
 .blk{border:1px solid var(--line-light);padding:12px 14px;margin-top:10px;background:var(--bg)}
 .blk .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:8px}
-.pill{--c:var(--unv);display:inline-block;font:600 11.5px/1.6 var(--font-body);padding:0 8px;border:1px solid var(--c);color:var(--c);white-space:nowrap}
-.pill.solid{background:var(--c);color:var(--surface)}
+/* a status is text with a small square in its colour: it must not read as a button */
+.pill{--c:var(--unv);display:inline-flex;align-items:center;gap:6px;font:400 12.5px/1.6 var(--font-body);color:var(--muted);white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;background:var(--c);flex:none}
+.pill.solid{color:var(--c);font-weight:600}
 .conf{font-size:12px;color:var(--muted)}
 .an{margin:0 0 10px;font-size:14px;line-height:1.6}
 .ev{margin:0 0 10px;padding:10px 12px;background:color-mix(in srgb,var(--c,var(--ok)) 8%,var(--surface));border-left:3px solid var(--c,var(--ok))}
@@ -228,12 +231,14 @@ a.textbtn{text-decoration:none}
 .addmenu button{border:0;background:none;text-align:left;padding:10px 14px;font:14px/1.3 var(--font-body);color:var(--ink);cursor:pointer}
 .addmenu button:hover,.addmenu button:focus-visible{background:var(--hover)}
 .srcfilter{border-bottom:1px solid var(--line);margin:0 0 14px}
-.srcfilter .chip{--c:var(--primary)}
+.srcfilter .chips{margin-left:0;gap:26px}
+.srcfilter .chip{--c:var(--primary);padding-left:0;padding-right:0}
+.srcfilter .chip:hover{background:none}
 .srcfilter .chip::before{display:none}
 .srow{background:var(--surface);border:1px solid var(--line);padding:14px 18px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
 .srow .id{font:600 12.5px/1.8 var(--font-mono);color:var(--muted)}
 .srow .cit{font-size:14.5px;overflow-wrap:anywhere}
-.srow .pills{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:6px;grid-column:2}
+.srow .pills{display:flex;flex-wrap:wrap;align-items:center;gap:2px 18px;margin-top:6px;grid-column:2}
 .srow .used{grid-column:2;font-size:12.5px;color:var(--muted);margin-top:4px}
 .cchip{display:inline-block;margin:0 6px 4px 0;padding:0 7px;font:600 12px/1.75 var(--font-mono);color:var(--c);border:1px solid var(--c);background:color-mix(in srgb,var(--c) 10%,transparent);text-decoration:none}
 .cchip:hover{background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--c)}
@@ -296,7 +301,7 @@ a.textbtn{text-decoration:none}
 <div class="tabs">
   <div class="in">
     <div class="nav" id="nav"><button type="button" id="prev" aria-label="Previous claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span id="navLabel"></span><button type="button" id="next" aria-label="Next claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
-    <a class="textbtn primary" id="wordReport" hidden title="Download the Word copy with the suggested edits as tracked changes"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Word report</span></a>
+    <a class="textbtn primary" id="wordReport" hidden title="Download a copy of your Word file with every suggested fix as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Word copy with suggested edits</span></a>
   </div>
 </div>
 
@@ -336,7 +341,7 @@ var GLABEL={ok:'Supported',part:'Partial',bad:'Not supported',unv:"Can't verify"
 var FAILING_NOTE='A cited source does not support this';
 var PROV_LABEL='from the abstract only';
 var GVAR={ok:'--ok',part:'--part',bad:'--bad',unv:'--unv',unc:'--unc'};
-var STATUS={full_text:'Full text',abstract_only:'Abstract only',user_provided:'Provided by you',missing:'No full text found',unresolved:'Not looked up'};
+var STATUS={full_text:'Full text, downloaded',user_provided:'Full text, provided by you',abstract_only:'Abstract only',missing:'No full text found',unresolved:'Not looked up'};
 var DATABASE={crossref:'Crossref',openalex:'OpenAlex'};
 var EXISTS={verified:'Found in a citation database',partial_match:'Database record differs in part',mismatch:'Database record does not match',not_found:'Not found in citation databases',unchecked:'Not looked up'};
 var EXISTS_MEANS={verified:'A record matching this reference was found, so the work exists as cited.',partial_match:'The closest record differs from the reference in part, so it was not relied on.',mismatch:'The record behind the printed DOI is a different work.',not_found:'No record of this work was found in Crossref or OpenAlex.'};
@@ -745,7 +750,7 @@ function renderSources(){
     row.append(c);
     var pills=el('div','pills');
     var sc=r.status==='full_text'||r.status==='user_provided'?'var(--ok)':(r.status==='abstract_only'?'var(--part)':'var(--unv)');
-    pills.append(pill(STATUS[r.status]||r.status,sc,r.status==='full_text'||r.status==='user_provided'));
+    pills.append(pill(STATUS[r.status]||r.status,sc));
     if(r.exists&&r.exists!=='unchecked')pills.append(existsPill(r));
     if(r.retracted)pills.append(pill('Retracted or corrected','var(--bad)',true));
     var lh=localHref(r.local_file);
@@ -826,7 +831,7 @@ function renderSrcLead(){
 var wordName=DATA.meta.word_export;
 function offerWord(href){
   var a=$('#wordReport');a.href=href;a.setAttribute('download',wordName);
-  a.setAttribute('aria-label','Download the Word report: '+wordName);a.hidden=false;
+  a.setAttribute('aria-label','Download the Word copy with suggested edits: '+wordName);a.hidden=false;
 }
 if(wordName&&location.protocol==='file:'&&/^[^\/\\]+\.docx$/.test(wordName))offerWord(encodeURI(wordName));
 
@@ -1003,11 +1008,13 @@ function renderNeedSrc(){
   var n=DATA.sources_needed,box=$('#needSrc');
   if(!box||!n||!n.need_source)return;
   box.hidden=false;
-  box.append(el('b',null,n.need_source+' of '+count(n.references,'source has','sources have')+' no full text.'));
+  var txt=el('div','txt');
   var kinds=[];
   if(n.abstract_only)kinds.push(count(n.abstract_only,'has','have')+' only an abstract');
-  if(n.no_text)kinds.push(count(n.no_text,'has','have')+' no text at all');
-  box.append(document.createTextNode(' '+kinds.join(' and ')+'. '+count(n.claims_relying,'claim relies','claims rely')+' on at least one of them. A claim with no text to read is marked \u201ccan\u2019t verify\u201d. A claim judged from an abstract alone has only a provisional result, because the abstract is part of the paper and the full text is what settles it. Add the papers on the Sources page and the affected claims are rechecked.'));
+  if(n.no_text)kinds.push(count(n.no_text,'has','have')+' nothing');
+  txt.append(el('b',null,n.need_source+' of '+count(n.references,'source has','sources have')+' no full text'));
+  txt.append(document.createTextNode(': '+kinds.join(' and ')+'. '+count(n.claims_relying,'claim relies','claims rely')+' on them, so '+(n.claims_relying===1?'it is':'they are')+' marked \u201ccan\u2019t verify\u201d or, where only an abstract was read, provisional.'));
+  box.append(txt);
   var act=el('div','act');
   var b=el('button',null,'Review Missing Sources');b.type='button';
   b.addEventListener('click',function(){openSources(true);});
