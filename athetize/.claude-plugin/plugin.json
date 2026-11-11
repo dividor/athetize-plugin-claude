@@ -1,7 +1,7 @@
 {
   "name": "athetize",
   "displayName": "Athetize Fact Checker",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "Checks whether the sources a paper cites support what the paper says. Finds each claim, gets the cited source, compares the two, and produces an HTML report with the evidence quoted, plus suggested edits as Word tracked changes.",
   "author": {
     "name": "Matthew Harris",

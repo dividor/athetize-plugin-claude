@@ -2,13 +2,17 @@
 
 All notable changes to Athetize will be documented in this file.
 
-## [Unreleased]
+## [0.8.4] - 2026-11-11
 
 ### Added
 - A social preview image for the repository, `docs/images/social-preview.png`
 - Bug reports ask where the plugin was run: the terminal, the desktop app's Code tab or Cowork, or chat
 
 ### Changed
+- Dependency updates from Dependabot: lxml 6.1.3 or newer for the plugin; pytest-cov, pre-commit, pypdf, flake8 and radon for development
+- PyMuPDF 2.1 or newer on Python 3.11 and newer. It needs Python 3.11, so older Pythons keep 1.24.3 or newer, and the plugin still supports Python 3.9
+- The plugin imports PyMuPDF as `pymupdf`. The old `fitz` name is deprecated in PyMuPDF 2 and will be removed
+- CI checks that the plugin's requirements install on every Python it supports, and the development requirements on Python 3.11. CI installs its test packages without reading those files, so a minimum version that no longer installs could pass unnoticed
 - The issue forms no longer point to Discussions, which are not enabled, and their paths match the plugin's folder
 - The README screenshots show the current report, and a new one shows the Suggested Edits view
 
