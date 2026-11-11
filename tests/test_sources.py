@@ -79,10 +79,12 @@ class PdfReadingTests(unittest.TestCase):
             return pl_text.pdf_extractor()
 
     def test_fastest_extractor_present_is_chosen(self):
-        self.assertEqual(self._choice(("fitz", "pypdf"), ("pdftotext",)), "pymupdf")
+        self.assertEqual(self._choice(("pymupdf", "pypdf"), ("pdftotext",)), "pymupdf")
         self.assertEqual(self._choice(("pypdf",), ("pdftotext",)), "pdftotext")
         self.assertEqual(self._choice(("pypdf",)), "pypdf")
         self.assertIsNone(self._choice())
+        # the old fitz name alone no longer counts: the plugin imports pymupdf
+        self.assertIsNone(self._choice(("fitz",)))
 
     def test_pypdf_reads_each_page_when_it_is_the_only_extractor(self):
         with tempfile.TemporaryDirectory() as d:

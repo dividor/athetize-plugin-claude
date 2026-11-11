@@ -96,7 +96,7 @@ def pdf_extractor() -> str | None:
     PyMuPDF is the quickest. pypdf is the one Claude's own PDF skill uses, so it is there
     wherever that skill works, and it is the last choice because it is the slowest.
     """
-    if importlib.util.find_spec("fitz") is not None:
+    if importlib.util.find_spec("pymupdf") is not None:
         return "pymupdf"
     if shutil.which("pdftotext"):
         return "pdftotext"
@@ -128,9 +128,9 @@ def read_pdf_text(path: Path) -> str:
     """Text of a PDF, pages separated by form feeds, from the extractor found here."""
     how = pdf_extractor()
     if how == "pymupdf":
-        import fitz
+        import pymupdf
 
-        with fitz.open(str(path)) as doc:
+        with pymupdf.open(str(path)) as doc:
             return "\f".join(page.get_text("text") for page in doc)
     if how == "pdftotext":
         return _pdftotext(path)
