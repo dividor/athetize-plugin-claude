@@ -2,6 +2,12 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- The README screenshots are sharp: PNG at twice the pixel density, where they were 800-pixel JPEGs that GitHub stretched
+- The social preview image shows two result labels, "Claim supported" and "Claim not supported", in place of a card with text
+
 ## [0.8.6] - 2026-11-11
 
 ### Fixed

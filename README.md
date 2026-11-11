@@ -7,7 +7,7 @@
 
 A Claude plugin that checks whether the sources a paper cites support what the paper says. It finds each claim, gets the cited source, compares the two, and shows the result on your paper with the evidence quoted. It is a screening aid: every flag still needs a human look.
 
-![The report: a paper with each claim highlighted by its result](docs/images/report-highlights.jpg)
+![The report: a paper with each claim highlighted by its result](docs/images/report-highlights.png)
 
 ## Install
 
@@ -82,15 +82,15 @@ A result that rests on an abstract only is marked provisional.
 
 Click a claim for the analysis, the quoted passage and a suggested rewording:
 
-![A claim's card: the result, the analysis and the evidence quoted from the source](docs/images/report-claim-card.jpg)
+![A claim's card: the result, the analysis and the evidence quoted from the source](docs/images/report-claim-card.png)
 
 Switch to Suggested Edits to see every rewording and reference fix marked in the paper, as tracked changes:
 
-![Suggested Edits: rewordings marked in the paper as tracked changes](docs/images/report-edits.jpg)
+![Suggested Edits: rewordings marked in the paper as tracked changes](docs/images/report-edits.png)
 
 The Sources tab shows where each source's text came from and lets you add the missing ones:
 
-![The Sources tab: each reference, where its text came from and the claims that cite it](docs/images/report-sources.jpg)
+![The Sources tab: each reference, where its text came from and the claims that cite it](docs/images/report-sources.png)
 
 The Word copy, shown here in LibreOffice:
 
