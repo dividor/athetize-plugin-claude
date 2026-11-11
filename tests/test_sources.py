@@ -675,6 +675,10 @@ class SourcesNeededTests(unittest.TestCase):
         self.assertNotIn("Cited for", html)
         self.assertIn("Download Report</a>", html)
         self.assertNotIn("in the window that has opened", html)
+        # opened as a file the page cannot take files: it says so, with nothing to copy and paste
+        self.assertIn("was opened as a file, so it cannot take your papers", html)
+        self.assertNotIn("Copy request", html)
+        self.assertNotIn("Ask Claude:", html)
         self.assertIn("Review Missing Sources", html)
         self.assertNotIn("'No source'", html)
         self.assertNotIn("'Located'", html)
