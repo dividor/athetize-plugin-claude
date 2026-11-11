@@ -2,6 +2,14 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.8.6] - 2026-11-11
+
+### Fixed
+- Choosing a folder for missing sources asked the person to type a path even where a folder chooser was available. The skill named the desktop app's folder tool loosely, so Claude could miss it. It now gives the real tool names, `mcp__ccd_directory__request_directory` for the Code tab and `mcp__cowork__request_cowork_directory` for Cowork, and searches for them before anything else
+
+### Changed
+- Before asking how to add missing sources, the check works out what the session can do, and offers only answers it can honour. A chat cannot reach the person's folders, so it offers Attach files and no folder answer
+
 ## [0.8.5] - 2026-11-11
 
 ### Added

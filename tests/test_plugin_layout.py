@@ -132,6 +132,16 @@ class ComponentTests(unittest.TestCase):
             with self.subTest(file=str(path.relative_to(ROOT))):
                 self.assertNotIn("<plugin root>", path.read_text("utf-8"))
 
+    def test_folder_question_names_the_real_folder_tools(self):
+        # a loose name made Claude miss the tool and ask for a typed path instead
+        text = (PLUGIN_DIR / "skills" / "check-paper" / "SKILL.md").read_text("utf-8")
+        for tool in (
+            "mcp__ccd_directory__request_directory",
+            "mcp__cowork__request_cowork_directory",
+        ):
+            self.assertIn(f"`{tool}`", text)
+        self.assertIn("Never offer an answer the session cannot honour", text)
+
     def test_skills_that_call_the_helper_reference_it_through_the_plugin_root(self):
         for path in sorted((PLUGIN_DIR / "skills").glob("*/SKILL.md")):
             text = path.read_text("utf-8")
