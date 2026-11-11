@@ -88,6 +88,10 @@ Click a claim for the analysis, the quoted passage and a suggested rewording:
 
 ![A claim's card: the result, the analysis and the evidence quoted from the source](docs/images/report-claim-card.jpg)
 
+Switch to Suggested Edits to see every rewording and reference fix marked in the paper, as tracked changes:
+
+![Suggested Edits: rewordings marked in the paper as tracked changes](docs/images/report-edits.jpg)
+
 The Sources tab shows where each source's text came from and lets you add the missing ones:
 
 ![The Sources tab: each reference, where its text came from and the claims that cite it](docs/images/report-sources.jpg)

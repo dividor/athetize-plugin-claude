@@ -2,6 +2,11 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- The README screenshots show the current report, and a new one shows the Suggested Edits view
+
 ## [0.8.3] - 2026-11-11
 
 ### Changed
