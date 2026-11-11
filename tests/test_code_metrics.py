@@ -273,7 +273,7 @@ class MainTests(TempDirTestCase):
 
     def test_default_paths_are_this_repository_python_directories(self):
         with mock.patch.object(sys, "argv", ["code_metrics.py"]):
-            self.assertEqual(cm.parse_args().paths, ["scripts", "tools", "tests"])
+            self.assertEqual(cm.parse_args().paths, ["athetize/scripts", "tools", "tests"])
 
 
 class RunTests(TempDirTestCase):

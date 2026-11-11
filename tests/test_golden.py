@@ -33,7 +33,7 @@ from pl_core import Work, jload, jsave
 
 ROOT = Path(__file__).resolve().parent.parent
 FIX = ROOT / "tests" / "fixtures" / "sample"
-REPORT_TEMPLATE = ROOT / "templates" / "report.html"
+REPORT_TEMPLATE = ROOT / "athetize" / "templates" / "report.html"
 GOLDEN = FIX / "golden.json"
 
 VOLATILE_KEYS = {

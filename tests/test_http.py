@@ -110,7 +110,9 @@ class HttpTests(unittest.TestCase):
         self.assertEqual(seen["ua"], f"athetize/{pl_http.VERSION}")
 
     def test_version_comes_from_the_plugin_manifest(self):
-        manifest = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text("utf-8"))
+        manifest = json.loads(
+            (ROOT / "athetize" / ".claude-plugin" / "plugin.json").read_text("utf-8")
+        )
         self.assertEqual(pl_http.VERSION, manifest["version"])
         self.assertEqual(pl_http.HOMEPAGE, manifest["homepage"])
         self.assertTrue(pl_http.HOMEPAGE.startswith("https://github.com/"))

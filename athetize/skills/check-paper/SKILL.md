@@ -21,7 +21,7 @@ Produce a self-contained `report.html` (and, for Word manuscripts, a tracked-cha
 
 ### 1. Preflight
 
-Run `PL doctor`. Report blocked services and a missing PDF extractor in one line each. If `xml_parser` is null and the paper is a Word file (or the user has Word or XML sources), install it before ingest: `pip install defusedxml` (add `--break-system-packages` if needed), and say you did. If no contact email is configured, ask once whether to set one (`PL config set-email ADDRESS`); it enables Unpaywall open-access lookups and is stored only in `~/.athetize/config.json`. Continue without it if the user declines.
+Run `PL doctor`. Report blocked services and a missing PDF extractor in one line each. If `xml_parser` is null and the paper is a Word file (or the user has Word or XML sources), the `defusedxml` package is missing. Say so, ask the person whether to install it (`pip install defusedxml`), and install it only when they agree. Never install a package without asking. If no contact email is configured, ask once whether to set one (`PL config set-email ADDRESS`); it enables Unpaywall open-access lookups and is stored only in `~/.athetize/config.json`. Continue without it if the user declines.
 
 ### 2. Ingest
 

@@ -16,7 +16,7 @@ Python 3.9 or newer. The helper scripts use the standard library plus a few smal
 
 Athetize uses the same libraries as Claude's own document skills: `defusedxml` and `lxml` for Word files and, when nothing faster is present, `pypdf` for PDFs. Where those skills already work, such as a session that runs commands in Claude's sandbox, there is nothing to install.
 
-Everything at once: `pip install -r scripts/requirements.txt` from the plugin folder. On systems that protect the system Python, use a virtual environment or add `--break-system-packages`. Claude runs `pl.py doctor` at the start of a check and tells you what is missing.
+Everything at once: `pip install -r athetize/scripts/requirements.txt` from the plugin folder. On systems that protect the system Python, use a virtual environment or add `--break-system-packages`. Claude runs `pl.py doctor` at the start of a check and tells you what is missing.
 
 To try a local clone without installing it, start Claude Code with `claude --plugin-dir /path/to/athetize-plugin-claude`.
 
@@ -33,8 +33,8 @@ To try a local clone without installing it, start Claude Code with `claude --plu
 | Agent | `claim-extractor` | Finds claims in a range of paragraphs (parallel, for long papers) |
 | Agent | `claim-verifier` | Compares claims with source passages for one batch (parallel) |
 | Agent | `suggestion-writer` | Drafts evidence-bounded rewordings for one batch of flagged claims (parallel) |
-| Scripts | `scripts/pl.py` and `pl_*.py` modules | Ingest, reference lookup, downloads, passage retrieval, quote verification, report build |
-| Template | `templates/report.html` | The report: one file, no external requests |
+| Scripts | `athetize/scripts/pl.py` and `pl_*.py` modules | Ingest, reference lookup, downloads, passage retrieval, quote verification, report build |
+| Template | `athetize/templates/report.html` | The report: one file, no external requests |
 
 The plugin has no hooks and no MCP servers. Nothing runs until you ask Claude to check a paper. The one background process is the local helper described under Privacy and safety, which runs only while you add sources from the report.
 
