@@ -673,6 +673,7 @@ class SourcesNeededTests(unittest.TestCase):
         self.assertNotIn('class="hero"', html)
         self.assertNotIn("Document checked", html)
         self.assertIn("retractions flagged", html)
+        self.assertIn("function refNode(p)", html)
         self.assertIn('id="settingsBtn"', html)
         self.assertIn("'Citations '", html)
         self.assertNotIn("Cited for", html)
