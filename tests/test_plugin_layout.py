@@ -203,18 +203,38 @@ class FileTests(unittest.TestCase):
         tops = {p.relative_to(PLUGIN_DIR).parts[0] for p in self.plugin_files}
         self.assertEqual(
             tops,
-            {".claude-plugin", "LICENSE", "agents", "logo.png", "scripts", "skills", "templates"},
+            {
+                ".claude-plugin",
+                "LICENSE",
+                "README.md",
+                "agents",
+                "logo.png",
+                "scripts",
+                "skills",
+                "templates",
+            },
         )
 
     def test_readme_and_license_are_present(self):
-        # the directory reads the README at the top of the repository when the plugin has none
-        readme = (ROOT / "README.md").read_text("utf-8")
-        prose = re.sub(r"```.*?```", "", readme, flags=re.S)
-        self.assertGreaterEqual(len(prose.split()), 40)
+        # the directory reads the plugin folder's README; the one at the top is for GitHub
+        for readme in (PLUGIN_DIR / "README.md", ROOT / "README.md"):
+            prose = re.sub(r"```.*?```", "", readme.read_text("utf-8"), flags=re.S)
+            self.assertGreaterEqual(len(prose.split()), 40, readme)
         self.assertIn("MIT License", (ROOT / "LICENSE").read_text("utf-8"))
         self.assertEqual(
             (PLUGIN_DIR / "LICENSE").read_text("utf-8"), (ROOT / "LICENSE").read_text("utf-8")
         )
+
+    def test_both_readmes_give_the_same_account_of_what_the_plugin_does(self):
+        def bullets(path, heading):
+            text = path.read_text("utf-8").split(f"## {heading}\n", 1)[1].split("\n## ", 1)[0]
+            return [line for line in text.splitlines() if line.startswith("- ")]
+
+        for heading in ("What it runs, sends and fetches", "Example prompts"):
+            with self.subTest(section=heading):
+                top = bullets(ROOT / "README.md", heading)
+                self.assertTrue(top)
+                self.assertEqual(bullets(PLUGIN_DIR / "README.md", heading), top)
 
     def test_listing_fields_point_at_real_things(self):
         self.assertTrue((PLUGIN_DIR / PLUGIN["icon"]).is_file())
@@ -225,14 +245,14 @@ class FileTests(unittest.TestCase):
             self.assertTrue((ROOT / path).is_file(), path)
 
     def test_readme_gives_at_least_three_example_prompts(self):
-        readme = (ROOT / "README.md").read_text("utf-8")
-        section = readme.split("## Example prompts", 1)[1].split("\n## ", 1)[0]
-        self.assertGreaterEqual(len(re.findall(r"(?m)^- ", section)), 3)
+        for path in (PLUGIN_DIR / "README.md", ROOT / "README.md"):
+            section = path.read_text("utf-8").split("## Example prompts", 1)[1].split("\n## ", 1)[0]
+            self.assertGreaterEqual(len(re.findall(r"(?m)^- ", section)), 3, path)
 
 
 class DisclosureTests(unittest.TestCase):
     def test_readme_names_every_host_the_scripts_contact_or_link_to(self):
-        readme = (ROOT / "README.md").read_text("utf-8")
+        readme = (PLUGIN_DIR / "README.md").read_text("utf-8")
         hosts = set()
         for path in (PLUGIN_DIR / "scripts").glob("*.py"):
             hosts.update(

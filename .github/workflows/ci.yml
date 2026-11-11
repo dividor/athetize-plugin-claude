@@ -100,7 +100,7 @@ jobs:
         run: |
           claude plugin validate --strict athetize/.claude-plugin/plugin.json
           claude plugin validate --strict .claude-plugin/marketplace.json
-          claude plugin validate --strict athetize
+          claude plugin validate --strict --profile directory athetize
           claude plugin validate --strict .
 
   security-scan:

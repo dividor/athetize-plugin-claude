@@ -14,9 +14,10 @@ A Claude plugin that checks whether the sources a paper cites support what the p
 **Claude Code**
 
 ```
-/plugin marketplace add dividor/athetize-plugin-claude
-/plugin install athetize@athetize-plugin
+/plugin install athetize --marketplace dividor/athetize-plugin-claude
 ```
+
+On Claude Code older than 2.1.275, use two steps: `/plugin marketplace add dividor/athetize-plugin-claude`, then `/plugin install athetize@athetize-plugin`.
 
 **Claude desktop app (Cowork) and claude.ai**
 

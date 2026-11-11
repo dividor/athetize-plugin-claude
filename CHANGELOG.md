@@ -13,7 +13,9 @@ Prepared for submission to the Claude plugin directory.
 ### Added
 - Listing details in the manifest: a display name, an icon, and links to the documentation, support and privacy policy
 - A privacy policy, `docs/privacy.md`
-- A copy of the licence inside the plugin folder
+- A copy of the licence and a README of its own inside the plugin folder, so a zip of the plugin stands alone. A test keeps that README's account of what the plugin runs and sends identical to the main one
+- The one-step install line, `/plugin install athetize --marketplace dividor/athetize-plugin-claude`
+- CI validates the plugin with the directory profile
 - Tests that hold the plugin folder to the directory's file rules: text and pictures only, size and count limits
 
 ## [0.7.26] - 2026-11-10
