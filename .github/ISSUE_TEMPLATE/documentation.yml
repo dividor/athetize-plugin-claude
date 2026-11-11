@@ -37,7 +37,7 @@ body:
     id: location
     attributes:
       label: Where
-      description: File and section, for example `README.md` > Setup, or `skills/check-paper/SKILL.md`
+      description: File and section, for example `README.md` > Install, or `athetize/skills/check-paper/SKILL.md`
     validations:
       required: true
 

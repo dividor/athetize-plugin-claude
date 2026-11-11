@@ -41,6 +41,20 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where were you running it?
+      description: The plugin behaves differently in each, so this matters.
+      options:
+        - Claude Code in a terminal
+        - Claude desktop app, Code tab
+        - Claude desktop app, Cowork
+        - claude.ai chat or the desktop app's Chat tab
+        - Other
+    validations:
+      required: true
+
   - type: textarea
     id: description
     attributes:
@@ -88,7 +102,7 @@ body:
       placeholder: |
         - OS: [e.g., macOS 15, Ubuntu 24.04, Windows 11]
         - Claude Code version: [output of `claude --version`]
-        - Plugin version: [from `claude plugin list`]
+        - Athetize version: [at the foot of the report, or from `claude plugin list`]
         - Python version: [e.g., 3.11.5]
         - Output of `pl.py doctor` (remove your email address)
       render: markdown

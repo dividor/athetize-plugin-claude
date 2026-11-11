@@ -15,7 +15,7 @@ body:
       label: Pre-submission Checklist
       description: Please check the following before submitting
       options:
-        - label: I have searched existing issues and discussions
+        - label: I have searched existing issues
           required: true
         - label: I have checked the README
           required: true
