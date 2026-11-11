@@ -2,6 +2,11 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.8.2] - 2026-11-11
+
+### Changed
+- The plugin is shown as "Athetize Fact Checker" in the app and in the marketplace. Its id stays `athetize`, so install commands and existing installs are unchanged
+
 ## [0.8.1] - 2026-11-11
 
 Found by running the plugin in a cloud session linked to a computer.

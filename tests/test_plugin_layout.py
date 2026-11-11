@@ -236,6 +236,15 @@ class FileTests(unittest.TestCase):
                 self.assertTrue(top)
                 self.assertEqual(bullets(PLUGIN_DIR / "README.md", heading), top)
 
+    def test_shown_name_is_the_same_everywhere(self):
+        # the id stays "athetize" so install commands keep working; this is the name people see
+        self.assertEqual(PLUGIN["name"], "athetize")
+        self.assertEqual(PLUGIN["displayName"], "Athetize Fact Checker")
+        self.assertEqual(MARKETPLACE["plugins"][0]["displayName"], PLUGIN["displayName"])
+        for readme in (ROOT / "README.md", PLUGIN_DIR / "README.md"):
+            first = readme.read_text("utf-8").splitlines()[0]
+            self.assertEqual(first, "# " + PLUGIN["displayName"], readme)
+
     def test_listing_fields_point_at_real_things(self):
         self.assertTrue((PLUGIN_DIR / PLUGIN["icon"]).is_file())
         for key in ("documentationUrl", "supportUrl", "privacyPolicyUrl", "homepage"):

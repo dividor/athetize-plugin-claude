@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "athetize-plugin",
-  "description": "Athetize: check whether the sources a paper cites back up what the paper says.",
+  "description": "Athetize Fact Checker: check whether the sources a paper cites back up what the paper says.",
   "owner": {
     "name": "Matthew Harris",
     "url": "https://github.com/dividor"
@@ -9,6 +9,7 @@
   "plugins": [
     {
       "name": "athetize",
+      "displayName": "Athetize Fact Checker",
       "source": "./athetize",
       "description": "Checks a paper's cited claims against the sources it cites and produces a self-contained HTML report, with suggested edits as Word tracked changes.",
       "category": "productivity",

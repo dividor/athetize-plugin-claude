@@ -1,4 +1,4 @@
-# Athetize
+# Athetize Fact Checker
 
 A Claude plugin that checks whether the sources a paper cites support what the paper says. It finds each claim, gets the cited source, compares the two, and shows the result on your paper with the evidence quoted. It is a screening aid: every flag still needs a human look.
 
