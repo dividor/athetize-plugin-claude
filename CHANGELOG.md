@@ -2,6 +2,12 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.17] - 2026-11-10
+
+### Changed
+- The Highlight and Suggested Edits switch sits inside the paper, at its top right beside the first heading. It is a joined pair with a ruled edge, so it cannot be mistaken for the grey result filters
+- Download Report and Add sources are softer: a light blue tint with a ruled edge and medium-weight text, where they were solid blocks
+
 ## [0.7.16] - 2026-11-10
 
 ### Changed
