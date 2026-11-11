@@ -111,6 +111,8 @@ a.textbtn{text-decoration:none}
 /* The filters are plain square chips on a soft fill, with no outlines. A filter that is on
    takes the look of the highlight it picks out in the paper: a tint over a coloured rule. */
 .toolbar .chips{flex:1 0 100%;flex-wrap:wrap;overflow:visible;gap:6px;margin:0}
+/* the chips share the row's whole width, so this row ends where every other row ends */
+.toolbar .chip{flex:1 1 auto;justify-content:center}
 .toolbar .hint{flex:1 1 260px;min-width:0;margin:0;font-size:13px}
 .toolbar .chip{height:32px;padding:0 12px;border:0;background:var(--soft);color:var(--ink);font-size:13.5px;transition:background-color .12s}
 .toolbar .chip::before{width:8px;height:8px}
@@ -136,6 +138,8 @@ a.textbtn{text-decoration:none}
 .hint{font-size:13.5px;color:var(--muted);margin:0 0 14px}
 .notice{margin:0 0 20px;padding:14px 18px;border:1px solid var(--note-line);background:var(--note-bg);font-size:14px}
 .notice b{font-family:var(--font-heading);font-weight:600}
+.needband{background:var(--surface);padding:14px 0 6px}
+.needband .notice{margin:0}
 .notice.need{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px}
 .notice.need .txt{flex:1 1 420px}
 .notice.need .act{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -188,6 +192,22 @@ a.textbtn{text-decoration:none}
 .pnote{margin-left:8px;border:1px solid var(--unc);color:var(--unc);background:transparent;padding:0 8px;font:600 11.5px/1.7 var(--font-body);cursor:pointer;vertical-align:.1em}
 .pnote:hover{background:var(--hover)}
 
+/* ---------- the paper with its suggested edits ----------
+   A switch above the paper shows it either with the results highlighted or with the
+   suggested rewordings marked in the text, as they are in the Word document. */
+.viewsw{display:flex;justify-content:flex-end;gap:4px;margin:0 0 10px}
+.viewsw button{height:30px;padding:0 12px;border:0;background:var(--soft);color:var(--muted);font:400 13px/1 var(--font-heading);cursor:pointer;transition:background-color .12s}
+.viewsw button b{font-weight:600}
+.viewsw button:hover{background:var(--hover);color:var(--ink)}
+.viewsw button[aria-pressed="true"]{background:color-mix(in srgb,var(--primary) 14%,var(--surface));box-shadow:inset 0 -2px 0 var(--primary-dark);color:var(--ink)}
+.viewsw button:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
+.claim .ed{display:none}
+#paper.edits .claim{background:none;border-bottom-color:transparent;cursor:text;pointer-events:none}
+#paper.edits .claim.has-edit:not(.sug-off){cursor:pointer;pointer-events:auto}
+#paper.edits .claim.has-edit:not(.sug-off) .hl{display:none}
+#paper.edits .claim.has-edit:not(.sug-off) .ed{display:inline}
+#paper.edits .claim.has-edit:not(.sug-off):hover,#paper.edits .claim.has-edit.active:not(.sug-off){background:var(--hover)}
+
 /* ---------- position rail ---------- */
 .rail{position:fixed;right:max(6px,env(safe-area-inset-right,0px));top:64px;bottom:24px;width:8px;z-index:15;pointer-events:none}
 .rail a{position:absolute;left:0;width:8px;height:3px;background:var(--c);pointer-events:auto;opacity:.85}
@@ -237,8 +257,8 @@ a.textbtn{text-decoration:none}
 .sug.off{opacity:.55}
 .sug .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;font-size:12.5px;color:var(--muted)}
 .sug .diff{font-size:14px;line-height:1.65;overflow-wrap:anywhere}
-.sug .diff del{color:var(--bad);text-decoration:line-through;background:color-mix(in srgb,var(--bad) 10%,transparent)}
-.sug .diff ins{color:var(--ok);text-decoration:none;background:color-mix(in srgb,var(--ok) 13%,transparent);border-bottom:1px solid var(--ok)}
+.sug .diff del,.claim .ed del{color:var(--bad);text-decoration:line-through;background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.sug .diff ins,.claim .ed ins{color:var(--ok);text-decoration:none;background:color-mix(in srgb,var(--ok) 13%,transparent);border-bottom:1px solid var(--ok)}
 .sug .why{font-size:13px;margin:6px 0 0;color:var(--muted)}
 .sug .act{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .sug .act button,.sugsum button,.addsrc .act button{font:400 12.5px/1.6 var(--font-body);padding:3px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
@@ -308,7 +328,7 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
   .ptab{flex:1;min-width:0;padding:0 10px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.toolbar .chip{transition:none}}
-@media print{.toolbar,.nav,.rail,.card,.iconbtn,.about,.hint,.pagetabs,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
+@media print{.toolbar,.viewsw,.needband,.nav,.rail,.card,.iconbtn,.about,.hint,.pagetabs,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
 </style>
 </head>
 <body>
@@ -348,6 +368,10 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
   </div></div>
 </nav>
 
+<div class="needband" id="needBand" hidden>
+  <div class="in"><div class="notice need" id="needSrc" hidden></div></div>
+</div>
+
 <div class="toolbar">
   <div class="in">
     <div class="chips" id="chips" role="group" aria-label="Filter claims by result"></div>
@@ -358,7 +382,10 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
 
 <main class="wrap in" id="docView">
   <p class="provline" id="provLine" hidden></p>
-  <div class="notice need" id="needSrc" hidden></div>
+  <div class="viewsw" id="viewSw" role="group" aria-label="What the paper shows" hidden>
+    <button type="button" id="showHl" aria-pressed="true">Highlights</button>
+    <button type="button" id="showEd" aria-pressed="false">Suggested edits <b id="edCount"></b></button>
+  </div>
   <article class="sheet" id="paper"></article>
   <div class="sugsum" id="sugSum"></div>
 </main>
@@ -443,6 +470,25 @@ function rich(p,a,b){ // the text of paragraph p from a to b, with its type styl
   }
   return frag;
 }
+/* The first suggested rewording of each claim, to mark in the paper's text. */
+var REWRITE={};
+(DATA.suggestions||[]).forEach(function(sg){if(sg.kind==='rewrite'&&sg.claim_id&&!REWRITE[sg.claim_id])REWRITE[sg.claim_id]=sg;});
+function editNode(p,c,sg){ // the claim's text with the rewording marked in it; null when it cannot be placed
+  var at=p.text.indexOf(sg.original);if(at<0)return null;
+  var box=el('span','ed'),pos=at,ok=true;
+  if(at>c.start)box.append(rich(p,c.start,Math.min(at,c.end)));
+  (sg.suggested?sg.diff:[['-',sg.original]]).forEach(function(op){
+    if(op[0]==='+'){if(pos<c.start||pos>c.end)ok=false;else box.append(el('ins',null,op[1]));return;}
+    var a=pos,b=pos+op[1].length;pos=b;
+    /* unchanged words outside the claim are already in the paragraph; a change there cannot be shown */
+    if(op[0]==='-'&&(a<c.start||b>c.end)){ok=false;return;}
+    var from=Math.max(a,c.start),to=Math.min(b,c.end);if(to<=from)return;
+    if(op[0]==='=')box.append(rich(p,from,to));
+    else{var d=el('del');d.append(rich(p,from,to));box.append(d);}
+  });
+  if(pos<c.end)box.append(rich(p,Math.max(pos,c.start),c.end));
+  return ok?box:null;
+}
 function paraNode(p){
   var node=el('p','para'+(p.align==='center'?' ctr':''));node.id='para-'+p.id;
   var segs=(byPara[p.id]||[]).sort(function(a,b){return a.start-b.start||(a.kind==='claim'?-1:1);});
@@ -454,12 +500,14 @@ function paraNode(p){
     var failing=s.kind==='claim'&&GROUP[verdict]!=='bad'&&(s.d.failing_refs||[]).length>0;
     var prov=s.kind==='claim'&&s.d.provisional===true;
     var m=el('span','claim v-'+verdict+(failing?' has-bad':'')+(prov?' prov':''));
-    m.append(rich(p,s.start,s.end));
+    var hl=el('span','hl');hl.append(rich(p,s.start,s.end));m.append(hl);
+    var sg=s.kind==='claim'?REWRITE[s.d.id]:null,ed=sg?editNode(p,s.d,sg):null;
+    if(ed){m.append(ed);m.classList.add('has-edit');m.dataset.sug=sg.id;}
     m.tabIndex=0;m.setAttribute('role','button');
     m.setAttribute('aria-label',LABEL[verdict]+(prov?', '+PROV_LABEL+', provisional':'')+(failing?', and '+FAILING_NOTE.toLowerCase():'')+': '+p.text.slice(s.start,s.end));
     var idx=items.length;
     m.dataset.idx=idx;
-    items.push({kind:s.kind,d:s.d,verdict:verdict,group:GROUP[verdict],failing:failing,prov:prov,el:m});
+    items.push({kind:s.kind,d:s.d,verdict:verdict,group:GROUP[verdict],failing:failing,prov:prov,edit:!!ed,el:m});
     node.append(m);pos=s.end;
   });
   if(pos<p.text.length)node.append(rich(p,pos,p.text.length));
@@ -563,10 +611,13 @@ function applyFilter(){
 }
 
 /* ---------- navigation list ---------- */
+var editsMode=false;
+function hasEdit(it){return it.edit===true&&!it.el.classList.contains('sug-off');}
 function navList(){
   var any=anyActive(),out=[];
   items.forEach(function(it,i){
-    if(any){if(shown(it))out.push(i);}
+    if(editsMode){if(hasEdit(it)&&(!any||shown(it)))out.push(i);}
+    else if(any){if(shown(it))out.push(i);}
     else if(it.verdict!=='supported')out.push(i);
   });
   return out;
@@ -575,7 +626,7 @@ var cur=-1;
 function updateNav(){
   var l=navList(),pos=l.indexOf(cur);
   /* before anything is picked it reads 1: the next press goes to the first one */
-  $('#navLabel').textContent=l.length?((pos>=0?pos+1:1)+' of '+l.length+(anyActive()?' shown':' to review')):'nothing to review';
+  $('#navLabel').textContent=l.length?((pos>=0?pos+1:1)+' of '+l.length+(editsMode?(l.length===1?' edit':' edits'):(anyActive()?' shown':' to review'))):(editsMode?'no edits':'nothing to review');
 }
 function go(delta){
   var l=navList();if(!l.length)return;
@@ -601,7 +652,7 @@ function searchLinks(sr){var d=el('div','srch');d.append(document.createTextNode
 var SUG={};(DATA.suggestions||[]).forEach(function(x){SUG[x.id]=x;});
 var EXKEY='athetize-excluded-'+(DATA.meta.source_file||'paper'), EXCL={};
 try{(JSON.parse(localStorage.getItem(EXKEY)||'[]')||[]).forEach(function(k){EXCL[k]=1;});}catch(e){}
-function saveExcl(){try{localStorage.setItem(EXKEY,JSON.stringify(Object.keys(EXCL)));}catch(e){}renderSugSum();}
+function saveExcl(){try{localStorage.setItem(EXKEY,JSON.stringify(Object.keys(EXCL)));}catch(e){}renderSugSum();syncEdits();}
 function copyText(t,btn){var done=function(){var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o;},1200);};
   try{navigator.clipboard.writeText(t).then(done,function(){btn.textContent='Copy failed';});}catch(e){btn.textContent='Copy failed';}}
 function sugBlock(sg){
@@ -1141,7 +1192,7 @@ if(location.protocol==='http:'&&/^(127\.0\.0\.1|localhost)$/.test(location.hostn
 function renderNeedSrc(){
   var n=DATA.sources_needed,box=$('#needSrc');
   if(!box||!n||!n.need_source)return;
-  box.hidden=false;
+  box.hidden=false;$('#needBand').hidden=false;
   var txt=el('div','txt');
   txt.append(el('b',null,n.need_source+' of '+count(n.references,'source has','sources have')+' no full text.'));
   txt.append(document.createTextNode(' '+count(n.claims_relying,'claim','claims')+' can\u2019t be fully checked yet.'));
@@ -1162,6 +1213,7 @@ function showView(sources){
   closeCard();
   if(sources)paperY=window.scrollY;
   [$('.toolbar'),docView,rail].forEach(function(e){e.hidden=sources;});
+  $('#needBand').hidden=sources||$('#needSrc').hidden;
   $(sources?'#openSources':'#openResults').setAttribute('aria-current','page');
   $(sources?'#openResults':'#openSources').removeAttribute('aria-current');
   srcView.hidden=!sources;
@@ -1185,6 +1237,31 @@ $('#openSources').addEventListener('click',function(){openSources();});
 $('#openResults').addEventListener('click',function(){if(!srcView.hidden)leaveSources();});
 window.addEventListener('hashchange',syncView);
 renderSrcLead();renderSrcFilter();renderSources();renderSugSum();renderNeedSrc();syncView();
+
+/* ---------- highlights or suggested edits ---------- */
+/* A suggestion left out of the Word document is left out of the paper's edits too. */
+function syncEdits(){
+  var n=0;
+  items.forEach(function(it){
+    if(!it.edit)return;
+    it.el.classList.toggle('sug-off',EXCL[it.el.dataset.sug]===1);
+    if(hasEdit(it))n++;
+  });
+  $('#edCount').textContent=n;
+  $('#viewSw').hidden=!items.some(function(it){return it.edit;});
+  items.forEach(function(it){if(it.kind==='claim')it.el.tabIndex=(editsMode&&!hasEdit(it))?-1:0;});
+  updateNav();
+}
+function setEditsMode(on){
+  editsMode=on;closeCard();
+  paper.classList.toggle('edits',on);
+  $('#showHl').setAttribute('aria-pressed',on?'false':'true');
+  $('#showEd').setAttribute('aria-pressed',on?'true':'false');
+  syncEdits();placeRail();
+}
+$('#showHl').addEventListener('click',function(){setEditsMode(false);});
+$('#showEd').addEventListener('click',function(){setEditsMode(true);});
+syncEdits();
 
 /* ---------- what Athetize does ---------- */
 var aboutBtn=$('#aboutBtn'),about=$('#about');

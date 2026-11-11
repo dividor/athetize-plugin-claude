@@ -2,6 +2,15 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.15] - 2026-11-10
+
+### Added
+- A switch above the paper shows it either with the results highlighted or with the suggested rewordings marked in the text, deletions struck through and additions underlined, as in the Word document. In that view the stepper moves from edit to edit, and a suggestion left out of the Word document is left out here too
+
+### Changed
+- The line about missing sources sits above the result filters
+- The filter chips share the whole width of their row, so every row of the page ends at the same edge
+
 ## [0.7.14] - 2026-11-10
 
 ### Changed
