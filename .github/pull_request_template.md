@@ -51,7 +51,7 @@ Related to #(issue number)
 
 ## Plugin Behaviour
 
-- [ ] No new network destinations, or the README "Privacy and safety" section is updated to list them
+- [ ] No new network destinations, or the README section "What it runs, sends and fetches" is updated to list them
 - [ ] No change to how sources are obtained (open-access routes, user-provided files, the user's own browser only)
 - [ ] `version` in `.claude-plugin/plugin.json` and `CHANGELOG.md` updated if users should receive this change
 

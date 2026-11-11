@@ -4,7 +4,12 @@ All notable changes to Athetize will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- A social preview image for the repository, `docs/images/social-preview.png`
+- Bug reports ask where the plugin was run: the terminal, the desktop app's Code tab or Cowork, or chat
+
 ### Changed
+- The issue forms no longer point to Discussions, which are not enabled, and their paths match the plugin's folder
 - The README screenshots show the current report, and a new one shows the Suggested Edits view
 
 ## [0.8.3] - 2026-11-11
