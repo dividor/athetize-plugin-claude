@@ -28,7 +28,7 @@ The report's Sources page has an **Add sources** button. It lets the person choo
 
 1. Run `pl.py serve --work W` as a background command, never in the foreground: it waits for the person. Its first line of output is JSON with a `url` on `127.0.0.1`.
 2. Give the person that address and say: open it, go to Sources, press Add sources. Open it for them when a browser tool is available.
-3. The helper reads each file they choose, matches it to its reference and adds it. It stops when they press "Finish and recheck", or after two hours without activity, and prints `added`, `not_recognised` and `next`.
+3. The helper reads each file they choose, matches it to its reference and adds it. A reference that still lacks its full text also has its own **Upload document** button on its row: a file given there is added to that reference as it is, with no matching, because the person has said which one it is. It stops when they press "Finish and recheck", or after two hours without activity, and prints `added`, `not_recognised` and `next`.
 4. When it has stopped: for each file under `not_recognised` (kept in `not_recognised_folder`), ask which reference it is and add it with `pl.py add-source --work W REF FILE`. If anything was added, run the `recheck` skill and tell the person the report is ready. Start the helper again if they want to add more.
 
 This needs the session's commands to run on the person's own computer. In a cloud or sandboxed session their browser cannot reach the helper: ask for attached files or a folder instead (the steps above).

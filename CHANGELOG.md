@@ -2,6 +2,13 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.11] - 2026-11-10
+
+### Added
+- On the Sources page, each reference with no full text, or only an abstract, has an **Upload document** button. The file is added to that reference as it is, without matching. A file with almost no text is refused, and a file whose text reads like another reference is added with a note saying so
+- An information button at the top says briefly what Athetize does, that the checking is done by AI and can be wrong, and what is sent where
+- Links that leave the report carry a small arrow, since they open in a new tab
+
 ## [0.7.10] - 2026-11-10
 
 ### Changed

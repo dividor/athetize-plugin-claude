@@ -67,6 +67,13 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 .brand-sub{font-weight:400}
 .iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--muted);width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
 .iconbtn:hover{background:var(--hover);color:var(--ink)}
+.iconbtn[aria-expanded="true"]{background:var(--hover);color:var(--ink)}
+.topact{position:relative;display:flex;gap:8px;flex:none}
+/* a short note on what the product does, kept behind a button so the page stays clear */
+.about{position:absolute;right:0;top:calc(100% + 8px);z-index:50;width:min(380px,calc(100vw - 32px));padding:16px 18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+.about h2{font-size:1rem;margin:0 0 8px}
+.about p{margin:0 0 10px;font-size:13.5px;line-height:1.55;color:var(--ink)}
+.about p:last-child{margin-bottom:0;color:var(--muted)}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 /* ---------- page tabs ---------- */
 /* Tabs move between pages, so they must not look like the filled action buttons. They are
@@ -261,6 +268,8 @@ a.textbtn{text-decoration:none}
 .srow{background:var(--surface);border:1px solid var(--line);padding:14px 18px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
 .srow .id{font:600 12.5px/1.8 var(--font-mono);color:var(--muted)}
 .srow .cit{font-size:14.5px;overflow-wrap:anywhere}
+/* a link that leaves the report opens in a new tab, and a small arrow says so */
+a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85em;text-decoration:none;color:var(--muted)}
 .srow .pills{display:flex;flex-wrap:wrap;align-items:center;gap:2px 18px;margin-top:6px;grid-column:2}
 .srow .used{grid-column:2;font-size:12.5px;color:var(--muted);margin-top:4px}
 .cchip{display:inline-block;margin:0 6px 4px 0;padding:0 7px;font:600 12px/1.75 var(--font-mono);color:var(--c);border:1px solid var(--c);background:color-mix(in srgb,var(--c) 10%,transparent);text-decoration:none}
@@ -270,6 +279,12 @@ a.textbtn{text-decoration:none}
 .srow .more{grid-column:2;font-size:12px;color:var(--muted)}
 .srow .why{grid-column:2;font-size:12.5px;color:var(--muted)}
 .srow.flag{border-left:3px solid var(--part)}
+/* a row's own action is outlined, so the one filled button on the page stays Add sources */
+.srow .rowact{grid-column:2;margin-top:10px}
+.textbtn.small{height:30px;padding:0 11px;font-size:12.5px;gap:6px}
+.textbtn.small svg.ic{width:15px;height:15px}
+.srow .rownote{grid-column:2;margin-top:8px;font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.srow .rownote.bad{color:var(--bad)}
 .empty{padding:24px;text-align:center;color:var(--muted)}
 
 /* ---------- phones ---------- */
@@ -286,7 +301,7 @@ a.textbtn{text-decoration:none}
   .ptab{flex:1;min-width:0;padding:0 10px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.card.as-sheet,.claim,.bar button{transition:none}}
-@media print{.tabs,.nav,.rail,.card,.iconbtn,.hint,.pagetabs,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
+@media print{.tabs,.nav,.rail,.card,.iconbtn,.about,.hint,.pagetabs,.addsrc{display:none!important}body{background:#fff}.sheet{border:0;padding:0}}
 </style>
 </head>
 <body>
@@ -296,7 +311,16 @@ a.textbtn{text-decoration:none}
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 14.5l2.2 2.2L15.5 12"/></svg>
       <span class="brand-name">Athetize <span class="brand-sub">Fact Checker</span></span>
     </div>
+    <div class="topact">
+      <button class="iconbtn" id="aboutBtn" type="button" aria-label="What Athetize does" title="What Athetize does" aria-expanded="false" aria-controls="about"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.2"/></svg></button>
+      <div class="about" id="about" role="dialog" aria-label="What Athetize does" hidden>
+        <h2>What Athetize does</h2>
+        <p>Athetize checks each claim in your paper against the source it cites. Every claim gets a result, the passage in the source that the result rests on, and a link to that source. Where a claim goes further than its source, it suggests a rewording.</p>
+        <p>The checking is done by AI and can be wrong. Use a result as a pointer to read the evidence, not as the last word.</p>
+        <p>Athetize runs inside Claude, which reads your paper and the sources. Apart from that, only reference details, such as titles and DOIs, are sent out, to public indexes that help find the sources.</p>
+      </div>
     <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>
+    </div>
   </div>
 </header>
 
@@ -342,6 +366,7 @@ a.textbtn{text-decoration:none}
     <div class="row"><p id="srcLead"></p><div class="addwrap"><button class="textbtn primary" id="addSources" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add sources</button><div class="addmenu" id="addMenu" role="menu" hidden><button type="button" role="menuitem" id="pickFiles">Files…</button><button type="button" role="menuitem" id="pickFolder">A folder…</button></div></div></div>
     <input type="file" id="srcPicker" multiple hidden accept=".pdf,.txt,.md,.html,.htm,.docx,.xml">
     <input type="file" id="dirPicker" webkitdirectory hidden>
+    <input type="file" id="onePicker" hidden accept=".pdf,.txt,.md,.html,.htm,.docx,.xml">
   </div>
   <section class="addsrc" id="addSrc" aria-live="polite" hidden></section>
   <div class="srcfilter"><div class="chips" id="srcFilter" role="group" aria-label="Filter sources"></div></div>
@@ -380,7 +405,7 @@ function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=c
 function safeUrl(u){if(!u)return null;try{var x=new URL(u,location.href);return(x.protocol==='https:'||x.protocol==='http:')?x.href:null;}catch(e){return null;}}
 function localHref(p){if(location.protocol!=='file:')return null;return(p&&/^sources\//.test(p)&&p.indexOf('..')<0)?encodeURI(p):null;}
 var SVGNS='http://www.w3.org/2000/svg';
-var ICONS={prev:'M15 6l-6 6 6 6',next:'M9 6l6 6-6 6',close:'M6 6l12 12M18 6L6 18'};
+var ICONS={prev:'M15 6l-6 6 6 6',next:'M9 6l6 6-6 6',close:'M6 6l12 12M18 6L6 18',plus:'M12 5v14M5 12h14'};
 function icon(name){var s=document.createElementNS(SVGNS,'svg');s.setAttribute('class','ic');s.setAttribute('viewBox','0 0 24 24');s.setAttribute('aria-hidden','true');
   var p=document.createElementNS(SVGNS,'path');p.setAttribute('d',ICONS[name]);s.appendChild(p);return s;}
 function iconBtn(name,label){var b=el('button');b.type='button';b.title=label;b.setAttribute('aria-label',label);b.append(icon(name));return b;}
@@ -645,7 +670,7 @@ function refBlock(r,multi){
   });
   var src=el('div','src');
   var url=safeUrl(r.link);
-  if(url){var a=el('a',null,r.citation);a.href=url;a.target='_blank';a.rel='noopener noreferrer';src.append(a);}
+  if(url){var a=el('a','ext',r.citation);a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.title='Opens in a new tab';src.append(a);}
   else src.append(el('span','cite',r.citation));
   if(r.raw&&r.raw!==r.citation)src.append(el('div','rawref',r.raw));
   if(!url&&r.search)src.append(searchLinks(r.search));
@@ -815,7 +840,7 @@ window.addEventListener('resize',function(){placeRail();if(openIdx>=0&&!sheetMod
 window.addEventListener('load',placeRail);
 
 /* ---------- sources page ---------- */
-var srcList=$('#srcList'), needsOnly=false;
+var srcList=$('#srcList'), needsOnly=false, rowNote={};
 function count(n,one,many){return n+' '+(n===1?one:many);}
 function needsSource(r){return r.status==='missing'||r.status==='abstract_only'||r.status==='unresolved';}
 function needCount(){return DATA.refs.filter(needsSource).length;}
@@ -824,13 +849,14 @@ function renderSources(){
   var shown=0;
   DATA.refs.forEach(function(r){
     var needs=needsSource(r);
-    if(needsOnly&&!needs)return;
+    /* a row just given its document stays in view, so its note can be read */
+    if(needsOnly&&!needs&&!rowNote[r.id])return;
     shown++;
     var row=el('div','srow'+((needs||r.retracted)?' flag':''));
     row.id='ref-'+r.id;
     row.append(el('div','id','['+r.id+']'));
     var c=el('div','cit');var url=safeUrl(r.link);
-    if(url){var a=el('a',null,r.citation);a.href=url;a.target='_blank';a.rel='noopener noreferrer';c.append(a);}else c.textContent=r.citation;
+    if(url){var a=el('a','ext',r.citation);a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.title='Opens in a new tab';c.append(a);}else c.textContent=r.citation;
     if(!url&&r.search){var sl=searchLinks(r.search);sl.style.fontSize='12px';c.append(sl);}
     row.append(c);
     var pills=el('div','pills');
@@ -843,6 +869,15 @@ function renderSources(){
     row.append(pills);
     if(r.matched_title&&(r.exists==='partial_match'||r.exists==='mismatch')){row.append(el('div','more','Closest database record: \u201c'+r.matched_title+'\u201d. Not used: the citation and link above are the paper\u2019s own.'));}
     if(r.why_missing&&r.why_missing.length)row.append(whyLine(r.why_missing,'why'));
+    if(needs){
+      /* the person says which reference the file is for by pressing its row: nothing is matched */
+      var ub=el('button','textbtn small');ub.type='button';ub.append(icon('plus'),document.createTextNode('Upload document'));
+      ub.setAttribute('aria-label','Upload the document for reference '+r.id);
+      ub.disabled=adding===true;
+      ub.addEventListener('click',function(){uploadFor(r);});
+      var act=el('div','rowact');act.append(ub);row.append(act);
+    }
+    if(rowNote[r.id])row.append(el('div','rownote'+(rowNote[r.id].bad?' bad':''),rowNote[r.id].text));
     if(r.cited_by&&r.cited_by.length){
       var used=el('div','used','Cited for ');
       r.cited_by.forEach(function(cid){
@@ -971,7 +1006,7 @@ function showAdded(res){
 }
 function markAdded(res){
   res.matched.forEach(function(m){
-    DATA.refs.forEach(function(r){if(r.id===m.ref)r.status=m.status;});
+    DATA.refs.forEach(function(r){if(r.id===m.ref){r.status=m.status;r.why_missing=[];}});
   });
   renderSrcLead();renderSrcFilter();renderSources();
 }
@@ -1041,6 +1076,28 @@ function entryFiles(entry){
   }
   return more();
 }
+/* One document for one reference, from the button on that reference's row. */
+var onePicker=$('#onePicker'),oneRef=null;
+function uploadFor(r){
+  if(adding)return;
+  if(!helper){showHowToAdd();addBox.scrollIntoView({block:'center'});return;}
+  oneRef=r;onePicker.click();
+}
+onePicker.addEventListener('change',function(){
+  var f=onePicker.files[0],r=oneRef;onePicker.value='';oneRef=null;
+  if(!f||!r||adding)return;
+  function say(text,bad){rowNote[r.id]={text:text,bad:bad===true};renderSources();}
+  if(!READS.test(f.name)){say(f.name+' is not a type Athetize reads: PDF, Word, web page or text.',true);return;}
+  if(f.size>MAX_MB*1024*1024){say(f.name+' is over '+MAX_MB+' MB.',true);return;}
+  adding=true;addBtn.disabled=true;say('Reading '+f.name+'\u2026');
+  api('upload-for?ref='+encodeURIComponent(r.id)+'&name='+encodeURIComponent(f.name),{method:'POST',body:f}).then(function(m){
+    var res={matched:[m],ambiguous:[],unmatched:[],duplicates:[],already_imported:[],skipped:{other:0,same:[],known:[]}};
+    rowNote[r.id]={bad:false,text:'Added from '+m.file+'. Not rechecked yet: press Finish and recheck at the top of this page when you are done.'
+      +(m.looks_like?' Its text looks like reference ['+m.looks_like+'] ('+m.looks_like_title+'), not this one, so check it is the right file.':'')};
+    markAdded(res);showAdded(res);
+  },function(e){rowNote[r.id]={bad:true,text:'Not added. '+e.message};})
+    .then(function(){adding=false;addBtn.disabled=false;renderSources();});
+});
 var addMenu=$('#addMenu'),dirPicker=$('#dirPicker');
 function showAddMenu(open){addMenu.hidden=!open;addBtn.setAttribute('aria-expanded',open?'true':'false');if(open)$('#pickFiles').focus();}
 /* On a Mac the helper opens the system's own chooser, which takes files and folders
@@ -1139,6 +1196,13 @@ $('#openSources').addEventListener('click',function(){openSources();});
 $('#openResults').addEventListener('click',function(){if(!srcView.hidden)leaveSources();});
 window.addEventListener('hashchange',syncView);
 renderSrcLead();renderSrcFilter();renderSources();renderSugSum();renderNeedSrc();syncView();
+
+/* ---------- what Athetize does ---------- */
+var aboutBtn=$('#aboutBtn'),about=$('#about');
+function showAbout(open){about.hidden=!open;aboutBtn.setAttribute('aria-expanded',open?'true':'false');}
+aboutBtn.addEventListener('click',function(){showAbout(about.hidden);});
+document.addEventListener('click',function(e){if(!about.hidden&&!e.target.closest('.topact'))showAbout(false);});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!about.hidden){showAbout(false);aboutBtn.focus();}});
 
 /* ---------- theme ---------- */
 $('#theme').addEventListener('click',function(){

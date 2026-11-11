@@ -27,7 +27,7 @@ from typing import cast
 import pl_core
 import pl_resolve
 from pl_cmd_setup import out
-from pl_cmd_sources import import_paths, source_hashes
+from pl_cmd_sources import NotAdded, add_file_for, import_paths, source_hashes
 from pl_identify import _ref_title
 from pl_workspace import Work
 
@@ -184,6 +184,32 @@ class AddSources:
             raise Refused(400, f"{clean} did not arrive whole.")
         return {"saved": dest.name}
 
+    def save_for(self, ref_id: str, name: str, length: int, stream) -> dict:
+        """Take one file the person chose for one reference, and add it as that source.
+
+        Nothing is matched: the reference is the one whose row they pressed.
+        """
+        refs = {r["id"]: r for r in self.work.refs()}
+        if ref_id not in refs:
+            raise Refused(404, f"Reference {ref_id or '(none)'} is not in this paper.")
+        waiting = self.work.p(INCOMING, self.save(name, length, stream)["saved"])
+        try:
+            added = add_file_for(self.work, ref_id, waiting)
+        except NotAdded as refused:
+            raise Refused(422, str(refused)) from refused
+        finally:
+            waiting.unlink()
+        added["title"] = self._title(refs[ref_id])
+        if added["looks_like"]:
+            added["looks_like_title"] = self._title(refs[added["looks_like"]])
+        self.added.append({k: added[k] for k in ("file", "ref", "status")})
+        return added
+
+    @staticmethod
+    def _title(ref: dict) -> str:
+        """A reference's title, or its entry as printed when it has none."""
+        return _ref_title(ref) or pl_core._clean_raw(ref["raw"])
+
     def take_in(self) -> dict:
         """Match the waiting files to references, add the ones recognised and say what happened."""
         folder = self.work.p(INCOMING)
@@ -230,7 +256,7 @@ class AddSources:
         """Give each added file its reference's title and remember it for the summary."""
         refs = {r["id"]: r for r in self.work.refs()}
         for m in result["matched"]:
-            m["title"] = _ref_title(refs[m["ref"]]) or pl_core._clean_raw(refs[m["ref"]]["raw"])
+            m["title"] = self._title(refs[m["ref"]])
             self.added.append({k: m[k] for k in ("file", "ref", "status")})
 
     def known(self, body: bytes) -> dict:
@@ -316,6 +342,7 @@ class _Handler(BaseHTTPRequestHandler):
             "POST",
             {
                 "api/upload": self._upload,
+                "api/upload-for": self._upload_for,
                 "api/known": self._known,
                 "api/choose": lambda app, q: self._json(200, app.choose()),
                 "api/import": lambda app, q: self._json(200, app.take_in()),
@@ -333,6 +360,14 @@ class _Handler(BaseHTTPRequestHandler):
             raise Refused(411, "The file's size was not given.")
         name = (query.get("name") or [""])[0]
         self._json(200, app.save(name, int(length), self.rfile))
+
+    def _upload_for(self, app: AddSources, query: dict) -> None:
+        length = self.headers.get("Content-Length") or ""
+        if not length.isdigit():
+            raise Refused(411, "The file's size was not given.")
+        ref_id = (query.get("ref") or [""])[0]
+        name = (query.get("name") or [""])[0]
+        self._json(200, app.save_for(ref_id, name, int(length), self.rfile))
 
     def _known(self, app: AddSources, query: dict) -> None:
         length = self.headers.get("Content-Length") or ""

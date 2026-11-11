@@ -273,7 +273,7 @@ def _place_file(
     if rid is None:
         if how == "ambiguous":
             found["ambiguous"].append({"file": f.name, "could_be": amb})
-        elif len((text or "").strip()) < 500:
+        elif len((text or "").strip()) < MIN_SOURCE_TEXT:
             why = "has almost no text (a scan, or a saved sign-in page?)"
             found["unmatched"].append({"file": f.name, "why": why})
         else:
@@ -284,7 +284,7 @@ def _place_file(
     elif rid not in wanted:
         why = f"reference {rid} already has its full text"
         found["duplicates"].append({"file": f.name, "ref": rid, "why": why})
-    elif len((text or "").strip()) < 500:
+    elif len((text or "").strip()) < MIN_SOURCE_TEXT:
         why = f"matched {rid} but has almost no text (scanned or a preview page?)"
         found["unmatched"].append({"file": f.name, "why": why})
     else:
@@ -343,6 +343,45 @@ def _import_matched(work: Work, refs: dict[str, dict], src: Path, matched: list[
         m["status"] = entry.get("status")
         m["characters"] = entry.get("evidence_chars")
     jsave(work.p("manifest.json"), manifest)
+
+
+# A file with less text than this cannot be a paper: a scan, or a saved sign-in page.
+MIN_SOURCE_TEXT = 500
+
+
+class NotAdded(Exception):
+    """A file that cannot be used as the source of the reference it was offered for."""
+
+
+def add_file_for(work: Work, ref_id: str, path: Path) -> dict:
+    """Add one file as the source of the reference the person named.
+
+    Their choice of reference stands: the file is not matched to one. It is still read,
+    so a file with almost no text is refused, and when its text is recognised as another
+    reference of the paper that reference is named under "looks_like", for the page to say.
+    """
+    refs = {r["id"]: r for r in work.refs()}
+    if ref_id not in refs:
+        raise NotAdded(f"Reference {ref_id} is not in this paper.")
+    try:
+        text = pl_text.extract_file_text(path)
+    except Exception as exc:  # unreadable file
+        raise NotAdded(f"{path.name} could not be read: {exc}"[:160]) from exc
+    if len(text.strip()) < MIN_SOURCE_TEXT:
+        raise NotAdded(
+            f"{path.name} has almost no text (a scan, or a saved sign-in page?), "
+            "so claims cannot be checked against it."
+        )
+    known = work.manifest().get("refs", {})
+    candidates = {rid: with_known_doi(ref, known.get(rid, {})) for rid, ref in refs.items()}
+    other = _match_file_to_ref(path, text, candidates)[0]
+    src = work.p("sources")
+    src.mkdir(exist_ok=True)
+    added: dict = {"file": path.name, "ref": ref_id, "path": str(path)}
+    _import_matched(work, refs, src, [added])
+    del added["path"]
+    added["looks_like"] = other if other and other != ref_id else None
+    return added
 
 
 def source_hashes(work: Work) -> set:

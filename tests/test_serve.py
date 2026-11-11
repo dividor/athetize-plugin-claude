@@ -36,6 +36,12 @@ def _offline(*a, **k):
     raise pl_http.HttpError("network error for offline.test: stubbed")
 
 
+# A long text that names none of the paper's references.
+PLAIN = (
+    "The harbour ledger lists cargo, tides and berths for each week of the season. " * 12
+).encode()
+
+
 class HelperTests(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
@@ -249,6 +255,48 @@ class HelperTests(unittest.TestCase):
                 self.assertEqual(json.loads(self.ask("GET", "api/ping")[1])["chooser"], there)
         with mock.patch.object(pl_serve, "has_system_chooser", return_value=False):
             self.assertEqual(self.post_json("api/choose")[0], 404)
+
+    def test_a_document_uploaded_on_a_row_is_added_to_that_reference(self):
+        # the text names no reference of the paper, so only the person's choice says whose it is
+        status, got = self.post_json("api/upload-for?ref=4&name=scan%20of%20chapter.txt", PLAIN)
+        self.assertEqual(status, 200)
+        self.assertEqual(
+            (got["file"], got["ref"], got["status"], got["looks_like"]),
+            ("scan of chapter.txt", "4", "user_provided", None),
+        )
+        self.assertTrue(got["title"])
+        self.assertEqual(self.work.manifest()["refs"]["4"]["status"], "user_provided")
+        self.assertEqual(self.work.p("sources", "4.txt").read_bytes(), PLAIN)
+        self.assertEqual(list(self.work.p(pl_serve.INCOMING).iterdir()), [])
+        self.assertEqual(
+            self.app.added, [{"file": "scan of chapter.txt", "ref": "4", "status": "user_provided"}]
+        )
+
+    def test_a_document_that_reads_like_another_reference_is_added_and_flagged(self):
+        status, got = self.post_json("api/upload-for?ref=4&name=paper.txt", BRANDT.encode())
+        self.assertEqual((status, got["ref"], got["looks_like"]), (200, "4", "3"))
+        self.assertEqual(
+            got["looks_like_title"], "Sleep spindles and overnight retention across the lifespan"
+        )
+        self.assertEqual(self.work.manifest()["refs"]["4"]["status"], "user_provided")
+        self.assertEqual(self.work.manifest()["refs"]["3"]["status"], "missing")
+
+    def test_a_document_for_a_reference_that_is_not_in_the_paper_is_refused(self):
+        status, got = self.post_json("api/upload-for?ref=99&name=paper.txt", PLAIN)
+        self.assertEqual(status, 404)
+        self.assertIn("Reference 99", got["error"])
+        self.assertFalse(self.work.p(pl_serve.INCOMING).exists())
+        self.assertEqual(self.post_json("api/upload-for?name=paper.txt", PLAIN)[0], 404)
+
+    def test_a_document_with_almost_no_text_is_refused_and_nothing_changes(self):
+        status, got = self.post_json("api/upload-for?ref=3&name=cover.txt", b"Sign in to read")
+        self.assertEqual(status, 422)
+        self.assertIn("almost no text", got["error"])
+        self.assertEqual(self.work.manifest()["refs"]["3"], {"status": "missing"})
+        self.assertFalse(self.work.p("sources").exists())
+        self.assertEqual(list(self.work.p(pl_serve.INCOMING).iterdir()), [])
+        self.assertEqual(self.app.added, [])
+        self.assertEqual(self.post_json("api/upload-for?ref=3&name=tool.exe", PLAIN)[0], 415)
 
     def test_importing_with_nothing_waiting_adds_nothing(self):
         status, result = self.post_json("api/import")
