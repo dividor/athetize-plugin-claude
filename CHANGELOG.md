@@ -2,6 +2,12 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.16] - 2026-11-10
+
+### Changed
+- The Word download button reads "Download Report"
+- The switch between the two views of the paper reads "Highlight" and "Suggested Edits" and sits in the toolbar line, beside the hint and the stepper, so it no longer takes a row of its own. The hint follows the view
+
 ## [0.7.15] - 2026-11-10
 
 ### Added

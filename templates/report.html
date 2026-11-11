@@ -103,8 +103,8 @@ a.textbtn{text-decoration:none}
 .hero h1{font-size:clamp(17px,2.2vw,20px);font-weight:500;line-height:1.35;margin:0;color:var(--ink);overflow-wrap:anywhere}
 
 /* ---------- sticky filter row ---------- */
-/* One quiet toolbar under the tabs: the result filters, then a line with the hint on the
-   left and the stepper on the right. */
+/* One quiet toolbar under the tabs: the result filters, then a line with the view switch
+   and the hint on the left and the stepper on the right. */
 .toolbar{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
 .toolbar .in{display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px;min-height:52px;padding-top:8px;padding-bottom:8px}
 .toolbar .nav{margin-left:auto} /* stays at the right edge, also when it wraps under the filters */
@@ -193,9 +193,9 @@ a.textbtn{text-decoration:none}
 .pnote:hover{background:var(--hover)}
 
 /* ---------- the paper with its suggested edits ----------
-   A switch above the paper shows it either with the results highlighted or with the
+   A switch in the toolbar shows the paper either with the results highlighted or with the
    suggested rewordings marked in the text, as they are in the Word document. */
-.viewsw{display:flex;justify-content:flex-end;gap:4px;margin:0 0 10px}
+.viewsw{display:flex;flex:none;gap:4px;margin:0}
 .viewsw button{height:30px;padding:0 12px;border:0;background:var(--soft);color:var(--muted);font:400 13px/1 var(--font-heading);cursor:pointer;transition:background-color .12s}
 .viewsw button b{font-weight:600}
 .viewsw button:hover{background:var(--hover);color:var(--ink)}
@@ -357,7 +357,7 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
       <p class="eyebrow">Document checked</p>
       <h1 id="title"></h1>
     </div>
-    <a class="textbtn primary" id="wordReport" hidden title="Download your Word document with every suggested edit as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Updated Document</span></a>
+    <a class="textbtn primary" id="wordReport" hidden title="Download the report as a Word document: your paper with every suggested edit as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Download Report</span></a>
   </div>
 </section>
 
@@ -375,17 +375,17 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
 <div class="toolbar">
   <div class="in">
     <div class="chips" id="chips" role="group" aria-label="Filter claims by result"></div>
-    <p class="hint">Hover a highlight, or tap it on a phone, to see the analysis and the source.</p>
+    <div class="viewsw" id="viewSw" role="group" aria-label="What the paper shows" hidden>
+      <button type="button" id="showHl" aria-pressed="true">Highlight</button>
+      <button type="button" id="showEd" aria-pressed="false">Suggested Edits <b id="edCount"></b></button>
+    </div>
+    <p class="hint" id="hint">Hover or tap a highlight for details.</p>
     <div class="nav" id="nav"><button type="button" id="prev" aria-label="Previous claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span id="navLabel"></span><button type="button" id="next" aria-label="Next claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
   </div>
 </div>
 
 <main class="wrap in" id="docView">
   <p class="provline" id="provLine" hidden></p>
-  <div class="viewsw" id="viewSw" role="group" aria-label="What the paper shows" hidden>
-    <button type="button" id="showHl" aria-pressed="true">Highlights</button>
-    <button type="button" id="showEd" aria-pressed="false">Suggested edits <b id="edCount"></b></button>
-  </div>
   <article class="sheet" id="paper"></article>
   <div class="sugsum" id="sugSum"></div>
 </main>
@@ -994,7 +994,7 @@ function renderSrcLead(){
 var wordName=DATA.meta.word_export;
 function offerWord(href){
   var a=$('#wordReport');a.href=href;a.setAttribute('download',wordName);
-  a.setAttribute('aria-label','Download the updated Word document, with the suggested edits: '+wordName);a.hidden=false;
+  a.setAttribute('aria-label','Download the report as a Word document with the suggested edits: '+wordName);a.hidden=false;
 }
 if(wordName&&location.protocol==='file:'&&/^[^\/\\]+\.docx$/.test(wordName))offerWord(encodeURI(wordName));
 
@@ -1257,6 +1257,7 @@ function setEditsMode(on){
   paper.classList.toggle('edits',on);
   $('#showHl').setAttribute('aria-pressed',on?'false':'true');
   $('#showEd').setAttribute('aria-pressed',on?'true':'false');
+  $('#hint').textContent=on?'Click an edit to see why.':'Hover or tap a highlight for details.';
   syncEdits();placeRail();
 }
 $('#showHl').addEventListener('click',function(){setEditsMode(false);});
