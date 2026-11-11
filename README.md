@@ -1,4 +1,4 @@
-# Athetize
+# Athetize Fact Checker
 
 [![CI](https://github.com/dividor/athetize-plugin-claude/actions/workflows/ci.yml/badge.svg)](https://github.com/dividor/athetize-plugin-claude/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
