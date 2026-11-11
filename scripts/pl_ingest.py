@@ -211,19 +211,68 @@ def parse_pdf(path: Path) -> list[dict]:
     return paras
 
 
-def _read_raw_paragraphs(path: Path, ext: str) -> list[dict]:
-    """Read the manuscript with the parser for its file type."""
+def _read_manuscript(path: Path, ext: str) -> tuple[list[dict], list[dict]]:
+    """Read the manuscript with the parser for its file type: its paragraphs and its tables.
+
+    Only a Word file says how its tables are laid out; every other type gives none.
+    """
     if ext == ".docx":
-        return pl_text.read_docx_paragraphs(path)
+        return pl_text.read_docx(path)
     if ext == ".pdf":
-        return parse_pdf(path)
+        return parse_pdf(path), []
     if ext in (".md", ".markdown"):
-        return parse_markdown(path.read_text("utf-8", "replace"))
+        return parse_markdown(path.read_text("utf-8", "replace")), []
     if ext == ".tex":
-        return parse_tex(path.read_text("utf-8", "replace"))
+        return parse_tex(path.read_text("utf-8", "replace")), []
     if ext in (".txt", ""):
-        return parse_plain(path.read_text("utf-8", "replace"))
+        return parse_plain(path.read_text("utf-8", "replace")), []
     raise ValueError(f"Unsupported file type: {ext}. Use .docx, .pdf, .md, .tex or .txt")
+
+
+# A heading set in bold type, with no heading style, is at most this long.
+_BOLD_HEADING_MAX = 100
+
+
+def _is_bold_heading(p: dict, text: str) -> bool:
+    """True for a short line set entirely in bold, outside any table, that is not a sentence.
+
+    Many authors mark headings this way in Word and never apply a heading style.
+    """
+    return (
+        bool(p.get("bold_all"))
+        and "tbl" not in p
+        and len(text) <= _BOLD_HEADING_MAX
+        and bool(_WORD.search(text))
+        and (not text.endswith((".", ",", ";", ":")) or bool(NUMBERED_HEAD.match(text)))
+    )
+
+
+def _heading_level(style: str, text: str) -> int:
+    """Depth of a heading: 1 for a main section, 2 for a section inside it, and so on.
+
+    Taken from the heading style when it carries a number, otherwise from the heading's own
+    numbering ("3.1" is one level below "3.").
+    """
+    styled = re.match(r"heading\s*(\d)", style)
+    if styled and styled.group(1) != "0":
+        return int(styled.group(1))
+    numbered = NUMBERED_HEAD.match(text)
+    if numbered and numbered.group(1)[0].isdigit():
+        return min(numbered.group(1).rstrip(".").count(".") + 1, 6)
+    return 1
+
+
+# Layout a paragraph keeps from the manuscript, so the report can show it as written.
+_LAYOUT_KEYS = ("tbl", "align", "figures", "figures_after")
+
+
+def _layout(p: dict, text: str) -> dict:
+    """The layout of a paragraph that the report shows: table cell, centring, type, pictures."""
+    kept = {key: p[key] for key in _LAYOUT_KEYS if key in p}
+    if p.get("fmt") and p.get("fmt_text") == text:
+        # the stretches are counted on the stored text, so they are kept only when it is the same
+        kept["fmt"] = p["fmt"]
+    return kept
 
 
 def _is_heading(ext: str, style: str, text: str):
@@ -286,26 +335,48 @@ def _document_name(path: Path) -> str:
     return path.stem
 
 
+def _paragraph(p: dict, ext: str, in_refs: bool) -> tuple[dict, bool, bool]:
+    """One manuscript paragraph as it is stored, without its id.
+
+    Returns (paragraph, in_refs, marked): whether the reference list is still open after it,
+    and whether it counts as a heading by its style or wording, bold type aside.
+    """
+    text = pl_text.clean_extracted(p["text"]).replace("\n", " ")
+    style = (p.get("style") or "").lower()
+    kind, in_refs = _paragraph_kind(ext, style, text, in_refs)
+    marked = kind == "heading"
+    if kind == "body" and _is_bold_heading(p, text):
+        kind = "heading"
+    entry: dict = {"text": text, "kind": kind}
+    if kind == "heading":
+        entry["level"] = _heading_level(style, text)
+    entry.update(_layout(p, text))
+    return entry, in_refs, marked
+
+
 def ingest(path: Path) -> dict:
     ext = path.suffix.lower()
-    raw = _read_raw_paragraphs(path, ext)
+    raw, tables = _read_manuscript(path, ext)
 
     paragraphs: list[dict] = []
     in_refs = False
     title = ""
     for p in raw:
-        text = pl_text.clean_extracted(p["text"]).replace("\n", " ")
+        entry, in_refs, marked = _paragraph(p, ext, in_refs)
         style = (p.get("style") or "").lower()
-        kind, in_refs = _paragraph_kind(ext, style, text, in_refs)
-        if not title and _is_title(style, kind, text, len(paragraphs)):
-            title = text
-        paragraphs.append({"id": f"p{len(paragraphs) + 1}", "text": text, "kind": kind})
+        # a line that is only set in bold is shown as a heading but never taken as the title
+        if not title and marked and _is_title(style, "heading", entry["text"], len(paragraphs)):
+            title = entry["text"]
+        paragraphs.append({"id": f"p{len(paragraphs) + 1}", **entry})
     if not title:
         # no guessing from the opening line: an unmarked first line is often not the title
         title = _document_name(path)
-    return {
+    paper = {
         "source_file": path.name,
         "sha256": pl_text.sha256_file(path),
         "title": title,
         "paragraphs": paragraphs,
     }
+    if tables:
+        paper["tables"] = tables
+    return paper

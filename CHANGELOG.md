@@ -2,6 +2,15 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.9] - 2026-11-10
+
+### Added
+- The report shows a Word paper the way it was written. Headings are headings, at their depth, including ones the author only set in bold. Bold, italic, subscripts and superscripts are kept. Tables are drawn as tables, with merged cells and ruled lines where the paper has them. The paper's pictures stand where they are, with their captions. Centred lines stay centred
+- Add sources has a plus icon
+
+### Changed
+- The Results and Sources tabs no longer look like buttons. They are folder tabs: the page you are on is white with a coloured top edge and opens into the page, the other is a grey tab behind it. Only actions are filled buttons
+
 ## [0.7.8] - 2026-11-10
 
 ### Changed

@@ -68,13 +68,15 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 .iconbtn:hover{background:var(--hover);color:var(--ink)}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 /* ---------- page tabs ---------- */
-/* Tabs are boxes on a rule: the page you are on is filled and joined to the content below. */
+/* Tabs move between pages, so they must not look like the filled action buttons. They are
+   folder tabs on a rule: the page you are on is white, opens into the page below and has a
+   coloured top edge; the other is a grey tab behind it. */
 .pagetabs{background:var(--surface)}
-.tabstrip{display:flex;gap:6px;align-items:flex-end;border-bottom:2px solid var(--primary-dark)}
-.ptab{display:inline-flex;align-items:center;gap:8px;min-width:132px;justify-content:center;height:42px;padding:0 22px;cursor:pointer;
-  border:1px solid var(--line);border-bottom:0;background:var(--bg);color:var(--ink);font:600 15px/1 var(--font-heading)}
-.ptab:hover{background:var(--hover)}
-.ptab[aria-current="page"]{background:var(--primary-dark);border-color:var(--primary-dark);color:var(--on-accent)}
+.tabstrip{display:flex;gap:4px;align-items:flex-end;border-bottom:1px solid var(--line)}
+.ptab{display:inline-flex;align-items:center;gap:8px;min-width:132px;justify-content:center;height:44px;padding:0 22px;margin-bottom:-1px;cursor:pointer;
+  border:1px solid var(--line);border-top:3px solid var(--line);background:var(--soft);color:var(--muted);font:500 15px/1 var(--font-heading)}
+.ptab:hover{background:var(--hover);color:var(--ink)}
+.ptab[aria-current="page"]{background:var(--surface);border-top-color:var(--primary-dark);border-bottom-color:var(--surface);color:var(--ink);font-weight:600;cursor:default}
 .ptab .n{font-weight:400;opacity:.8}
 .textbtn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13.5px/1 var(--font-heading);cursor:pointer}
 .textbtn:hover{background:var(--hover);color:var(--ink)}
@@ -121,10 +123,27 @@ a.textbtn{text-decoration:none}
 .notice.need .act a,.notice.need .act button{font:600 13px/1.6 var(--font-heading);padding:5px 14px;white-space:nowrap;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none}
 .notice.need .act a:hover,.notice.need .act button:hover{background:var(--hover)}
 .sheet{background:var(--surface);border:1px solid var(--line);padding:clamp(20px,6vw,60px)}
-.sheet h2.h{font-size:1.15rem;line-height:1.35;margin:1.9em 0 .6em}
-.sheet h2.h:first-child{margin-top:0}
+.sheet .h{line-height:1.35;margin:1.9em 0 .6em}
+.sheet h2.h{font-size:1.3rem}
+.sheet h3.h{font-size:1.12rem}
+.sheet h4.h{font-size:1rem;font-family:var(--font-heading);font-weight:600}
+.sheet .h:first-child{margin-top:0}
 .para{font-size:1.03rem;line-height:1.8;margin:0 0 1.1em;overflow-wrap:anywhere}
 .para:last-child{margin-bottom:0}
+.para.ctr{text-align:center}
+.para sub,.para sup,.h sub,.h sup{font-size:.72em;line-height:0}
+/* the paper's own pictures and tables, laid out as they are in the manuscript */
+.docfig{display:block;margin:0 auto .8em;max-width:100%;height:auto;background:#fff}
+.nofig{margin:0 auto .8em;padding:18px;border:1px dashed var(--line);color:var(--muted);font-size:13px;text-align:center}
+.docbox{margin:1.7em auto;max-width:640px}
+.docbox.ruled{border:1px solid var(--line);padding:14px 16px}
+.docbox .para{font-size:.93rem;line-height:1.6;margin-bottom:.6em}
+.tablewrap{margin:1.6em 0;overflow-x:auto}
+.doctable{border-collapse:collapse;width:100%;font-size:.86rem}
+.doctable td{padding:5px 4px;vertical-align:middle}
+.doctable.ruled td{border:1px solid var(--line)}
+.doctable.wide{min-width:600px} /* many columns: scroll sideways on a phone, do not crush them */
+.doctable .para{font-size:inherit;line-height:1.45;margin:0;overflow-wrap:normal}
 
 /* ---------- claim overlay: colour plus a line style, so it reads without colour ---------- */
 .claim{--c:var(--unv);cursor:pointer;padding:1px 0;background:color-mix(in srgb,var(--c) 11%,transparent);border-bottom:2px solid var(--c);
@@ -315,7 +334,7 @@ a.textbtn{text-decoration:none}
 <main class="wrap in" id="sourcesView" hidden>
   <h2 class="vh">Sources</h2>
   <div class="srchead">
-    <div class="row"><p id="srcLead"></p><div class="addwrap"><button class="textbtn primary" id="addSources" type="button">Add sources</button><div class="addmenu" id="addMenu" role="menu" hidden><button type="button" role="menuitem" id="pickFiles">Files…</button><button type="button" role="menuitem" id="pickFolder">A folder…</button></div></div></div>
+    <div class="row"><p id="srcLead"></p><div class="addwrap"><button class="textbtn primary" id="addSources" type="button"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add sources</button><div class="addmenu" id="addMenu" role="menu" hidden><button type="button" role="menuitem" id="pickFiles">Files…</button><button type="button" role="menuitem" id="pickFolder">A folder…</button></div></div></div>
     <input type="file" id="srcPicker" multiple hidden accept=".pdf,.txt,.md,.html,.htm,.docx,.xml">
     <input type="file" id="dirPicker" webkitdirectory hidden>
   </div>
@@ -375,23 +394,34 @@ DATA.notes.forEach(function(n){
 });
 
 var paper=$('#paper');
-var lastText=-1;DATA.paragraphs.forEach(function(p,pi){if(p.kind!=='heading')lastText=pi;});
-DATA.paragraphs.forEach(function(p,pi){
-  if(pi===0&&p.text===DATA.meta.title)return;
-  if(p.kind==='heading'){
-    if(pi>lastText)return;
-    paper.append(el('h2','h',p.text));return;
+/* The paper is laid out as it was written: headings by depth, bold, italic, subscripts and
+   superscripts, tables with their merged cells, and pictures where they stand. */
+var MARK_TAG={b:'strong',i:'em',sub:'sub',sup:'sup'};
+var FIGURE_SCALE=1.5; // pictures are drawn larger than on the printed page, to be read on a screen
+function rich(p,a,b){ // the text of paragraph p from a to b, with its type styles
+  var frag=document.createDocumentFragment(),fmt=(p.fmt||[]).filter(function(f){return MARK_TAG[f[2]]&&f[0]<b&&f[1]>a;}),cuts=[a,b];
+  fmt.forEach(function(f){if(f[0]>a)cuts.push(f[0]);if(f[1]<b)cuts.push(f[1]);});
+  cuts.sort(function(x,y){return x-y;});
+  for(var i=0;i<cuts.length-1;i++){
+    var from=cuts[i],to=cuts[i+1];if(to<=from)continue;
+    var node=document.createTextNode(p.text.slice(from,to));
+    fmt.forEach(function(f){if(f[0]<=from&&f[1]>=to){var w=document.createElement(MARK_TAG[f[2]]);w.append(node);node=w;}});
+    frag.append(node);
   }
-  var node=el('p','para');node.id='para-'+p.id;
+  return frag;
+}
+function paraNode(p){
+  var node=el('p','para'+(p.align==='center'?' ctr':''));node.id='para-'+p.id;
   var segs=(byPara[p.id]||[]).sort(function(a,b){return a.start-b.start||(a.kind==='claim'?-1:1);});
   var pos=0;
   segs.forEach(function(s){
     if(s.start<pos){ if(s.kind==='note'){(pnotes[p.id]=pnotes[p.id]||[]).push(s.d);} return; }
-    if(s.start>pos)node.append(document.createTextNode(p.text.slice(pos,s.start)));
+    if(s.start>pos)node.append(rich(p,pos,s.start));
     var verdict=s.kind==='claim'?s.d.verdict:'note';
     var failing=s.kind==='claim'&&GROUP[verdict]!=='bad'&&(s.d.failing_refs||[]).length>0;
     var prov=s.kind==='claim'&&s.d.provisional===true;
-    var m=el('span','claim v-'+verdict+(failing?' has-bad':'')+(prov?' prov':''),p.text.slice(s.start,s.end));
+    var m=el('span','claim v-'+verdict+(failing?' has-bad':'')+(prov?' prov':''));
+    m.append(rich(p,s.start,s.end));
     m.tabIndex=0;m.setAttribute('role','button');
     m.setAttribute('aria-label',LABEL[verdict]+(prov?', '+PROV_LABEL+', provisional':'')+(failing?', and '+FAILING_NOTE.toLowerCase():'')+': '+p.text.slice(s.start,s.end));
     var idx=items.length;
@@ -399,14 +429,64 @@ DATA.paragraphs.forEach(function(p,pi){
     items.push({kind:s.kind,d:s.d,verdict:verdict,group:GROUP[verdict],failing:failing,prov:prov,el:m});
     node.append(m);pos=s.end;
   });
-  if(pos<p.text.length)node.append(document.createTextNode(p.text.slice(pos)));
+  if(pos<p.text.length)node.append(rich(p,pos,p.text.length));
   (pnotes[p.id]||[]).forEach(function(n){
     var b=el('button','pnote','Note');b.type='button';
     var idx=items.length;b.dataset.idx=idx;
     items.push({kind:'note',d:n,verdict:'note',group:'unc',el:b});
     node.append(b);
   });
-  paper.append(node);
+  return node;
+}
+function addFigures(list,host){
+  (list||[]).forEach(function(f){
+    var src=(DATA.figures||{})[f.file];
+    if(!src){host.append(el('div','nofig','A picture in the paper is not shown here.'));return;}
+    var img=el('img','docfig');img.src=src;img.alt='Picture from the paper';
+    if(f.w&&f.h){img.width=Math.round(f.w*FIGURE_SCALE);img.height=Math.round(f.h*FIGURE_SCALE);}
+    host.append(img);
+  });
+}
+function buildTable(info){ // returns the place for each cell, keyed "row:cell"
+  var rows=info.rows,cells={},ruled=info.borders?' ruled':'';
+  if(rows.length===1&&rows[0].length===1){ // one cell: a box around a figure and its caption
+    var box=el('div','docbox'+ruled);paper.append(box);cells['0:0']=box;return cells;
+  }
+  var wrap=el('div','tablewrap'),table=el('table','doctable'+ruled+((info.cols||[]).length>6?' wide':'')),above={};
+  if(info.cols){
+    var total=info.cols.reduce(function(a,b){return a+b;},0),group=el('colgroup');
+    info.cols.forEach(function(w){var c=el('col');c.style.width=(100*w/total).toFixed(2)+'%';group.append(c);});
+    table.append(group);
+  }
+  rows.forEach(function(row,ri){
+    var tr=el('tr'),col=0;
+    row.forEach(function(c,ci){
+      if(c[1]){var td=el('td');if(c[0]>1)td.colSpan=c[0];if(c[1]>1)td.rowSpan=c[1];tr.append(td);above[col]=td;}
+      cells[ri+':'+ci]=above[col];col+=c[0]; // a cell merged into the one above shares its place
+    });
+    table.append(tr);
+  });
+  wrap.append(table);paper.append(wrap);return cells;
+}
+var tablePlaces={};
+function placeFor(p){
+  if(!p.tbl)return paper;
+  var t=p.tbl[0];
+  if(!tablePlaces[t])tablePlaces[t]=buildTable(DATA.tables[t]);
+  return tablePlaces[t][p.tbl[1]+':'+p.tbl[2]];
+}
+var lastText=-1;DATA.paragraphs.forEach(function(p,pi){if(p.kind!=='heading')lastText=pi;});
+DATA.paragraphs.forEach(function(p,pi){
+  if(pi===0&&p.text===DATA.meta.title)return;
+  var host=placeFor(p);
+  addFigures(p.figures,host);
+  if(p.kind==='heading'&&!p.tbl){
+    if(pi>lastText)return;
+    var h=el('h'+Math.min((p.level||1)+1,4),'h');h.append(rich(p,0,p.text.length));host.append(h);
+  }else{
+    host.append(paraNode(p));
+  }
+  addFigures(p.figures_after,host);
 });
 if(!DATA.claims.length&&!DATA.notes.length){paper.append(el('div','empty','No checkable claims were found in this paper.'));}
 

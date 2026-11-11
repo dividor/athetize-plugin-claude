@@ -3,16 +3,19 @@ suggested edits."""
 
 from __future__ import annotations
 
+import base64
 import json
 import re
 import time
 import urllib.parse
+import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import pl_docx
 import pl_http
 import pl_text
+from pl_docx_read import PICTURE_TYPES
 from pl_verify import _evidence_text
 from pl_workspace import Work, jload
 
@@ -437,6 +440,46 @@ def _report_ref(rid: str, r: dict, e: dict, out_claims: list[dict], sugs: list[d
     }
 
 
+# What a paragraph carries into the report besides its text: how it was laid out.
+_PARAGRAPH_LAYOUT = ("level", "fmt", "tbl", "align", "figures", "figures_after")
+# The pictures of one report, together, are kept under this many bytes.
+MAX_PICTURE_BYTES = 12_000_000
+
+
+def _report_paragraph(p: dict) -> dict:
+    """A paragraph as the report shows it: its text, its kind and its layout."""
+    shown = {"id": p["id"], "text": p["text"], "kind": p["kind"]}
+    shown.update({key: p[key] for key in _PARAGRAPH_LAYOUT if key in p})
+    return shown
+
+
+def _report_figures(work: Work, paragraphs: list[dict]) -> dict[str, str]:
+    """The paper's pictures, each as a data address the report page can show.
+
+    They are read from the private copy of the Word manuscript. A picture of a type a
+    browser cannot show, or one that would take the report past MAX_PICTURE_BYTES, is
+    left out, and the page says a picture is not shown in its place.
+    """
+    wanted = []
+    for p in paragraphs:
+        for figure in p.get("figures", []) + p.get("figures_after", []):
+            if figure["file"] not in wanted:
+                wanted.append(figure["file"])
+    if not wanted:
+        return {}
+    shown: dict[str, str] = {}
+    room = MAX_PICTURE_BYTES
+    with zipfile.ZipFile(work.p("manuscript.docx")) as z:
+        for name in wanted:
+            kind = PICTURE_TYPES.get(Path(name).suffix.lower())
+            if not kind or z.getinfo(name).file_size > room:
+                continue
+            data = z.read(name)
+            room -= len(data)
+            shown[name] = f"data:{kind};base64," + base64.b64encode(data).decode("ascii")
+    return shown
+
+
 def word_export_name(paper: dict, fallback: str = "manuscript.docx") -> str:
     """File name of the Word copy with suggested edits, written beside the report."""
     return Path(paper.get("source_file") or fallback).stem + "_athetize_suggestions.docx"
@@ -467,10 +510,7 @@ def build_data(work: Work, with_suggestions: bool = True) -> dict:
         _report_ref(rid, r, manifest.get(rid, {}), out_claims, sugs) for rid, r in refs.items()
     ]
 
-    body_paras = []
-    for p in paper["paragraphs"]:
-        if p["kind"] != "reference":
-            body_paras.append({"id": p["id"], "text": p["text"], "kind": p["kind"]})
+    body_paras = [_report_paragraph(p) for p in paper["paragraphs"] if p["kind"] != "reference"]
     word = word_export_name(paper)
     return {
         "meta": {
@@ -481,6 +521,8 @@ def build_data(work: Work, with_suggestions: bool = True) -> dict:
             "word_export": word if work.p(word).exists() else None,
         },
         "paragraphs": body_paras,
+        "tables": paper.get("tables", []),
+        "figures": _report_figures(work, body_paras),
         "suggestions": sugs,
         "claims": out_claims,
         "notes": out_notes,

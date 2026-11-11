@@ -18,11 +18,11 @@ import shutil
 import subprocess
 import tempfile
 import unicodedata
-import zipfile
 from html.parser import HTMLParser
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
+from pl_docx_read import W, read_docx, read_docx_paragraphs
 from pl_passages import _SENT_END, _STOP, bm25_rank, chunk_passages, context_window, page_at
 from pl_quote import _NEGATIONS, TOKEN_RE, find_span, locate_quote, tokenize
 from pl_xml import parse_xml
@@ -48,6 +48,7 @@ __all__ = [
     "ocr_pdf_text",
     "page_at",
     "parse_xml",
+    "read_docx",
     "read_docx_paragraphs",
     "pdf_extractor",
     "read_pdf_text",
@@ -56,8 +57,6 @@ __all__ = [
     "title_similarity",
     "tokenize",
 ]
-
-W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 
 
 # --------------------------------------------------------------------------
@@ -91,43 +90,6 @@ def clean_extracted(text: str) -> str:
 # --------------------------------------------------------------------------
 # Readers
 # --------------------------------------------------------------------------
-def _docx_paragraph_style(p: ET.Element) -> str:
-    """Name of the Word paragraph style, or "" when the paragraph has none."""
-    style = ""
-    ppr = p.find(W + "pPr")
-    if ppr is not None:
-        ps = ppr.find(W + "pStyle")
-        if ps is not None:
-            style = ps.get(W + "val") or ""
-    return style
-
-
-def _docx_paragraph_text(p: ET.Element) -> str:
-    """Visible text of a Word paragraph; tabs and line breaks become spaces."""
-    parts = []
-    for el in p.iter():
-        if el.tag == W + "t":
-            parts.append(el.text or "")
-        elif el.tag == W + "tab":
-            parts.append(" ")
-        elif el.tag in (W + "br", W + "cr"):
-            parts.append(" ")
-    return re.sub(r"\s+", " ", "".join(parts)).strip()
-
-
-def read_docx_paragraphs(path: Path) -> list[dict]:
-    with zipfile.ZipFile(path) as z:
-        xml = z.read("word/document.xml")
-    root = parse_xml(xml)
-    out = []
-    for p in root.iter(W + "p"):
-        style = _docx_paragraph_style(p)
-        text = _docx_paragraph_text(p)
-        if text:
-            out.append({"text": text, "style": style})
-    return out
-
-
 def pdf_extractor() -> str | None:
     """The PDF text extractor that will be used here, fastest first; None when there is none.
 

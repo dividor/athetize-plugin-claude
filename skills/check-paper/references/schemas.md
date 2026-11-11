@@ -9,7 +9,9 @@ All files live in the workspace `<paper>-check/`. `paper.json` is written by `pl
  "paragraphs": [{"id": "p7", "text": "Full paragraph text.", "kind": "body"}]}
 ```
 
-`kind` is `heading`, `body` or `reference`. Claims may only point at `body` paragraphs.
+`kind` is `heading`, `body`, `reference` or `other` (a paragraph with no words, such as a mark in a table). Claims may only point at `body` paragraphs.
+
+A paragraph may also carry its layout, which the report uses to show the paper as it was written: `level` (depth of a heading), `fmt` (bold, italic, subscript and superscript stretches), `tbl` (its table cell), `align` and `figures` (pictures that stand before it). A Word paper with tables has a `tables` list beside `paragraphs`. Leave all of these alone.
 
 ## refs.json (Claude writes)
 
