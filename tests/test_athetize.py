@@ -989,7 +989,9 @@ class PipelineTests(unittest.TestCase):
         for c in data["claims"]:
             para = next(p for p in data["paragraphs"] if p["id"] == c["para"])
             self.assertEqual(para["text"][c["start"] : c["end"]], c["text"])
-        self.assertFalse(any(p["kind"] == "reference" for p in data["paragraphs"]))
+        # the reference list is part of the report, so its fixes can be shown on it
+        refs = [p["id"] for p in data["paragraphs"] if p["kind"] == "reference"]
+        self.assertEqual(refs, ["p9", "p10", "p11", "p12"])
         out = pl_core.build_report(self.work)
         html = out.read_text("utf-8")
         self.assertNotIn("/*__ATHETIZE_DATA__*/null", html)

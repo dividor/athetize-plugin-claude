@@ -59,6 +59,7 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 /* ---------- brand row ---------- */
 /* a rule under the product row sets it apart from the document being reported on */
 .top{background:var(--surface);padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid var(--line)}
+.pagetabs{padding-top:18px}
 .top .in{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px}
 .brand{display:flex;align-items:center;gap:9px;color:var(--primary-dark)}
 /* the mark is drawn 18px tall inside its 24px box; 26px type has capitals of the same height */
@@ -80,7 +81,8 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 .flow .fline path{fill:none;stroke:var(--primary);stroke-width:1.2}
 .flow text{text-anchor:middle;font-family:var(--font-heading)}
 .flow .fhead text{font-size:12.5px;font-weight:600;fill:var(--ink)}
-.flow .fsub text{font-size:10.5px;fill:var(--muted)}
+.flow .fsub text{font-size:10px;fill:var(--muted)}
+.flow .fsub text.fopt{font-style:italic}
 .setlbl{display:block;margin:0 0 4px;font:500 12.5px/1.4 var(--font-heading);color:var(--muted)}
 .setin{display:block;width:100%;height:36px;padding:0 10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:14px/1 var(--font-body)}
 .setin:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
@@ -109,17 +111,11 @@ a.textbtn{text-decoration:none}
 [hidden]{display:none!important}
 
 /* ---------- title band ---------- */
-.hero{background:var(--surface);padding:18px 0 18px}
-.docrow{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 24px}
-.docrow h1{flex:1 1 260px;min-width:0}
-/* the download is a plain link on the document's own line, its text level with the name */
+/* the download sits at the right end of the tab row, on both pages */
+.tabstrip .dl{margin-left:auto;align-self:center;padding:0 0 6px}
 .dl{flex:none;display:inline-flex;align-items:baseline;gap:6px;font:500 14px/1.35 var(--font-heading);color:var(--link);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
 .dl:hover{color:var(--primary-dark)}
 .dl svg.ic{width:15px;height:15px;align-self:center}
-/* The document name is a label for what was checked, not the page's headline: it is smaller and
-   lighter than the product name above it. */
-.hero .eyebrow{margin:0 0 2px;font:500 12.5px/1.4 var(--font-heading);color:var(--muted)}
-.hero h1{font-size:clamp(17px,2.2vw,20px);font-weight:500;line-height:1.35;margin:0;color:var(--ink);overflow-wrap:anywhere}
 
 /* ---------- sticky filter row ---------- */
 /* One quiet toolbar under the tabs: the result filters, then a line with the hint on the
@@ -170,6 +166,8 @@ a.textbtn{text-decoration:none}
 .sheet h3.h{font-size:1.12rem}
 .sheet h4.h{font-size:1rem;font-family:var(--font-heading);font-weight:600}
 .sheet .h:first-child,.sheet .viewsw+.h{margin-top:0}
+.sheet .doctitle+.viewsw,.sheet .h+.viewsw{margin-top:-.2em}
+.sheet .doctitle{font-size:1.55rem;line-height:1.3;margin:0 0 .9em;text-wrap:balance;overflow-wrap:anywhere}
 .para{font-size:1.03rem;line-height:1.8;margin:0 0 1.1em;overflow-wrap:anywhere}
 .para:last-child{margin-bottom:0}
 .para.ctr{text-align:center}
@@ -214,7 +212,7 @@ a.textbtn{text-decoration:none}
 /* ---------- the paper with its suggested edits ----------
    A switch at the top right of the paper shows it either with the results highlighted or
    with the suggested rewordings marked in the text, as they are in the Word document. */
-.viewsw{float:right;display:flex;margin:2px 0 14px 24px}
+.viewsw{display:flex;justify-content:flex-start;margin:0 0 1.8em;padding-bottom:12px;border-bottom:1px solid var(--line-light)}
 /* a joined pair with a ruled edge; the view that is on takes the page's soft blue tint, the
    same quiet emphasis as the main buttons. Nothing like the grey filters. */
 .viewsw button{height:28px;padding:0 12px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font:500 12.5px/1 var(--font-heading);cursor:pointer;white-space:nowrap}
@@ -226,6 +224,13 @@ a.textbtn{text-decoration:none}
 .viewsw button+button[aria-pressed="true"]{border-left:1px solid color-mix(in srgb,var(--primary) 50%,var(--surface));margin-left:-1px}
 .viewsw button:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 .claim .ed{display:none}
+.para.refpara{font-size:.92rem;line-height:1.6;margin:0 0 .6em;padding-left:2.2em;text-indent:-2.2em}
+.refx{cursor:pointer;background:color-mix(in srgb,var(--primary) 10%,transparent);border-bottom:2px dashed var(--primary-dark);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.refx:hover,.refx.active{background:color-mix(in srgb,var(--primary) 20%,transparent)}
+.refx .ed{display:none}
+#paper.edits .refx:not(.sug-off) .hl{display:none}
+#paper.edits .refx:not(.sug-off) .ed{display:inline}
+#paper.edits .refx.sug-off{background:none;border-bottom-color:transparent}
 #paper.edits .claim{background:none;border-bottom-color:transparent;cursor:text;pointer-events:none}
 #paper.edits .claim.has-edit:not(.sug-off){cursor:pointer;pointer-events:auto}
 #paper.edits .claim.has-edit:not(.sug-off) .hl{display:none}
@@ -281,8 +286,8 @@ a.textbtn{text-decoration:none}
 .sug.off{opacity:.55}
 .sug .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;font-size:12.5px;color:var(--muted)}
 .sug .diff{font-size:14px;line-height:1.65;overflow-wrap:anywhere}
-.sug .diff del,.claim .ed del{color:var(--bad);text-decoration:line-through;background:color-mix(in srgb,var(--bad) 10%,transparent)}
-.sug .diff ins,.claim .ed ins{color:var(--ok);text-decoration:none;background:color-mix(in srgb,var(--ok) 13%,transparent);border-bottom:1px solid var(--ok)}
+.sug .diff del,.claim .ed del,.refx .ed del{color:var(--bad);text-decoration:line-through;background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.sug .diff ins,.claim .ed ins,.refx .ed ins{color:var(--ok);text-decoration:none;background:color-mix(in srgb,var(--ok) 13%,transparent);border-bottom:1px solid var(--ok)}
 .sug .why{font-size:13px;margin:6px 0 0;color:var(--muted)}
 .sug .act{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .sug .act button,.sugsum button,.addsrc .act button{font:400 12.5px/1.6 var(--font-body);padding:3px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
@@ -342,6 +347,8 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
 
 /* ---------- phones ---------- */
 @media (max-width:760px){
+  .tabstrip{flex-wrap:wrap}
+  .tabstrip .dl{order:-1;flex:1 0 100%;justify-content:flex-end;padding:0 0 10px}
   .brand-name{font-size:19px}
   .brand svg{width:18px;height:18px}
   .chip{padding:13px 10px 10px;font-size:13.5px}
@@ -377,15 +384,15 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
       <button class="iconbtn" id="aboutBtn" type="button" aria-label="What Athetize does" title="What Athetize does" aria-expanded="false" aria-controls="about"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.2"/></svg></button>
       <div class="about" id="about" role="dialog" aria-label="What Athetize does" hidden>
         <h2>What Athetize does</h2>
-        <svg class="flow" viewBox="0 0 344 204" role="img" aria-label="Your paper and its sources go to Claude, which compares each claim with its source and produces a report and a Word document.">
-          <g class="fbox"><rect x="0.5" y="0.5" width="159" height="58"/><rect x="184.5" y="0.5" width="159" height="58"/><rect x="52.5" y="88.5" width="239" height="44"/><rect x="0.5" y="160.5" width="159" height="43"/><rect x="184.5" y="160.5" width="159" height="43"/></g>
-          <g class="fline"><path d="M80 59v14h184V59M172 73v11"/><path d="M168 80l4 5 4-5"/><path d="M172 133v13M80 156v-10h184v10"/><path d="M76 152l4 5 4-5M260 152l4 5 4-5"/></g>
-          <g class="fhead"><text x="80" y="22">Your paper</text><text x="264" y="22">Sources</text><text x="172" y="107">Claude compares each claim</text><text x="80" y="179">Report</text><text x="264" y="179">Word document</text></g>
-          <g class="fsub"><text x="80" y="38">each claim and</text><text x="80" y="51">the source it cites</text><text x="264" y="38">open copies found online</text><text x="264" y="51">and files you add</text><text x="172" y="123">with the text of its source</text><text x="80" y="194">results and evidence</text><text x="264" y="194">suggested edits</text></g>
+        <svg class="flow" viewBox="0 0 372 214" role="img" aria-label="Your paper, public paper indexes and the sources go to Claude, which compares each claim with its source and produces a report and a Word document.">
+          <g class="fbox"><rect x="0.5" y="0.5" width="115" height="70"/><rect x="128.5" y="0.5" width="115" height="70"/><rect x="256.5" y="0.5" width="115" height="70"/><rect x="66.5" y="96.5" width="239" height="44"/><rect x="0.5" y="168.5" width="179" height="45"/><rect x="192.5" y="168.5" width="179" height="45"/></g>
+          <g class="fline"><path d="M58 71v12h256V71M186 71v21"/><path d="M182 88l4 5 4-5"/><path d="M186 141v12M90 164v-11h192v11"/><path d="M86 160l4 5 4-5M278 160l4 5 4-5"/></g>
+          <g class="fhead"><text x="58" y="22">Your paper</text><text x="186" y="22">Paper indexes</text><text x="314" y="22">Sources</text><text x="186" y="115">Claude compares each claim</text><text x="90" y="187">Report</text><text x="282" y="187">Word document</text></g>
+          <g class="fsub"><text x="58" y="38">each claim and</text><text x="58" y="51">the source it cites</text><text x="186" y="38">Crossref, OpenAlex</text><text class="fopt" x="186" y="51">Unpaywall, optional</text><text x="186" y="64">retractions flagged</text><text x="314" y="38">open copies online</text><text x="314" y="51">and files you add</text><text x="186" y="131">with the text of its source</text><text x="90" y="203">results and evidence</text><text x="282" y="203">suggested edits</text></g>
         </svg>
-        <p>Athetize identifies each claim in your paper and the source it cites. It retrieves open-access copies of the sources where they are available and uses any files you provide. A source that cannot be read is marked “can’t verify”; no result is inferred.</p>
+        <p>Athetize identifies each claim in your paper and the source it cites. It looks each reference up in public indexes of papers, which also shows whether a source has been retracted, retrieves open-access copies where they are available, and uses any files you provide. A source that cannot be read is marked “can’t verify”; no result is inferred.</p>
         <p>The assessment is performed by AI and may contain errors. Review the quoted evidence before revising your paper.</p>
-        <p class="quiet">Claude reads your paper and the sources. The only other information transmitted is reference metadata, such as titles and DOIs, which is sent to public indexes to locate the sources.</p>
+        <p class="quiet">Claude reads your paper and the sources. The only other information transmitted is reference metadata, such as titles and DOIs, which is sent to public indexes to locate the sources. A contact email, if you add one in Settings, is sent to those indexes too and lets Athetize also search Unpaywall.</p>
         <p class="more" id="aboutMore"><a class="ext" id="aboutLink" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">Athetize on GitHub</a></p>
       </div>
     <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>
@@ -393,20 +400,11 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
   </div>
 </header>
 
-<section class="hero">
-  <div class="in">
-    <p class="eyebrow">Document checked</p>
-    <div class="docrow">
-      <h1 id="title"></h1>
-      <a class="dl" id="wordReport" hidden title="Download the report as a Word document: your paper with every suggested edit as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download Report</a>
-    </div>
-  </div>
-</section>
-
 <nav class="pagetabs" aria-label="Report pages">
   <div class="in"><div class="tabstrip">
     <button class="ptab" id="openResults" type="button" aria-current="page">Results</button>
     <button class="ptab" id="openSources" type="button">Sources <span class="n" id="srcCount"></span></button>
+    <a class="dl" id="wordReport" hidden title="Download the report as a Word document: your paper with every suggested edit as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download Report</a>
   </div></div>
 </nav>
 
@@ -426,7 +424,7 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
   <p class="provline" id="provLine" hidden></p>
   <article class="sheet" id="paper">
     <div class="viewsw" id="viewSw" role="group" aria-label="What the paper shows" hidden>
-      <button type="button" id="showHl" aria-pressed="true">Highlight</button><button type="button" id="showEd" aria-pressed="false">Suggested Edits <b id="edCount"></b></button>
+      <button type="button" id="showHl" aria-pressed="true">Highlight Checks</button><button type="button" id="showEd" aria-pressed="false">Suggested Edits <b id="edCount"></b></button>
     </div>
   </article>
   <div class="sugsum" id="sugSum"></div>
@@ -461,7 +459,7 @@ var GROUP={supported:'ok',partially_supported:'part',overstated:'part',unsupport
 var GLABEL={ok:'Supported',part:'Partial',bad:'Not supported',unv:"Can't verify",unc:'Uncited and notes'};
 var FAILING_NOTE='A cited source does not support this';
 var PROV_LABEL='from the abstract only';
-var GVAR={ok:'--ok',part:'--part',bad:'--bad',unv:'--unv',unc:'--unc'};
+var GVAR={ok:'--ok',part:'--part',bad:'--bad',unv:'--unv',unc:'--unc',ref:'--primary-dark'};
 var STATUS={full_text:'Full text, downloaded',user_provided:'Full text, provided by you',abstract_only:'Abstract only',missing:'No full text found',unresolved:'Not looked up'};
 var DATABASE={crossref:'Crossref',openalex:'OpenAlex'};
 var EXISTS={verified:'Found in a citation database',partial_match:'Database record differs in part',mismatch:'Database record does not match',not_found:'Not found in citation databases',unchecked:'Not looked up'};
@@ -497,7 +495,6 @@ function icon(name){var s=document.createElementNS(SVGNS,'svg');s.setAttribute('
 function iconBtn(name,label){var b=el('button');b.type='button';b.title=label;b.setAttribute('aria-label',label);b.append(icon(name));return b;}
 
 document.title=(DATA.meta.title||'Report')+' · Athetize Fact Checker';
-$('#title').textContent=DATA.meta.title||'Untitled paper';
 $('#foot').textContent='Checked '+DATA.meta.generated+(DATA.meta.source_file?' \u00b7 '+DATA.meta.source_file:'')+' \u00b7 Athetize '+DATA.meta.version;
 
 /* ---------- build the item list ---------- */
@@ -544,6 +541,29 @@ function editNode(p,c,sg){ // the claim's text with the rewording marked in it; 
   });
   if(pos<c.end)box.append(rich(p,Math.max(pos,c.start),c.end));
   return ok?box:null;
+}
+/* The reference list is part of the paper. An entry with a suggested fix is marked, opens its
+   card, and shows the fix as tracked changes in the Suggested Edits view. */
+var REFFIX={},REF_BY_ID={};
+(DATA.suggestions||[]).forEach(function(sg){if(sg.kind==='reference'&&sg.para&&!REFFIX[sg.para])REFFIX[sg.para]=sg;});
+DATA.refs.forEach(function(r){REF_BY_ID[r.id]=r;});
+function refNode(p){
+  var node=el('p','para refpara');node.id='para-'+p.id;
+  var sg=REFFIX[p.id],r=sg&&REF_BY_ID[(sg.refs||[])[0]],at=sg?p.text.indexOf(sg.original):-1;
+  if(!sg||!r||at<0||!sg.original){node.append(rich(p,0,p.text.length));return node;}
+  var end=at+sg.original.length;
+  if(at>0)node.append(rich(p,0,at));
+  var m=el('span','refx'),hl=el('span','hl'),ed=el('span','ed');
+  hl.append(rich(p,at,end));
+  (sg.suggested?sg.diff:[['-',sg.original]]).forEach(function(op){ed.append(op[0]==='='?document.createTextNode(op[1]):el(op[0]==='-'?'del':'ins',null,op[1]));});
+  m.append(hl,ed);
+  m.tabIndex=0;m.setAttribute('role','button');
+  m.setAttribute('aria-label','Suggested fix to reference '+r.id+': '+sg.original);
+  m.dataset.sug=sg.id;m.dataset.idx=items.length;
+  items.push({kind:'ref',d:r,verdict:'ref',group:'ref',edit:true,el:m});
+  node.append(m);
+  if(end<p.text.length)node.append(rich(p,end,p.text.length));
+  return node;
 }
 function paraNode(p){
   var node=el('p','para'+(p.align==='center'?' ctr':''));node.id='para-'+p.id;
@@ -613,18 +633,30 @@ function placeFor(p){
   return tablePlaces[t][p.tbl[1]+':'+p.tbl[2]];
 }
 var lastText=-1;DATA.paragraphs.forEach(function(p,pi){if(p.kind!=='heading')lastText=pi;});
+/* The paper's own title, when the manuscript marks one, opens the document. When it marks none
+   the report is named after the file, which no paragraph repeats, so nothing is added. */
+var titleShown=false;
 DATA.paragraphs.forEach(function(p,pi){
-  if(pi===0&&p.text===DATA.meta.title)return;
   var host=placeFor(p);
+  if(!titleShown&&pi<5&&!p.tbl&&p.text===DATA.meta.title){
+    titleShown=true;
+    var t=el('h1','doctitle');t.append(rich(p,0,p.text.length));host.append(t);return;
+  }
   addFigures(p.figures,host);
   if(p.kind==='heading'&&!p.tbl){
     if(pi>lastText)return;
     var h=el('h'+Math.min((p.level||1)+1,4),'h');h.append(rich(p,0,p.text.length));host.append(h);
   }else{
-    host.append(paraNode(p));
+    host.append(p.kind==='reference'?refNode(p):paraNode(p));
   }
   addFigures(p.figures_after,host);
 });
+/* The view switch has a row of its own, ruled off from the paper: under the title, or under
+   the opening heading when the paper marks no title, or else at the very top. */
+(function(){
+  var sw=$('#viewSw'),first=sw.nextElementSibling;
+  if(first&&(first.classList.contains('doctitle')||first.classList.contains('h')))first.after(sw);
+})();
 if(!DATA.claims.length&&!DATA.notes.length){paper.append(el('div','empty','No checkable claims were found in this paper.'));}
 
 /* ---------- filters + summary bar ---------- */
@@ -633,7 +665,7 @@ if(!DATA.claims.length&&!DATA.notes.length){paper.append(el('div','empty','No ch
    finding is never hidden behind a better result from another source. */
 var active={};
 var counts={ok:0,part:0,bad:0,unv:0,unc:0};
-items.forEach(function(it){counts[it.group]++;});
+items.forEach(function(it){if(it.group in counts)counts[it.group]++;});
 function inGroup(it,g){return it.group===g||(g==='bad'&&it.failing)||(g==='prov'&&it.prov);}
 function shown(it){return Object.keys(active).some(function(g){return active[g]&&inGroup(it,g);});}
 var alsoFailing=items.filter(function(it){return it.failing;}).length;
@@ -661,7 +693,7 @@ if(provCount){
 function anyActive(){return Object.keys(active).some(function(k){return active[k];});}
 function applyFilter(){
   var any=anyActive();
-  items.forEach(function(it){it.el.classList.toggle('dim',any&&!shown(it));});
+  items.forEach(function(it){it.el.classList.toggle('dim',any&&it.kind!=='ref'&&!shown(it));});
   [].forEach.call(chips.querySelectorAll('.chip'),function(c){c.setAttribute('aria-pressed',active[c.dataset.g]?'true':'false');});
   updateNav();placeRail();
 }
@@ -672,7 +704,8 @@ function hasEdit(it){return it.edit===true&&!it.el.classList.contains('sug-off')
 function navList(){
   var any=anyActive(),out=[];
   items.forEach(function(it,i){
-    if(editsMode){if(hasEdit(it)&&(!any||shown(it)))out.push(i);}
+    if(it.kind==='ref'&&!editsMode)return; // a reference fix is reviewed among the edits
+    if(editsMode){if(hasEdit(it)&&(it.kind==='ref'||!any||shown(it)))out.push(i);}
     else if(any){if(shown(it))out.push(i);}
     else if(it.verdict!=='supported')out.push(i);
   });
@@ -841,6 +874,7 @@ function buildCard(i){
 var cardAnchor=null;
 function openCard(i,pin,focus,anchor){
   clearTimeout(hideT);clearTimeout(showT);
+  if(items[i].kind==='ref'){openRefCard(items[i].d,anchor||items[i].el);openIdx=i;pinned=!!pin;return;}
   openIdx=i;pinned=!!pin;cardAnchor=anchor||null;
   buildCard(i);
   var m=anchor||items[i].el,rects=m.getClientRects(),at=rects[0];

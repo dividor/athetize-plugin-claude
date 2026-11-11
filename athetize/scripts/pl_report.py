@@ -527,7 +527,8 @@ def build_data(work: Work, with_suggestions: bool = True) -> dict:
         _report_ref(rid, r, manifest.get(rid, {}), out_claims, sugs) for rid, r in refs.items()
     ]
 
-    body_paras = [_report_paragraph(p) for p in paper["paragraphs"] if p["kind"] != "reference"]
+    # the reference list is shown too: its entries can carry suggested fixes
+    body_paras = [_report_paragraph(p) for p in paper["paragraphs"]]
     word = word_export_name(paper)
     return {
         "meta": {
