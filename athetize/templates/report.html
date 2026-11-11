@@ -302,9 +302,7 @@ a.textbtn{text-decoration:none}
 .addsrc p{margin:0 0 14px;font-size:14px}
 .addsrc ul{margin:0 0 14px;padding-left:20px;font-size:14px}
 .addsrc li{margin:2px 0;overflow-wrap:anywhere}
-.addsrc .req{font:12.5px/1.5 var(--font-mono);background:var(--bg);border:1px solid var(--line-light);padding:8px 10px;margin:0 0 12px;color:var(--ink);overflow-wrap:anywhere}
 .addsrc .act{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
-.addsrc .after{margin:0;font-size:13px;color:var(--muted)}
 .addsrc > :last-child{margin-bottom:0}
 #sourcesView.dropping{outline:2px dashed var(--primary);outline-offset:-6px}
 .textbtn:disabled{opacity:.55;cursor:default}
@@ -1062,7 +1060,6 @@ if(wordName&&location.protocol==='file:'&&/^[^\/\\]+\.docx$/.test(wordName))offe
 /* ---------- add sources ----------
    The page can take files only when the plugin's helper on this computer is showing it
    (pl.py serve). Opened as a plain file, the button says how to get that. */
-var paperName=DATA.meta.source_file||DATA.meta.title||'this paper';
 var addBtn=$('#addSources'),picker=$('#srcPicker'),addBox=$('#addSrc'),helper=false,adding=false,oneChooser=false;
 var READS=/\.(pdf|txt|md|html?|docx|xml)$/i, MAX_MB=300;
 function api(route,opts){
@@ -1076,12 +1073,12 @@ function addNote(title,lines){
 }
 function addList(lines){var ul=el('ul');lines.forEach(function(t){ul.append(el('li',null,t));});addBox.append(ul);}
 function showHowToAdd(){
-  var req='Open the Athetize report for '+paperName+' so I can add sources.';
-  addNote('Add sources',['This page can take your files once Claude has opened the report for you. Ask Claude:']);
-  addBox.append(el('div','req',req));
-  var c=el('button',null,'Copy request');c.type='button';c.addEventListener('click',function(){copyText(req,c);});
-  var act=el('div','act');act.append(c);addBox.append(act);
-  addBox.append(el('p','after','Claude replies with a link to this report where Add sources opens your files. You can also attach the papers to a message to Claude, or tell it which folder they are in. File names do not matter.'));
+  /* Opened as a plain file, the page cannot take files or pass them on. Say so in two lines:
+     no request to copy, nothing to paste. */
+  addNote('Add sources',[
+    'This copy of the report was opened as a file, so it cannot take your papers.',
+    'Give them to Claude instead: attach the files to a message, or say which folder they are in. File names do not matter.'
+  ]);
 }
 function showAdded(res){
   var n=res.matched.length,skip=res.skipped;

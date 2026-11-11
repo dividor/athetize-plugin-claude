@@ -2,6 +2,16 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.8.1] - 2026-11-11
+
+Found by running the plugin in a cloud session linked to a computer.
+
+### Changed
+- A check no longer sends a list file of the missing sources. The report's Sources tab already lists them; the list is written only when the person asks which papers to download
+- Choosing a folder now has a route for each kind of session. In a cloud session linked to the person's computer, the connected folder is listed and the folders that hold papers are offered as answers, so nothing is typed
+- In a cloud or sandboxed session the person is no longer pointed at Add sources in the report, which cannot take files there
+- Opened as a plain file, the report's Add sources says in two lines that it cannot take files and how to hand them over. The request to copy and paste is gone
+
 ## [0.8.0] - 2026-11-10
 
 Prepared for submission to the Claude plugin directory.
