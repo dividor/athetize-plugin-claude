@@ -518,6 +518,7 @@ def build_data(work: Work, with_suggestions: bool = True) -> dict:
             "source_file": paper.get("source_file"),
             "generated": time.strftime("%Y-%m-%d %H:%M"),
             "version": pl_http.VERSION,
+            "homepage": pl_http.HOMEPAGE,
             "word_export": word if work.p(word).exists() else None,
         },
         "paragraphs": body_paras,

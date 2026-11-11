@@ -2,6 +2,11 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.18] - 2026-11-10
+
+### Added
+- The information panel links to Athetize on GitHub. The address comes from the plugin's manifest
+
 ## [0.7.17] - 2026-11-10
 
 ### Changed

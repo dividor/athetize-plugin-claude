@@ -16,7 +16,10 @@ import urllib.request
 from pathlib import Path
 
 _MANIFEST = Path(__file__).resolve().parent.parent / ".claude-plugin" / "plugin.json"
-VERSION: str = json.loads(_MANIFEST.read_text("utf-8"))["version"]
+_PLUGIN: dict = json.loads(_MANIFEST.read_text("utf-8"))
+VERSION: str = _PLUGIN["version"]
+# Where the plugin lives on the web: its source code and issues.
+HOMEPAGE: str = _PLUGIN["homepage"]
 ALLOWED_SCHEMES = ("http", "https")
 
 

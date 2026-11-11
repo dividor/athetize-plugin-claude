@@ -73,7 +73,8 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 .about{position:absolute;right:0;top:calc(100% + 8px);z-index:50;width:min(380px,calc(100vw - 32px));padding:16px 18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
 .about h2{font-size:1rem;margin:0 0 8px}
 .about p{margin:0 0 10px;font-size:13.5px;line-height:1.55;color:var(--ink)}
-.about p:last-child{margin-bottom:0;color:var(--muted)}
+.about p.quiet{color:var(--muted)}
+.about p.more{margin:12px 0 0;padding-top:10px;border-top:1px solid var(--line-light);font-size:13px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 /* ---------- page tabs ---------- */
 /* Tabs move between pages, so they must not look like the filled action buttons. They are
@@ -350,7 +351,8 @@ a.ext::after{content:"\2197";display:inline-block;margin-left:4px;font-size:.85e
         <h2>What Athetize does</h2>
         <p>Athetize checks each claim in your paper against the source it cites. Every claim gets a result, the passage in the source that the result rests on, and a link to that source. Where a claim goes further than its source, it suggests a rewording.</p>
         <p>The checking is done by AI and can be wrong. Read the quoted evidence yourself before you change your paper.</p>
-        <p>Athetize runs inside Claude, which reads your paper and the sources. Apart from that, only reference details, such as titles and DOIs, are sent out, to public indexes that help find the sources.</p>
+        <p class="quiet">Athetize runs inside Claude, which reads your paper and the sources. Apart from that, only reference details, such as titles and DOIs, are sent out, to public indexes that help find the sources.</p>
+        <p class="more" id="aboutMore"><a class="ext" id="aboutLink" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">Athetize on GitHub</a></p>
       </div>
     <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>
     </div>
@@ -1272,6 +1274,9 @@ syncEdits();
 
 /* ---------- what Athetize does ---------- */
 var aboutBtn=$('#aboutBtn'),about=$('#about');
+/* the plugin's page: its source code, its documentation and where to report a problem */
+var home=safeUrl(DATA.meta.homepage);
+if(home)$('#aboutLink').href=home;else $('#aboutMore').hidden=true;
 function showAbout(open){about.hidden=!open;aboutBtn.setAttribute('aria-expanded',open?'true':'false');}
 aboutBtn.addEventListener('click',function(){showAbout(about.hidden);});
 document.addEventListener('click',function(e){if(!about.hidden&&!e.target.closest('.topact'))showAbout(false);});
