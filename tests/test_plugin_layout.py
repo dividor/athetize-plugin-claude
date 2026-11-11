@@ -1,9 +1,10 @@
 """Checks that the repository is a valid, listable Claude Code plugin.
 
 These mirror the Claude Code plugin documentation and the plugin directory's pre-submission
-checklist: manifest fields, skill and agent frontmatter, no binaries or oversized files, and a
-README that names every network host the scripts contact. The one binary allowed besides
-pictures is a small sample paper under examples/, which the plugin itself does not ship.
+checklist: manifest fields, skill and agent frontmatter, no binaries or oversized files in the
+plugin folder, and a README that names every network host the scripts contact. The plugin is
+the athetize/ folder; tests, examples and docs sit beside it and are not shipped. The one
+binary kept besides pictures is a small sample paper under examples/.
 """
 
 import json
@@ -15,11 +16,14 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parent.parent
-PLUGIN = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text("utf-8"))
+# The plugin itself: the folder that is installed, and that the directory checks.
+PLUGIN_DIR = ROOT / "athetize"
+PLUGIN = json.loads((PLUGIN_DIR / ".claude-plugin" / "plugin.json").read_text("utf-8"))
 MARKETPLACE = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text("utf-8"))
 
 MAX_FILES = 512
 MAX_NON_IMAGE_BYTES = 256 * 1024
+MAX_PLUGIN_FILE_BYTES = 5 * 1024 * 1024
 IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
 # The one kind of binary file kept besides pictures: a sample paper to try the plugin on.
 # It lives under examples/, outside what the plugin itself ships.
@@ -82,17 +86,20 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual(homepage.scheme, "https")
         self.assertTrue(homepage.netloc)
 
-    def test_marketplace_serves_the_plugin_from_the_repository_root(self):
+    def test_marketplace_serves_the_plugin_from_its_own_folder(self):
         self.assertNotIn(MARKETPLACE["name"], RESERVED_MARKETPLACE_NAMES)
         self.assertTrue(MARKETPLACE["owner"]["name"].strip())
         entries = MARKETPLACE["plugins"]
         self.assertEqual(len(entries), 1)
         self.assertEqual(entries[0]["name"], PLUGIN["name"])
-        self.assertEqual(entries[0]["source"], "./")
+        self.assertEqual(entries[0]["source"], "./athetize")
+        self.assertTrue((ROOT / entries[0]["source"] / ".claude-plugin" / "plugin.json").is_file())
 
     def test_only_manifests_live_in_the_claude_plugin_folder(self):
-        names = sorted(p.name for p in (ROOT / ".claude-plugin").iterdir())
-        self.assertEqual(names, ["marketplace.json", "plugin.json"])
+        marketplace = sorted(p.name for p in (ROOT / ".claude-plugin").iterdir())
+        self.assertEqual(marketplace, ["marketplace.json"])
+        plugin = sorted(p.name for p in (PLUGIN_DIR / ".claude-plugin").iterdir())
+        self.assertEqual(plugin, ["plugin.json"])
 
     def test_changelog_has_an_entry_for_the_current_version(self):
         changelog = (ROOT / "CHANGELOG.md").read_text("utf-8")
@@ -101,7 +108,7 @@ class ManifestTests(unittest.TestCase):
 
 class ComponentTests(unittest.TestCase):
     def test_every_skill_has_name_and_description(self):
-        skills = sorted((ROOT / "skills").glob("*/SKILL.md"))
+        skills = sorted((PLUGIN_DIR / "skills").glob("*/SKILL.md"))
         self.assertGreaterEqual(len(skills), 1)
         for path in skills:
             with self.subTest(skill=path.parent.name):
@@ -111,7 +118,7 @@ class ComponentTests(unittest.TestCase):
                 self.assertLessEqual(len(meta["description"]), 1536)
 
     def test_every_agent_has_name_description_and_an_explicit_tool_list(self):
-        agents = sorted((ROOT / "agents").glob("*.md"))
+        agents = sorted((PLUGIN_DIR / "agents").glob("*.md"))
         self.assertGreaterEqual(len(agents), 1)
         for path in agents:
             with self.subTest(agent=path.stem):
@@ -121,12 +128,12 @@ class ComponentTests(unittest.TestCase):
                 self.assertIn("tools", meta)
 
     def test_components_use_the_plugin_root_variable_not_a_placeholder(self):
-        for path in [*ROOT.glob("skills/**/*.md"), *ROOT.glob("agents/*.md")]:
+        for path in [*PLUGIN_DIR.glob("skills/**/*.md"), *PLUGIN_DIR.glob("agents/*.md")]:
             with self.subTest(file=str(path.relative_to(ROOT))):
                 self.assertNotIn("<plugin root>", path.read_text("utf-8"))
 
     def test_skills_that_call_the_helper_reference_it_through_the_plugin_root(self):
-        for path in sorted((ROOT / "skills").glob("*/SKILL.md")):
+        for path in sorted((PLUGIN_DIR / "skills").glob("*/SKILL.md")):
             text = path.read_text("utf-8")
             if "pl.py" in text:
                 with self.subTest(skill=path.parent.name):
@@ -140,13 +147,12 @@ class ComponentTests(unittest.TestCase):
 
 
 class FileTests(unittest.TestCase):
+    """Rules for every file in the repository, and stricter ones for the plugin folder."""
+
     @classmethod
     def setUpClass(cls):
         cls.files = repo_files()
-
-    def test_file_count_is_within_the_listing_limit(self):
-        self.assertGreater(len(self.files), 0)
-        self.assertLessEqual(len(self.files), MAX_FILES)
+        cls.plugin_files = [p for p in cls.files if PLUGIN_DIR in p.parents]
 
     def test_no_operating_system_junk_bytecode_or_symlinks(self):
         for path in self.files:
@@ -156,14 +162,31 @@ class FileTests(unittest.TestCase):
                 self.assertNotIn("__pycache__", path.parts)
                 self.assertFalse(path.is_symlink())
 
-    def test_non_image_files_are_text_and_under_the_size_limit(self):
+    def test_plugin_folder_is_within_the_listing_limits(self):
+        self.assertGreater(len(self.plugin_files), 0)
+        self.assertLessEqual(len(self.plugin_files), MAX_FILES)
+        for path in self.plugin_files:
+            with self.subTest(file=str(path.relative_to(ROOT))):
+                self.assertLess(path.stat().st_size, MAX_PLUGIN_FILE_BYTES)
+
+    def test_plugin_folder_holds_only_text_and_pictures(self):
+        # the directory holds a submission for review over any other kind of binary file
+        for path in self.plugin_files:
+            if path.suffix.lower() in IMAGE_EXTS:
+                continue
+            with self.subTest(file=str(path.relative_to(ROOT))):
+                data = path.read_bytes()
+                self.assertLess(len(data), MAX_NON_IMAGE_BYTES)
+                data.decode("utf-8")  # raises on a binary file
+
+    def test_the_rest_of_the_repository_is_text_pictures_and_sample_documents(self):
         for path in self.files:
             if path.suffix.lower() in IMAGE_EXTS or is_sample_document(path):
                 continue
             with self.subTest(file=str(path.relative_to(ROOT))):
                 data = path.read_bytes()
                 self.assertLess(len(data), MAX_NON_IMAGE_BYTES)
-                data.decode("utf-8")  # raises on a binary file
+                data.decode("utf-8")
 
     def test_sample_documents_are_small_word_files_kept_under_examples(self):
         samples = [p for p in self.files if p.suffix.lower() in SAMPLE_DOCUMENT_EXTS]
@@ -176,17 +199,42 @@ class FileTests(unittest.TestCase):
                     self.assertIn("word/document.xml", z.namelist())
                     self.assertIsNone(z.testzip())
 
+    def test_plugin_folder_ships_nothing_but_the_plugin(self):
+        tops = {p.relative_to(PLUGIN_DIR).parts[0] for p in self.plugin_files}
+        self.assertEqual(
+            tops,
+            {".claude-plugin", "LICENSE", "agents", "logo.png", "scripts", "skills", "templates"},
+        )
+
     def test_readme_and_license_are_present(self):
+        # the directory reads the README at the top of the repository when the plugin has none
         readme = (ROOT / "README.md").read_text("utf-8")
-        self.assertGreaterEqual(len(readme.split()), 40)
+        prose = re.sub(r"```.*?```", "", readme, flags=re.S)
+        self.assertGreaterEqual(len(prose.split()), 40)
         self.assertIn("MIT License", (ROOT / "LICENSE").read_text("utf-8"))
+        self.assertEqual(
+            (PLUGIN_DIR / "LICENSE").read_text("utf-8"), (ROOT / "LICENSE").read_text("utf-8")
+        )
+
+    def test_listing_fields_point_at_real_things(self):
+        self.assertTrue((PLUGIN_DIR / PLUGIN["icon"]).is_file())
+        for key in ("documentationUrl", "supportUrl", "privacyPolicyUrl", "homepage"):
+            self.assertTrue(PLUGIN[key].startswith("https://"), key)
+        for key in ("documentationUrl", "privacyPolicyUrl"):
+            path = PLUGIN[key].split("/blob/main/", 1)[1]
+            self.assertTrue((ROOT / path).is_file(), path)
+
+    def test_readme_gives_at_least_three_example_prompts(self):
+        readme = (ROOT / "README.md").read_text("utf-8")
+        section = readme.split("## Example prompts", 1)[1].split("\n## ", 1)[0]
+        self.assertGreaterEqual(len(re.findall(r"(?m)^- ", section)), 3)
 
 
 class DisclosureTests(unittest.TestCase):
     def test_readme_names_every_host_the_scripts_contact_or_link_to(self):
         readme = (ROOT / "README.md").read_text("utf-8")
         hosts = set()
-        for path in (ROOT / "scripts").glob("*.py"):
+        for path in (PLUGIN_DIR / "scripts").glob("*.py"):
             hosts.update(
                 re.findall(r"https?://([a-z0-9][a-z0-9.-]*\.[a-z]{2,})", path.read_text("utf-8"))
             )

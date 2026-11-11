@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "athetize",
-      "source": "./",
+      "source": "./athetize",
       "description": "Checks a paper's cited claims against the sources it cites and produces a self-contained HTML report, with suggested edits as Word tracked changes.",
       "category": "productivity",
       "homepage": "https://github.com/dividor/athetize-plugin-claude"

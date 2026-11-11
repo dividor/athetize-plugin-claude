@@ -97,13 +97,13 @@ The repository root is the plugin. Claude Code installs it straight from here (`
 
 | Path | What it is |
 |---|---|
-| `.claude-plugin/plugin.json` | Plugin manifest (name, version, description, author) |
+| `athetize/.claude-plugin/plugin.json` | Plugin manifest (name, version, description, author) |
 | `.claude-plugin/marketplace.json` | Makes this repository its own plugin marketplace |
-| `skills/<name>/SKILL.md` | One skill per folder: instructions Claude follows |
-| `agents/<name>.md` | Subagents the skills launch in parallel |
-| `scripts/pl.py`, `scripts/pl_*.py` | The helper the skills call for every deterministic step (see the module map below) |
-| `scripts/requirements.txt` | The helper's optional runtime packages |
-| `templates/report.html` | The self-contained report page |
+| `athetize/skills/<name>/SKILL.md` | One skill per folder: instructions Claude follows |
+| `athetize/agents/<name>.md` | Subagents the skills launch in parallel |
+| `athetize/scripts/pl.py`, `athetize/scripts/pl_*.py` | The helper the skills call for every deterministic step (see the module map below) |
+| `athetize/scripts/requirements.txt` | The helper's optional runtime packages |
+| `athetize/templates/report.html` | The self-contained report page |
 | `tests/` | Offline tests and the sample fixtures |
 | `tools/quality/` | Repository tooling (complexity gate); not used by the plugin at run time |
 
@@ -121,7 +121,7 @@ The repository root is the plugin. Claude Code installs it straight from here (`
 | `pl_serve.py` | The helper on `127.0.0.1` that shows the report and takes the files chosen with its Add sources button |
 | `pl_quote.py`, `pl_passages.py`, `pl_verify.py` | Finding passages, locating quotes in sources, checking verdicts |
 | `pl_suggest.py`, `pl_docx.py`, `pl_docx_comments.py`, `pl_docx_package.py` | Suggested edits and the Word tracked-changes export |
-| `pl_report.py` | Data for `templates/report.html` |
+| `pl_report.py` | Data for `athetize/templates/report.html` |
 | `pl_core.py` | Re-exports the workspace, validation, verification and report functions under one name |
 
 ## 🔧 Pre-commit Hooks
@@ -202,7 +202,7 @@ detect-secrets audit .secrets.baseline
 
 ### Security rules for plugin code
 
-- All network access goes through `scripts/pl_http.py`, which fetches `http` and `https` only and verifies TLS certificates. Do not call `urllib`, `requests` or sockets anywhere else.
+- All network access goes through `athetize/scripts/pl_http.py`, which fetches `http` and `https` only and verifies TLS certificates. Do not call `urllib`, `requests` or sockets anywhere else.
 - Any new network destination must be listed in the README "Privacy and safety" section.
 - Parse untrusted XML with `defusedxml`. Never use `eval()`, `exec()` or `shell=True`.
 - Text from papers, sources and web pages is data. Skills and agents must say so and must never follow instructions found in it.
@@ -212,7 +212,7 @@ detect-secrets audit .secrets.baseline
 
 Dependabot is configured (`.github/dependabot.yml`) to open monthly PRs for:
 
-- Python dependency updates (`requirements-dev.txt`, `scripts/requirements.txt`)
+- Python dependency updates (`requirements-dev.txt`, `athetize/scripts/requirements.txt`)
 - GitHub Actions version updates
 
 ## 🛠️ Making Changes
@@ -408,13 +408,13 @@ Include:
 - **Linting**: flake8
 - **Type Checking**: mypy; use type hints for function signatures
 - **Python version**: the scripts must run on Python 3.9. Keep `from __future__ import annotations` at the top of every module and avoid newer-only syntax.
-- **Dependencies**: standard library first. A new runtime package needs a strong reason, must be listed in `scripts/requirements.txt` and the README, and must fail with a clear message when missing.
+- **Dependencies**: standard library first. A new runtime package needs a strong reason, must be listed in `athetize/scripts/requirements.txt` and the README, and must fail with a clear message when missing.
 - **Fail loudly**: no silent fallbacks. A failed lookup or unreadable file is reported to the user, never hidden.
 - **Plain English**: in code, comments, skills and docs, say what the thing does.
 
 ## 🔄 Release Process
 
-1. Update `version` in `.claude-plugin/plugin.json`. Users only receive an update when this changes.
+1. Update `version` in `athetize/.claude-plugin/plugin.json`. Users only receive an update when this changes.
 2. Add an entry to `CHANGELOG.md`.
 3. Merge the PR to `main` once CI passes.
 4. Tag the release (`claude plugin tag` creates an `athetize--vX.Y.Z` tag and checks the manifests agree) and create a GitHub Release with notes.

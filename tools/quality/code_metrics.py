@@ -28,7 +28,7 @@ from cognitive_complexity.api import get_cognitive_complexity
 from radon.metrics import mi_rank, mi_visit
 
 DEFAULT_ROOTS = [
-    Path("scripts"),
+    Path("athetize/scripts"),
     Path("tools"),
     Path("tests"),
 ]

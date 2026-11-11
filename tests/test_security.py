@@ -22,6 +22,7 @@ import pl_text
 import pl_xml
 
 ROOT = Path(__file__).resolve().parent.parent
+PLUGIN_DIR = ROOT / "athetize"
 INTERNAL_ENTITY = b'<?xml version="1.0"?><!DOCTYPE d [<!ENTITY e "expanded">]><d>x &e; y</d>'
 W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
@@ -107,7 +108,9 @@ class NoBrowserAutomationTests(unittest.TestCase):
     DRIVERS = ("playwright", "selenium", "pyppeteer", "puppeteer", "webdriver")
 
     def test_no_script_or_requirement_names_a_browser_driver(self):
-        files = sorted((ROOT / "scripts").glob("*.py")) + [ROOT / "scripts" / "requirements.txt"]
+        files = sorted((PLUGIN_DIR / "scripts").glob("*.py")) + [
+            PLUGIN_DIR / "scripts" / "requirements.txt"
+        ]
         self.assertGreater(len(files), 20)
         for path in files:
             text = path.read_text("utf-8").casefold()

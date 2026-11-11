@@ -2,6 +2,20 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.8.0] - 2026-11-10
+
+Prepared for submission to the Claude plugin directory.
+
+### Changed
+- The plugin now lives in its own `athetize/` folder, which is all that is installed. Tests, examples, docs and development tooling sit beside it and are no longer shipped to users. The marketplace entry points at that folder, so the install commands are unchanged
+- The README says everything the plugin runs, sends, fetches and writes, gives example prompts and has a troubleshooting table, as the directory's checklist asks
+
+### Added
+- Listing details in the manifest: a display name, an icon, and links to the documentation, support and privacy policy
+- A privacy policy, `docs/privacy.md`
+- A copy of the licence inside the plugin folder
+- Tests that hold the plugin folder to the directory's file rules: text and pictures only, size and count limits
+
 ## [0.7.26] - 2026-11-10
 
 ### Changed

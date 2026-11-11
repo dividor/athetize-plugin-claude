@@ -22,6 +22,14 @@ A Claude plugin that checks whether the sources a paper cites support what the p
 
 Open Customize, then Plugins, choose Add marketplace and enter `dividor/athetize-plugin-claude`. An organisation admin can add it for everyone under Organization settings, Plugins & skills.
 
+**Without a marketplace**
+
+The plugin is the [`athetize`](athetize) folder. Load a copy of it, or a zip of it, for one session:
+
+```bash
+claude --plugin-dir /path/to/athetize
+```
+
 Athetize is tested in Claude Code and the Claude desktop app. In claude.ai chat a plugin's agents are not used, and Athetize has not been tested there.
 
 **Requirements**
@@ -45,14 +53,13 @@ Athetize reads the paper (Word, PDF, Markdown, LaTeX or text), downloads open-ac
 - `report.html`: your paper with every claim highlighted, the evidence behind each result, and a Sources tab.
 - A Word copy with each suggested edit as a tracked change and a comment that says why, for Word manuscripts.
 
-Other things to say:
+## Example prompts
 
-| Say | What happens |
-| --- | --- |
-| "Add the sources in ~/Papers" | Each file is read and matched to its reference. No renaming. |
-| "Open the report so I can add sources" | Add files from the report's Sources tab. |
-| "Update the report" | Rechecks only what changed. |
-| "Suggest fixes" | Drafts rewordings and reference-list fixes. |
+- "Check the citations in draft.docx"
+- "Add the sources in ~/Papers and update the report"
+- "Open the report so I can add sources"
+- "Suggest fixes and give me a Word version with tracked changes"
+- "Which papers do I still need to download?"
 
 To try it without a paper of your own, check the sample in [examples](examples/README.md).
 
@@ -88,15 +95,26 @@ The Word copy, shown here in LibreOffice:
 
 ![The Word copy: tracked changes with a comment explaining each one](docs/images/word-export.png)
 
-## Privacy
+## What it runs, sends and fetches
 
-- Claude reads your paper and the sources. The plugin's scripts send neither anywhere.
-- Only reference details (titles, authors, DOIs) are sent out, to find the sources: Crossref (`api.crossref.org`), OpenAlex (`api.openalex.org`), Europe PMC (`www.ebi.ac.uk`), arXiv (`arxiv.org`, `export.arxiv.org`), ERIC (`api.ies.ed.gov`, `files.eric.ed.gov`), Semantic Scholar (`api.semanticscholar.org`) and, if you set a contact email, Unpaywall (`api.unpaywall.org`).
-- Full text is downloaded only from open-access copies, from addresses printed in a reference, and from files you provide.
-- The report links to `doi.org`, `scholar.google.com`, `search.worldcat.org`, `search.crossref.org`, `openalex.org` and `github.com`. Nothing is sent until you click.
-- No hooks, no MCP servers, no bundled keys.
+- **Runs.** Python scripts in `athetize/scripts`, where Claude runs commands. If they are installed, the `pdftotext`, `pdftoppm` and `tesseract` tools to read PDFs. While you add sources from the report, a small web server on `127.0.0.1` that only the report page can reach; on a Mac it opens the system file chooser through `osascript`. It stops when you finish, or after two hours.
+- **Sends.** Reference details only (titles, authors, DOIs), to find the sources: Crossref (`api.crossref.org`), OpenAlex (`api.openalex.org`), Europe PMC (`www.ebi.ac.uk`), arXiv (`arxiv.org`, `export.arxiv.org`), ERIC (`api.ies.ed.gov`, `files.eric.ed.gov`), Semantic Scholar (`api.semanticscholar.org`) and, if you set a contact email, Unpaywall (`api.unpaywall.org`). The email, when set, goes to these services as their contact address.
+- **Fetches.** Full text from open-access copies, from addresses printed in a reference, and from files or addresses you provide.
+- **Writes.** A `<paper>-check` folder next to your paper, and `~/.athetize/config.json` for settings.
+- **Links.** The report links to `doi.org`, `scholar.google.com`, `search.worldcat.org`, `search.crossref.org`, `openalex.org` and `github.com`. Nothing is sent until you click.
+- **Does not.** No hooks, no MCP servers, no telemetry, no bundled keys. Claude reads your paper and the sources; the scripts send neither anywhere.
 
-The full account is in [docs/privacy.md](docs/privacy.md). To report a vulnerability, see [SECURITY.md](SECURITY.md).
+See the [privacy policy](docs/privacy.md). To report a vulnerability, see [SECURITY.md](SECURITY.md).
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| A Python package is missing | `pip install defusedxml lxml pypdf` |
+| A claim says "can't verify" | Its source could not be read. Add it from the Sources tab, or tell Claude where the file is. |
+| Few sources were downloaded | Many papers are not open access. Set a contact email in the report's Settings to also try Unpaywall, or add the files yourself. |
+| No Word copy | It is made only when the paper is a Word file. |
+| Something else | [Open an issue](https://github.com/dividor/athetize-plugin-claude/issues). |
 
 ## Limitations
 

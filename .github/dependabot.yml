@@ -15,9 +15,9 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
 
-  # The plugin's optional runtime dependencies (scripts/requirements.txt)
+  # The plugin's optional runtime dependencies (athetize/scripts/requirements.txt)
   - package-ecosystem: "pip"
-    directory: "/scripts"
+    directory: "/athetize/scripts"
     target-branch: "main"
     schedule:
       interval: "monthly"
