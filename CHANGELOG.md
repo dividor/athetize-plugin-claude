@@ -6,7 +6,7 @@ All notable changes to Athetize will be documented in this file.
 
 ### Changed
 - The document's name no longer sits in a band at the top of the page. The paper's own title, when the manuscript marks one, opens the document, on its own line and aligned as in the paper
-- The Highlight and Suggested Edits switch has a row of its own under the title, or under the opening heading, ruled off from the paper below
+- The Highlight and Suggested Edits switch has a row of its own under the title, or under the opening heading, centred and ruled off from the paper below
 - Download Report sits at the right end of the tab row, so it shows on both pages
 - The information panel's diagram shows the paper indexes: Crossref and OpenAlex, Unpaywall as an option, and retracted sources flagged. Its text says so too
 
