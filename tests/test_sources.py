@@ -606,6 +606,11 @@ class SourcesNeededTests(unittest.TestCase):
         ):
             self.assertIn(needed, html)
         self.assertNotIn("Back to document", html)
+        self.assertIn('Athetize <span class="brand-sub">Fact Checker</span>', html)
+        self.assertNotIn("Citation check", html)
+        self.assertNotIn("drop them on this page", html)
+        self.assertIn('id="foot"', html)
+        self.assertIn('class="textbtn primary" id="wordReport"', html)
         self.assertIn("Review Missing Sources", html)
         self.assertNotIn("'No source'", html)
         self.assertNotIn("'Located'", html)

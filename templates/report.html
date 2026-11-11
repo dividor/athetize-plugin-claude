@@ -63,14 +63,14 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 /* the mark is drawn 18px tall inside its 24px box; 26px type has capitals of the same height */
 .brand svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .brand-name{font:600 26px/1 var(--font-heading);letter-spacing:-.01em}
-.brand-tag{font-size:13px;color:var(--muted);padding-left:12px;margin-left:4px;border-left:1px solid var(--line)}
+.brand-sub{font-weight:400}
 .iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--muted);width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
 .iconbtn:hover{background:var(--hover);color:var(--ink)}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 /* ---------- page tabs ---------- */
 /* Tabs are boxes on a rule: the page you are on is filled and joined to the content below. */
-.pagetabs{background:var(--surface);border-bottom:2px solid var(--primary-dark)}
-.pagetabs .in{display:flex;gap:6px;align-items:flex-end}
+.pagetabs{background:var(--surface)}
+.tabstrip{display:flex;gap:6px;align-items:flex-end;border-bottom:2px solid var(--primary-dark)}
 .ptab{display:inline-flex;align-items:center;gap:8px;min-width:132px;justify-content:center;height:42px;padding:0 22px;cursor:pointer;
   border:1px solid var(--line);border-bottom:0;background:var(--bg);color:var(--ink);font:600 15px/1 var(--font-heading)}
 .ptab:hover{background:var(--hover)}
@@ -110,7 +110,8 @@ a.textbtn{text-decoration:none}
 .nav span{font-size:13px;color:var(--muted);min-width:92px;text-align:center;white-space:nowrap}
 
 /* ---------- page ---------- */
-.wrap{padding-top:24px;padding-bottom:96px}
+.wrap{padding-top:24px;padding-bottom:28px}
+.foot{padding:0 0 88px;font-size:12px;color:var(--muted)}
 .hint{font-size:13.5px;color:var(--muted);margin:0 0 14px}
 .notice{margin:0 0 20px;padding:14px 18px;border:1px solid var(--note-line);background:var(--note-bg);font-size:14px}
 .notice b{font-family:var(--font-heading);font-weight:600}
@@ -220,7 +221,6 @@ a.textbtn{text-decoration:none}
 .addsrc .act{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
 .addsrc .after{margin:0;font-size:13px;color:var(--muted)}
 .addsrc > :last-child{margin-bottom:0}
-.drophint{margin:-6px 0 20px;font-size:13px;color:var(--muted)}
 #sourcesView.dropping{outline:2px dashed var(--primary);outline-offset:-6px}
 .textbtn:disabled{opacity:.55;cursor:default}
 .addwrap{position:relative;flex:none}
@@ -235,16 +235,19 @@ a.textbtn{text-decoration:none}
 .srow .cit{font-size:14.5px;overflow-wrap:anywhere}
 .srow .pills{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:6px;grid-column:2}
 .srow .used{grid-column:2;font-size:12.5px;color:var(--muted);margin-top:4px}
-.srow .used a{margin-right:6px;font:600 12px var(--font-mono)}
+.cchip{display:inline-block;margin:0 6px 4px 0;padding:0 7px;font:600 12px/1.75 var(--font-mono);color:var(--c);border:1px solid var(--c);background:color-mix(in srgb,var(--c) 10%,transparent);text-decoration:none}
+.cchip:hover{background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--c)}
+.g-ref{--c:var(--primary-dark)}
+.difflist{margin:0 0 10px;padding-left:18px;font-size:13.5px}
 .srow .more{grid-column:2;font-size:12px;color:var(--muted)}
 .srow .why{grid-column:2;font-size:12.5px;color:var(--muted)}
-.srow .differs{color:var(--part);font-weight:600}
 .srow.flag{border-left:3px solid var(--part)}
 .empty{padding:24px;text-align:center;color:var(--muted)}
 
 /* ---------- phones ---------- */
 @media (max-width:760px){
-  .brand-tag{display:none}
+  .brand-name{font-size:19px}
+  .brand svg{width:18px;height:18px}
   .chip{padding:13px 10px 10px;font-size:13.5px}
   .nav{position:fixed;left:0;right:0;bottom:0;z-index:35;justify-content:center;gap:10px;background:var(--surface);border-top:1px solid var(--line);
     padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px))}
@@ -263,8 +266,7 @@ a.textbtn{text-decoration:none}
   <div class="in">
     <div class="brand">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 14.5l2.2 2.2L15.5 12"/></svg>
-      <span class="brand-name">Athetize</span>
-      <span class="brand-tag">Citation check</span>
+      <span class="brand-name">Athetize <span class="brand-sub">Fact Checker</span></span>
     </div>
     <button class="iconbtn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" stroke="none"/></svg></button>
   </div>
@@ -277,10 +279,10 @@ a.textbtn{text-decoration:none}
 </section>
 
 <nav class="pagetabs" aria-label="Report pages">
-  <div class="in">
+  <div class="in"><div class="tabstrip">
     <button class="ptab" id="openResults" type="button" aria-current="page">Results</button>
     <button class="ptab" id="openSources" type="button">Sources <span class="n" id="srcCount"></span></button>
-  </div>
+  </div></div>
 </nav>
 
 <section class="summary" id="summary">
@@ -294,7 +296,7 @@ a.textbtn{text-decoration:none}
 <div class="tabs">
   <div class="in">
     <div class="nav" id="nav"><button type="button" id="prev" aria-label="Previous claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span id="navLabel"></span><button type="button" id="next" aria-label="Next claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
-    <a class="textbtn" id="wordReport" hidden title="Download the Word copy with the suggested edits as tracked changes"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Word report</span></a>
+    <a class="textbtn primary" id="wordReport" hidden title="Download the Word copy with the suggested edits as tracked changes"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Word report</span></a>
   </div>
 </div>
 
@@ -312,11 +314,12 @@ a.textbtn{text-decoration:none}
     <input type="file" id="srcPicker" multiple hidden accept=".pdf,.txt,.md,.html,.htm,.docx,.xml">
     <input type="file" id="dirPicker" webkitdirectory hidden>
   </div>
-  <p class="drophint" id="dropHint" hidden>Add sources lets you choose files or a whole folder. You can also drop them on this page. Each file is read and matched to its reference, and duplicates are skipped. File names do not matter.</p>
   <section class="addsrc" id="addSrc" aria-live="polite" hidden></section>
   <div class="srcfilter"><div class="chips" id="srcFilter" role="group" aria-label="Filter sources"></div></div>
   <div id="srcList"></div>
 </main>
+
+<footer class="foot"><div class="in" id="foot"></div></footer>
 
 <div class="rail" id="rail" aria-hidden="true"></div>
 <div class="card" id="card" role="dialog" aria-label="Claim analysis" tabindex="-1"></div>
@@ -353,8 +356,9 @@ function icon(name){var s=document.createElementNS(SVGNS,'svg');s.setAttribute('
   var p=document.createElementNS(SVGNS,'path');p.setAttribute('d',ICONS[name]);s.appendChild(p);return s;}
 function iconBtn(name,label){var b=el('button');b.type='button';b.title=label;b.setAttribute('aria-label',label);b.append(icon(name));return b;}
 
-document.title=(DATA.meta.title||'Report')+' · Athetize';
+document.title=(DATA.meta.title||'Report')+' · Athetize Fact Checker';
 $('#title').textContent=DATA.meta.title||'Untitled paper';
+$('#foot').textContent='Checked '+DATA.meta.generated+(DATA.meta.source_file?' \u00b7 '+DATA.meta.source_file:'')+' \u00b7 Athetize '+DATA.meta.version;
 
 /* ---------- build the item list ---------- */
 var items=[]; // {kind,d,verdict,group,el}
@@ -463,7 +467,8 @@ function navList(){
 var cur=-1;
 function updateNav(){
   var l=navList(),pos=l.indexOf(cur);
-  $('#navLabel').textContent=l.length?((pos>=0?pos+1:'–')+' of '+l.length+(anyActive()?' shown':' to review')):'nothing to review';
+  /* before anything is picked it reads 1: the next press goes to the first one */
+  $('#navLabel').textContent=l.length?((pos>=0?pos+1:1)+' of '+l.length+(anyActive()?' shown':' to review')):'nothing to review';
 }
 function go(delta){
   var l=navList();if(!l.length)return;
@@ -624,6 +629,12 @@ function openCard(i,pin,focus,anchor){
   clearTimeout(hideT);clearTimeout(showT);
   openIdx=i;pinned=!!pin;cardAnchor=anchor||null;
   buildCard(i);
+  var m=anchor||items[i].el,rects=m.getClientRects(),at=rects[0];
+  for(var k=0;!anchor&&k<rects.length;k++){if(lastPointer.y>=rects[k].top&&lastPointer.y<=rects[k].bottom){at=rects[k];break;}}
+  showCardAt(at,focus);
+}
+/* Show the card that has just been filled, beside the given rectangle (or as a sheet on a phone). */
+function showCardAt(r,focus){
   var sheet=sheetMode();
   card.classList.toggle('as-sheet',sheet);
   document.body.classList.toggle('sheet-open',sheet);
@@ -631,8 +642,6 @@ function openCard(i,pin,focus,anchor){
   card.style.left='';card.style.top='';
   if(!sheet){
     card.style.visibility='hidden';card.classList.add('open');
-    var m=anchor||items[i].el,rects=m.getClientRects(),r=rects[0];
-    for(var k=0;!anchor&&k<rects.length;k++){if(lastPointer.y>=rects[k].top&&lastPointer.y<=rects[k].bottom){r=rects[k];break;}}
     var vw=document.documentElement.clientWidth,w=card.offsetWidth,h=card.offsetHeight;
     var left=Math.max(12,Math.min(r.left,vw-w-12))+window.scrollX;
     var below=window.innerHeight-r.bottom;
@@ -744,22 +753,56 @@ function renderSources(){
     row.append(pills);
     if(r.matched_title&&(r.exists==='partial_match'||r.exists==='mismatch')){row.append(el('div','more','Closest database record: \u201c'+r.matched_title+'\u201d. Not used: the citation and link above are the paper\u2019s own.'));}
     if(r.why_missing&&r.why_missing.length)row.append(whyLine(r.why_missing,'why'));
-    if(r.discrepancies&&r.discrepancies.length)row.append(el('div','more differs','Differs from the database record. '+r.discrepancies.map(function(t){return t.charAt(0).toUpperCase()+t.slice(1);}).join('. ')+'.'));
     if(r.cited_by&&r.cited_by.length){
-      var used=el('div','used','Supports ');
+      var used=el('div','used','Cited for ');
       r.cited_by.forEach(function(cid){
         var idx=items.findIndex(function(it){return it.kind==='claim'&&it.d.id===cid;});
         if(idx<0)return;
-        var a=el('a',null,cid);a.href='#';
+        /* coloured by what this source did for the claim, with the legend's colours */
+        var mine=items[idx].d.items.filter(function(x){return x.ref_id===r.id;})[0];
+        var v=mine?mine.verdict:items[idx].verdict;
+        var a=el('a','cchip g-'+(GROUP[v]||'unv'),cid);a.href='#';a.title=LABEL[v]||v;
         a.addEventListener('click',function(ev){ev.preventDefault();if(openIdx===idx&&cardAnchor===a)closeCard();else openCard(idx,true,true,a);});
         used.append(a);
       });
       row.append(used);
     }
-    if(r.suggestions&&r.suggestions.length){r.suggestions.forEach(function(id){if(SUG[id]){var sb=sugBlock(SUG[id]);sb.style.gridColumn='2';row.append(sb);}});}
+    var fixes=(r.suggestions||[]).filter(function(id){return SUG[id];});
+    var differs=r.discrepancies&&r.discrepancies.length;
+    if(fixes.length||differs){
+      var notes=el('div','used','Reference list ');
+      (fixes.length?fixes:['note']).forEach(function(label){
+        var a=el('a','cchip g-ref',label);a.href='#';a.title=fixes.length?'Suggested fix to this reference':'The database record differs from this reference';
+        a.addEventListener('click',function(ev){ev.preventDefault();if(cardAnchor===a&&card.classList.contains('open'))closeCard();else openRefCard(r,a);});
+        notes.append(a);
+      });
+      row.append(notes);
+    }
     srcList.append(row);
   });
   if(!shown)srcList.append(el('div','empty',needsOnly?'Every source has its full text.':'No references were extracted.'));
+}
+/* The card for a reference: a suggested fix to its entry, or where the database record differs. */
+function openRefCard(r,anchor){
+  clearTimeout(hideT);clearTimeout(showT);
+  openIdx=-1;pinned=true;cardAnchor=anchor;
+  card.textContent='';card.append(el('div','grab'));
+  var head=el('div','c-head');
+  var badge=el('span','badge','Reference ['+r.id+']');badge.style.setProperty('--c','var(--primary-dark)');
+  var cb=iconBtn('close','Close');cb.addEventListener('click',closeCard);
+  head.append(badge,el('span','sp'),cb);card.append(head);
+  var body=el('div','c-body');
+  body.append(el('div','claimtxt',r.raw||r.citation));
+  var fixes=(r.suggestions||[]).filter(function(id){return SUG[id];});
+  if(!fixes.length&&r.discrepancies&&r.discrepancies.length){
+    body.append(el('p','an','The database record differs from the reference as printed:'));
+    var ul=el('ul','difflist');
+    r.discrepancies.forEach(function(t){ul.append(el('li',null,t.charAt(0).toUpperCase()+t.slice(1)+'.'));});
+    body.append(ul);
+  }
+  fixes.forEach(function(id){body.append(sugBlock(SUG[id]));});
+  card.append(body);
+  showCardAt(anchor.getBoundingClientRect(),true);
 }
 function renderSrcFilter(){
   var box=$('#srcFilter');box.textContent='';
@@ -830,7 +873,7 @@ function showAdded(res){
   var fin=el('button',null,'Finish and recheck');fin.type='button';
   fin.addEventListener('click',function(){
     api('done',{method:'POST'}).then(function(){
-      addBtn.disabled=true;helper=false;$('#dropHint').hidden=true;
+      addBtn.disabled=true;helper=false;
       addNote('Handed to Claude',['Claude now has the list of what you added and rechecks the claims that cite it. If it does not start by itself, tell it \u201crecheck\u201d. Open the report again when Claude says it is ready.']);
     }).catch(function(e){addNote('Could not finish',[e.message]);});
   });
@@ -952,7 +995,7 @@ $('#sourcesView').addEventListener('drop',function(e){
 if(location.protocol==='http:'&&/^(127\.0\.0\.1|localhost)$/.test(location.hostname)){
   addBtn.disabled=true;
   api('ping').then(function(j){helper=j.ok===true;oneChooser=j.chooser===true;},function(){helper=false;})
-    .then(function(){addBtn.disabled=false;$('#dropHint').hidden=!helper;if(helper&&wordName)offerWord('word.docx');});
+    .then(function(){addBtn.disabled=false;if(helper&&wordName)offerWord('word.docx');});
 }
 
 /* ---------- missing-sources notice ---------- */

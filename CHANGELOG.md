@@ -2,6 +2,17 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.7] - 2026-11-10
+
+### Changed
+- The report is headed "Athetize Fact Checker"; the "Citation check" tag is gone
+- The tabs sit on a rule that starts where they start, in line with the title
+- The Word report button is filled, so it stands out
+- The date of the check, the file name and the version sit in a small line at the foot of the page
+- The stepper never shows a dash. It reads 1 before anything is picked, and the first press goes to the first claim
+- On the Sources page, the claims a source is cited for are chips in the legend's colours, by what that source did for the claim. Notes about the reference itself are a chip too, such as s1, and open in a card. The inline "Differs from the database record" line and the inline fix are gone
+- The paragraph of instructions under Add sources is removed
+
 ## [0.7.6] - 2026-11-10
 
 ### Changed
