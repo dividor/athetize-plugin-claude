@@ -2,6 +2,11 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.19] - 2026-11-10
+
+### Changed
+- Every link that leaves the report opens in a new tab. Each link already asked for one; the page now enforces it for any link, so none can be missed
+
 ## [0.7.18] - 2026-11-10
 
 ### Added

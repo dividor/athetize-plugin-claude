@@ -1272,6 +1272,17 @@ $('#showHl').addEventListener('click',function(){setEditsMode(false);});
 $('#showEd').addEventListener('click',function(){setEditsMode(true);});
 syncEdits();
 
+/* ---------- links ---------- */
+/* Every link that leaves the report opens in a new tab, whatever part of the page made it.
+   Links within the page and the Word download are left alone. */
+document.addEventListener('click',function(e){
+  var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;
+  var to=a.getAttribute('href');
+  if(!to||to.charAt(0)==='#'||a.hasAttribute('download'))return;
+  a.target='_blank';
+  if(!/\bnoopener\b/.test(a.rel))a.rel=(a.rel?a.rel+' ':'')+'noopener';
+},true);
+
 /* ---------- what Athetize does ---------- */
 var aboutBtn=$('#aboutBtn'),about=$('#about');
 /* the plugin's page: its source code, its documentation and where to report a problem */
