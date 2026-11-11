@@ -2,6 +2,11 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.24] - 2026-11-10
+
+### Added
+- The sample paper's Word file, `examples/bananas/banana_sample.docx`, is in the repository. A test keeps it in step with its text. The repository's rule against binary files now allows small Word files under `examples/`, which the plugin itself does not ship
+
 ## [0.7.23] - 2026-11-10
 
 ### Added

@@ -65,6 +65,3 @@ metrics.json
 # Logs
 *.log
 nohup.out
-
-# The sample paper's Word file is built from its text by examples/bananas/make_docx.py
-examples/**/*.docx

@@ -2,13 +2,15 @@
 
 These mirror the Claude Code plugin documentation and the plugin directory's pre-submission
 checklist: manifest fields, skill and agent frontmatter, no binaries or oversized files, and a
-README that names every network host the scripts contact.
+README that names every network host the scripts contact. The one binary allowed besides
+pictures is a small sample paper under examples/, which the plugin itself does not ship.
 """
 
 import json
 import re
 import subprocess
 import unittest
+import zipfile
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -19,6 +21,11 @@ MARKETPLACE = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_tex
 MAX_FILES = 512
 MAX_NON_IMAGE_BYTES = 256 * 1024
 IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
+# The one kind of binary file kept besides pictures: a sample paper to try the plugin on.
+# It lives under examples/, outside what the plugin itself ships.
+SAMPLE_DOCUMENT_EXTS = {".docx"}
+SAMPLE_DOCUMENT_DIR = "examples"
+MAX_SAMPLE_DOCUMENT_BYTES = 512 * 1024
 FORBIDDEN_NAMES = {".DS_Store", "Thumbs.db", "desktop.ini"}
 RESERVED_MARKETPLACE_NAMES = {
     "claude-plugins-official",
@@ -29,6 +36,12 @@ RESERVED_MARKETPLACE_NAMES = {
 EXAMPLE_HOST = re.compile(r"(^|\.)example\.(org|com|edu|net)$")
 # XML namespace identifiers in the Word-export code. They name a format; nothing is fetched.
 XML_NAMESPACE_HOSTS = {"schemas.openxmlformats.org", "schemas.microsoft.com", "www.w3.org"}
+
+
+def is_sample_document(path: Path) -> bool:
+    """True for a Word file kept under examples/ as a sample paper."""
+    inside = path.resolve().relative_to(ROOT).parts
+    return path.suffix.lower() in SAMPLE_DOCUMENT_EXTS and inside[0] == SAMPLE_DOCUMENT_DIR
 
 
 def repo_files() -> list:
@@ -145,12 +158,23 @@ class FileTests(unittest.TestCase):
 
     def test_non_image_files_are_text_and_under_the_size_limit(self):
         for path in self.files:
-            if path.suffix.lower() in IMAGE_EXTS:
+            if path.suffix.lower() in IMAGE_EXTS or is_sample_document(path):
                 continue
             with self.subTest(file=str(path.relative_to(ROOT))):
                 data = path.read_bytes()
                 self.assertLess(len(data), MAX_NON_IMAGE_BYTES)
                 data.decode("utf-8")  # raises on a binary file
+
+    def test_sample_documents_are_small_word_files_kept_under_examples(self):
+        samples = [p for p in self.files if p.suffix.lower() in SAMPLE_DOCUMENT_EXTS]
+        self.assertTrue(samples, "the sample paper's Word file is missing")
+        for path in samples:
+            with self.subTest(file=str(path.relative_to(ROOT))):
+                self.assertTrue(is_sample_document(path), "Word files belong under examples/")
+                self.assertLess(path.stat().st_size, MAX_SAMPLE_DOCUMENT_BYTES)
+                with zipfile.ZipFile(path) as z:
+                    self.assertIn("word/document.xml", z.namelist())
+                    self.assertIsNone(z.testzip())
 
     def test_readme_and_license_are_present(self):
         readme = (ROOT / "README.md").read_text("utf-8")

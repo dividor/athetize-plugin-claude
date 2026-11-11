@@ -60,6 +60,12 @@ class SamplePaperTests(unittest.TestCase):
         self.assertIn('string="SAMPLE"', header)
         self.assertIn('<w:headerReference w:type="default" r:id="rIdHeader"/>', document)
 
+    def test_the_word_file_in_the_repository_matches_its_text(self):
+        # the stored file is built from the Markdown; rebuild it after changing the text
+        stored = pl_ingest.ingest(BANANAS / "banana_sample.docx")
+        self.assertEqual(stored["paragraphs"], self.paper["paragraphs"])
+        self.assertEqual(stored.get("tables"), self.paper.get("tables"))
+
     def test_the_text_says_it_is_a_sample(self):
         text = " ".join(p["text"] for p in self.paper["paragraphs"])
         self.assertIn("made-up sample paper", text)

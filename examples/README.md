@@ -10,20 +10,21 @@ deliberately wrong.
 | --- | --- |
 | `banana_sample.md` | The paper's text: title, sections, figure captions and nine references |
 | `fig1_trade.png`, `fig2_provitamin.png` | Its two figures, drawn from numbers in the cited sources |
-| `make_docx.py` | Builds `banana_sample.docx`, laid out like a paper with a SAMPLE watermark |
+| `banana_sample.docx` | The paper as a Word file, laid out like a paper with a SAMPLE watermark |
+| `make_docx.py` | Rebuilds the Word file from the text and figures |
 
-Build the Word file, then ask Claude to check it:
-
-```bash
-python3 examples/bananas/make_docx.py
-```
+Ask Claude to check it:
 
 ```text
 Check the citations in examples/bananas/banana_sample.docx
 ```
 
-The Word file is built, not stored, because this repository keeps no binary files other than
-pictures. The builder needs nothing beyond Python itself.
+The Word file is built from the text. After changing `banana_sample.md`, rebuild it; the
+builder needs nothing beyond Python itself, and a test fails if the two fall out of step.
+
+```bash
+python3 examples/bananas/make_docx.py
+```
 
 ### What the sample shows
 
