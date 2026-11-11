@@ -2,6 +2,12 @@
 
 All notable changes to Athetize will be documented in this file.
 
+## [0.7.10] - 2026-11-10
+
+### Changed
+- The Word button reads "Word document with suggested edits"
+- A rule under the Athetize Fact Checker row sets it apart from the document. The document's name is smaller and lighter, under a small "Document checked" label, so it no longer competes with the product name
+
 ## [0.7.9] - 2026-11-10
 
 ### Added

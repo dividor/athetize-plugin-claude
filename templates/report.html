@@ -57,7 +57,8 @@ svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;strok
 .in{max-width:var(--col);margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
 
 /* ---------- brand row ---------- */
-.top{background:var(--surface);padding-top:env(safe-area-inset-top,0px)}
+/* a rule under the product row sets it apart from the document being reported on */
+.top{background:var(--surface);padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid var(--line)}
 .top .in{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px}
 .brand{display:flex;align-items:center;gap:9px;color:var(--primary-dark)}
 /* the mark is drawn 18px tall inside its 24px box; 26px type has capitals of the same height */
@@ -86,9 +87,12 @@ a.textbtn{text-decoration:none}
 [hidden]{display:none!important}
 
 /* ---------- title band ---------- */
-.hero{background:var(--surface);padding:6px 0 18px}
+.hero{background:var(--surface);padding:18px 0 18px}
 .summary{background:var(--surface);padding:18px 0 6px}
-.hero h1{font-size:clamp(22px,3.4vw,30px);line-height:1.25;margin:0;text-wrap:balance}
+/* The document name is a label for what was checked, not the page's headline: it is smaller and
+   lighter than the product name above it. */
+.hero .eyebrow{margin:0 0 2px;font:500 12.5px/1.4 var(--font-heading);color:var(--muted)}
+.hero h1{font-size:clamp(17px,2.2vw,20px);font-weight:500;line-height:1.35;margin:0;color:var(--ink);overflow-wrap:anywhere}
 .bar{display:flex;height:6px;background:var(--line-light);margin:0;gap:2px}
 .bar button{border:0;padding:0;cursor:pointer;background:var(--c);min-width:6px;transition:flex-grow .4s}
 .bar button:hover{filter:brightness(1.12)}
@@ -298,6 +302,7 @@ a.textbtn{text-decoration:none}
 
 <section class="hero">
   <div class="in">
+    <p class="eyebrow">Document checked</p>
     <h1 id="title"></h1>
   </div>
 </section>
@@ -320,7 +325,7 @@ a.textbtn{text-decoration:none}
 <div class="tabs">
   <div class="in">
     <div class="nav" id="nav"><button type="button" id="prev" aria-label="Previous claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span id="navLabel"></span><button type="button" id="next" aria-label="Next claim needing attention"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
-    <a class="textbtn primary" id="wordReport" hidden title="Download a copy of your Word file with every suggested fix as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Word copy with suggested edits</span></a>
+    <a class="textbtn primary" id="wordReport" hidden title="Download a copy of your Word file with every suggested fix as a tracked change, each with a comment saying why"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">Word document with suggested edits</span></a>
   </div>
 </div>
 
@@ -911,7 +916,7 @@ function renderSrcLead(){
 var wordName=DATA.meta.word_export;
 function offerWord(href){
   var a=$('#wordReport');a.href=href;a.setAttribute('download',wordName);
-  a.setAttribute('aria-label','Download the Word copy with suggested edits: '+wordName);a.hidden=false;
+  a.setAttribute('aria-label','Download the Word document with suggested edits: '+wordName);a.hidden=false;
 }
 if(wordName&&location.protocol==='file:'&&/^[^\/\\]+\.docx$/.test(wordName))offerWord(encodeURI(wordName));
 
