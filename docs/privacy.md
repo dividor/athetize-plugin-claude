@@ -7,7 +7,7 @@ Athetize is a plugin that runs inside Claude. This is what it does with your inf
 - **The plugin's author collects nothing.** There is no telemetry, no account, no analytics and no server run by the author. Nothing about you or your papers is sent to the author.
 - **Your paper and your sources stay where Claude runs.** The plugin's scripts read them there and send them nowhere. Claude itself reads them to do the checking, under the terms of your Claude plan.
 - **Only reference details leave, to find the sources.** Titles, authors and DOIs of the works your paper cites are sent to the public indexes listed below. If you choose to set a contact email, it is sent to those indexes as their contact address, as their terms ask.
-- **Nothing is kept.** The plugin writes its results to a folder next to your paper and its settings to `~/.athetize/config.json`, both on the computer where Claude runs commands. Delete them to remove everything.
+- **Results stay on your computer.** The plugin writes its results to a folder next to your paper and its settings to `~/.athetize/config.json`, both on the computer where Claude runs commands. Nothing else is kept. Delete them to remove everything.
 - **Not directed at children.** The plugin is a tool for authors, reviewers and editors.
 
 Questions: [open an issue](https://github.com/dividor/athetize-plugin-claude/issues). To report a vulnerability, see [SECURITY.md](../SECURITY.md).
@@ -17,6 +17,7 @@ Questions: [open an issue](https://github.com/dividor/athetize-plugin-claude/iss
 What the plugin runs, sends, fetches and writes:
 
 - **Runs on your machine.** Python scripts in `athetize/scripts/`. If installed, they call the `pdftotext`, `pdftoppm` and `tesseract` command-line tools to read PDFs. They do not drive a browser and bundle no browser automation. The subagents are instructed to run only the `pl.py` helper.
+- **Installed only with your agreement.** In Claude Code on your own computer, if a Python package the scripts need (`defusedxml`, `lxml` or `pypdf`) is missing, Claude asks before installing it with `pip` from PyPI (`pypi.org`). Where the packages are already present, as in Claude's sandbox, nothing is installed.
 - **Read by Claude.** Athetize runs inside Claude, so Claude reads the manuscript and the sources to do the checking, as it does with any file you give it. The plugin's own scripts send neither of them anywhere.
 - **Stays on your machine.** The copies of the manuscript and your sources that the scripts work on. Results are written to the `<paper>-check/` folder next to the paper; settings go to `~/.athetize/config.json`.
 - **Sent out.** Only reference metadata (titles, authors, DOIs) and, if you set one, your contact email as the polite-use identifier. It goes to Crossref (`api.crossref.org`), OpenAlex (`api.openalex.org`), Europe PMC (`www.ebi.ac.uk`), arXiv (`arxiv.org`, `export.arxiv.org`), ERIC (`api.ies.ed.gov`, `files.eric.ed.gov`), Semantic Scholar (`api.semanticscholar.org`) and Unpaywall (`api.unpaywall.org`). `pl.py doctor` sends one test query to each service to see whether it is reachable.
