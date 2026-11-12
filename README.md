@@ -55,6 +55,10 @@ Athetize reads the paper (Word, PDF, Markdown, LaTeX or text), downloads open-ac
 - `report.html`: your paper with every claim highlighted, the evidence behind each result, and a Sources tab.
 - A Word copy with each suggested edit as a tracked change and a comment that says why, for Word manuscripts.
 
+## How it works
+
+![How Athetize checks a paper: find the claims, look up each reference and flag retractions, download open-access sources, ask you for the rest, check each claim, build the report](docs/images/how-it-works.png)
+
 ## Example prompts
 
 - "Check the citations in draft.docx"

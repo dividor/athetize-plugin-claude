@@ -4,6 +4,9 @@ All notable changes to Athetize will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- A diagram in the README of the steps a check goes through: finding the claims, looking up references and flagging retractions, downloading open-access sources, asking for the rest, checking each claim and building the report
+
 ## [0.8.10] - 2026-11-12
 
 ### Added
