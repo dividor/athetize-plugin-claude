@@ -164,9 +164,8 @@ class GoldenTest(unittest.TestCase):
         # Resolved, because the scripts resolve workspace paths and macOS temp folders sit
         # behind a /private symlink; an unresolved path would leave that prefix in the output.
         cls.tmp = Path(tempfile.mkdtemp()).resolve()
-        cls.env = {k: os.environ.get(k) for k in ("ATHETIZE_HOME", "ATHETIZE_EMAIL")}
+        cls.env = {"ATHETIZE_HOME": os.environ.get("ATHETIZE_HOME")}
         os.environ["ATHETIZE_HOME"] = str(cls.tmp / "home")
-        os.environ.pop("ATHETIZE_EMAIL", None)
         cls._orig_get = pl_http.http_get
         cls.actual = {}
         try:

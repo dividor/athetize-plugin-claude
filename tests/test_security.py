@@ -19,6 +19,7 @@ import pl_cli
 import pl_docx_package
 import pl_http
 import pl_text
+import pl_workspace
 import pl_xml
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -101,6 +102,22 @@ class DoctorTests(unittest.TestCase):
         self.assertIsNone(info["xml_parser"])
         self.assertIn("defusedxml", info["missing_packages"])
         self.assertTrue(any("pl.py install-packages" in note for note in info["notes"]))
+
+
+class ContactEmailSourceTests(unittest.TestCase):
+    """The contact email is sent to the scholarly indexes, so it comes only from Settings."""
+
+    def test_an_email_in_the_environment_is_not_used(self):
+        with tempfile.TemporaryDirectory() as d:
+            env = {"ATHETIZE_HOME": d, "ATHETIZE_EMAIL": "from-env@example.org"}
+            with mock.patch.dict("os.environ", env):
+                self.assertNotIn("email", pl_workspace.load_config())
+                pl_workspace.set_email("saved@example.org")
+                self.assertEqual(pl_workspace.load_config()["email"], "saved@example.org")
+
+    def test_no_script_reads_an_email_from_the_environment(self):
+        for path in sorted((PLUGIN_DIR / "scripts").glob("*.py")):
+            self.assertNotIn("ATHETIZE_EMAIL", path.read_text("utf-8"), path.name)
 
 
 class NoBrowserAutomationTests(unittest.TestCase):
