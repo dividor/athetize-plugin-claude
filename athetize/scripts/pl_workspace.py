@@ -80,11 +80,8 @@ def config_path() -> Path:
 
 
 def load_config() -> dict:
-    """Saved configuration, with ATHETIZE_EMAIL from the environment taking priority."""
-    cfg = jload(config_path(), {}) or {}
-    if os.environ.get("ATHETIZE_EMAIL"):
-        cfg["email"] = os.environ["ATHETIZE_EMAIL"]
-    return cfg
+    """Saved configuration. The contact email comes only from here, never the environment."""
+    return jload(config_path(), {}) or {}
 
 
 # An ordinary address and nothing else: it is sent in a request header, so spaces, line

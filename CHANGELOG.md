@@ -9,6 +9,11 @@ All notable changes to Athetize will be documented in this file.
 - The social preview image shows two result labels, "Claim supported" and "Claim not supported", in place of a card with text
 - The privacy policy says that a missing Python package is installed from PyPI only after the person agrees, and its summary no longer says "Nothing is kept" just before saying where results are written
 
+## [0.8.8] - 2026-11-11
+
+### Changed
+- The contact email comes only from the report's Settings, saved in `~/.athetize/config.json`. The scripts no longer read an `ATHETIZE_EMAIL` environment variable, so nothing already set on the person's computer is sent to the scholarly indexes
+
 ## [0.8.7] - 2026-11-11
 
 ### Fixed

@@ -860,7 +860,6 @@ class PipelineTests(unittest.TestCase):
         cls.tmp = Path(tempfile.mkdtemp())
         cls.home_patch = os.environ.get("ATHETIZE_HOME")
         os.environ["ATHETIZE_HOME"] = str(cls.tmp / "home")
-        os.environ.pop("ATHETIZE_EMAIL", None)
         cls.work = Work(cls.tmp / "sample-check")
         w = cls.work
         w.root.mkdir(parents=True)
