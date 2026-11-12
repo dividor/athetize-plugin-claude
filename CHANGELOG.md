@@ -4,6 +4,12 @@ All notable changes to Athetize will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- A guide for coding assistants at the repository root: commands, how the skills, helper script and workspace fit together, and the rules for this repository
+
+### Changed
+- CONTRIBUTING.md matches the current layout (the plugin in `athetize/`, the marketplace at the root), the validation commands CI runs, and the tag-based release
+
 ## [0.8.9] - 2026-11-12
 
 ### Added

@@ -88,12 +88,12 @@ pre-commit install
 To try your working copy in Claude Code without installing it:
 
 ```bash
-claude --plugin-dir .
+claude --plugin-dir athetize
 ```
 
 ## 🗂️ Repository Layout
 
-The repository root is the plugin. Claude Code installs it straight from here (`"source": "./"` in the marketplace file).
+The plugin lives in `athetize/`. The repository root is its marketplace: `.claude-plugin/marketplace.json` points at it with `"source": "./athetize"`.
 
 | Path | What it is |
 |---|---|
@@ -106,6 +106,7 @@ The repository root is the plugin. Claude Code installs it straight from here (`
 | `athetize/templates/report.html` | The self-contained report page |
 | `tests/` | Offline tests and the sample fixtures |
 | `tools/quality/` | Repository tooling (complexity gate); not used by the plugin at run time |
+| `tools/release/` | Builds the plugin zip attached to each GitHub release |
 
 ### Script modules
 
@@ -295,7 +296,7 @@ chore: update development dependencies
 pytest
 
 # With coverage
-pytest --cov=scripts --cov=tools --cov-report=term-missing
+pytest --cov=athetize/scripts --cov=tools --cov-report=term-missing
 ```
 
 - Tests must exercise the real scripts. Do not reimplement logic in a test.
@@ -315,19 +316,20 @@ pytest --cov=scripts --cov=tools --cov-report=term-missing
 
 ### Manual verification
 
-Tests cannot judge what Claude does with the skills. For changes to skills, agents, the report or the Word export, run the affected skill in Claude Code on a real paper (`claude --plugin-dir .`), open `report.html` in a browser, and open the exported `.docx` in Word. Say in the PR what you checked.
+Tests cannot judge what Claude does with the skills. For changes to skills, agents, the report or the Word export, run the affected skill in Claude Code on a real paper (`claude --plugin-dir athetize`), open `report.html` in a browser, and open the exported `.docx` in Word. Say in the PR what you checked.
 
 ## 🧩 Plugin Standards
 
 The plugin follows the [Claude Code plugin documentation](https://code.claude.com/docs/en/plugins) and the requirements for directory listing.
 
 ```bash
-claude plugin validate --strict .claude-plugin/plugin.json
+claude plugin validate --strict athetize/.claude-plugin/plugin.json
 claude plugin validate --strict .claude-plugin/marketplace.json
+claude plugin validate --strict --profile directory athetize
 ```
 
 - The plugin `name` is permanent. Never rename it.
-- Only the two manifests live in `.claude-plugin/`. Skills, agents, scripts and templates stay at the repository root.
+- Only the manifest lives in `athetize/.claude-plugin/`. Skills, agents, scripts and templates sit beside it in `athetize/`.
 - Every skill has `name` and `description` frontmatter; every agent has `name`, `description` and an explicit `tools` list with the fewest tools it needs.
 - Skills and agents refer to bundled files through `${CLAUDE_PLUGIN_ROOT}`.
 - No hooks, no MCP servers and nothing that runs without the user asking.
@@ -340,7 +342,7 @@ The CI workflow in `.github/workflows/ci.yml` runs on push and PRs:
 
 - **code-quality**: Pre-commit hooks (formatting, linting, type checks, security scans, complexity gate).
 - **tests**: `pytest` on Python 3.9, 3.10, 3.11, 3.12 and 3.13.
-- **plugin-validate**: `claude plugin validate --strict` on both manifests. No model calls and no API key.
+- **plugin-validate**: `claude plugin validate --strict` on both manifests and the plugin folder, then builds the release zip and validates it unpacked. No model calls and no API key.
 - **security-scan**: Dependency audit (pip-audit), Bandit SAST, Gitleaks.
 - **sbom**: CycloneDX bill of materials.
 
@@ -417,7 +419,7 @@ Include:
 1. Update `version` in `athetize/.claude-plugin/plugin.json`. Users only receive an update when this changes.
 2. Add an entry to `CHANGELOG.md`.
 3. Merge the PR to `main` once CI passes.
-4. Tag the release (`claude plugin tag` creates an `athetize--vX.Y.Z` tag and checks the manifests agree) and create a GitHub Release with notes.
+4. Tag `vX.Y.Z` on `main` and push the tag. The Release workflow (`.github/workflows/release.yml`) checks that the tag, `plugin.json` and the changelog agree, builds and validates `athetize.zip`, and publishes a GitHub release with the zip and that version's changelog section.
 
 ## 📞 Getting Help
 
