@@ -8,6 +8,11 @@ All notable changes to Athetize will be documented in this file.
 - The README screenshots are sharp: PNG at twice the pixel density, where they were 800-pixel JPEGs that GitHub stretched
 - The social preview image shows two result labels, "Claim supported" and "Claim not supported", in place of a card with text
 
+## [0.8.7] - 2026-11-11
+
+### Fixed
+- A paper title too long for one line wrapped into two lines of equal length, so its first line used little more than half the page width. The title now wraps normally and fills the width
+
 ## [0.8.6] - 2026-11-11
 
 ### Fixed
