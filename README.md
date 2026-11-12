@@ -92,7 +92,7 @@ The Sources tab shows where each source's text came from and lets you add the mi
 
 ![The Sources tab: each reference, where its text came from and the claims that cite it](docs/images/report-sources.png)
 
-The Word copy, shown here in LibreOffice:
+The Word copy, open in Microsoft Word:
 
 ![The Word copy: tracked changes with a comment explaining each one](docs/images/word-export.png)
 
