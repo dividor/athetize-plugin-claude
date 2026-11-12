@@ -7,6 +7,7 @@ All notable changes to Athetize will be documented in this file.
 ### Changed
 - The README screenshots are sharp: PNG at twice the pixel density, where they were 800-pixel JPEGs that GitHub stretched
 - The social preview image shows two result labels, "Claim supported" and "Claim not supported", in place of a card with text
+- The README's Word screenshot is taken in Microsoft Word, where it was a LibreOffice rendering whose comment boxes covered the text
 - The privacy policy says that a missing Python package is installed from PyPI only after the person agrees, and its summary no longer says "Nothing is kept" just before saying where results are written
 
 ## [0.8.8] - 2026-11-11
