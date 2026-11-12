@@ -16,7 +16,7 @@ Helper: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/pl.py"` (fallback `<skill base d
 1. **Prepare.** Run `PL suggest-prepare --work W`. It writes `W/suggest_batches/suggest-NNN.json` for claims judged partly supported, overstated, unsupported or contradicted that have no suggestion yet.
 2. **Draft rewordings.** Launch one `suggestion-writer` agent per batch, all in one message. Each writes `W/suggest_parts/suggest-NNN.json`.
 3. **Reference fixes (Claude, not the writers).** Write `W/suggest_parts/references.json` with `kind: "reference"` entries for problems the check found in the reference list. Use the whole reference paragraph as `original`.
-   - Everything `PL status --work W` lists under `reference_discrepancies`: a year, title or DOI where the database record disagrees with the reference as printed. The report shows the same on its Sources page.
+   - Everything `PL status --work W` lists under `reference_discrepancies`: where the accepted database record disagrees with the reference as printed: a year more than one year out, a clearly different title, or a DOI the reference does not print. The report shows the same on its Sources page.
    - Years that differ from the in-text citation, decided by the issue year in Crossref or the article PDF.
    - Wrong or mismatched DOIs and links.
    - Missing volume, issue or pages that Crossref or the PDF confirms.

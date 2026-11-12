@@ -4,11 +4,16 @@ All notable changes to Athetize will be documented in this file.
 
 ## [Unreleased]
 
+## [0.8.10] - 2026-11-12
+
 ### Added
 - A guide for coding assistants at the repository root: commands, how the skills, helper script and workspace fit together, and the rules for this repository
 
 ### Changed
 - CONTRIBUTING.md matches the current layout (the plugin in `athetize/`, the marketplace at the root), the validation commands CI runs, and the tag-based release
+
+### Fixed
+- The READMEs and the `check-paper` and `suggest-edits` skills describe the reference checks as the scripts run them. They said a reference is flagged when its "year, title or DOI disagrees" with the database record, but no DOI is compared: the record is flagged when its year is more than a year out, its title clearly differs, or it has a DOI the reference does not print. A printed DOI that leads to a different work shows as a mismatch. The READMEs also name the retraction sources: Crossref retraction, withdrawal, removal and expression-of-concern notices, and OpenAlex's retraction flag
 
 ## [0.8.9] - 2026-11-12
 

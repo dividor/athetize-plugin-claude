@@ -72,7 +72,7 @@ To try it without a paper of your own, check the sample in [examples](examples/R
 - **Uses your files.** Point it at a folder or pick files. Each one is read and matched to its reference by its content, whatever it is called.
 - **Interactive report.** One HTML file: your paper with its figures and tables, claims highlighted by result, filters, a card for each claim, and a Sources tab where missing sources can be added.
 - **Suggested edits.** Rewordings bounded by the evidence, and fixes to the reference list. View them in the report, or download a Word copy with tracked changes and comments.
-- **Reference checks.** Flags retracted sources and references whose year, title or DOI disagrees with the database record.
+- **Reference checks.** Flags a source as retracted when Crossref lists a retraction, withdrawal, removal or expression of concern for it, or OpenAlex marks it retracted. Each reference is matched to its Crossref or OpenAlex record, and the Sources tab shows when no record is found, when the record behind a printed DOI is a different work, or when the matched record's year is more than a year out, its title clearly differs, or it has a DOI the reference does not print.
 - **Fast rechecks.** After new sources or a new draft, only what changed is checked again.
 
 | Result | Meaning |
