@@ -11,7 +11,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import shlex
-import subprocess  # nosec B404 - runs pip with a fixed argument list, never a shell
+import subprocess
 import sys
 import sysconfig
 from pathlib import Path
@@ -72,7 +72,8 @@ def _still_missing(packages: list[str]) -> list[str]:
     A fresh process is asked because a user folder created by the install is not on this
     process's search path.
     """
-    res = subprocess.run(  # nosec B603 - fixed command, no shell
+    # A fixed command with an argument list: no shell is involved.
+    res = subprocess.run(
         [sys.executable, "-c", _STILL_MISSING, *packages],
         capture_output=True,
         text=True,
@@ -87,9 +88,8 @@ def install_missing() -> dict:
     if not missing:
         return {"installed": [], "still_missing": [], "command": None}
     command = pip_install_command(missing)
-    res = subprocess.run(  # nosec B603 - fixed command, no shell
-        command, capture_output=True, text=True, timeout=_PIP_WAIT
-    )
+    # A fixed command with an argument list: no shell is involved.
+    res = subprocess.run(command, capture_output=True, text=True, timeout=_PIP_WAIT)
     still = _still_missing(missing)
     report = {
         "installed": [name for name in missing if name not in still],

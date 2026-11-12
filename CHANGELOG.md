@@ -4,6 +4,14 @@ All notable changes to Athetize will be documented in this file.
 
 ## [Unreleased]
 
+## [0.8.9] - 2026-11-12
+
+### Added
+- Each GitHub release carries `athetize.zip`, the plugin folder ready for Upload plugin in the Claude desktop app and claude.ai. Pushing a version tag builds it, checks that the tag matches `plugin.json`, validates the unpacked zip and publishes the release with that version's changelog. CI builds and validates the same zip on every pull request
+
+### Removed
+- Three `# nosec` comments in `pl_packages.py`. Bandit's subprocess warnings they silenced are low severity, below what the gate fails on, and the project allows no suppressions
+
 ### Changed
 - The README screenshots are sharp: PNG at twice the pixel density, where they were 800-pixel JPEGs that GitHub stretched
 - The social preview image shows two result labels, "Claim supported" and "Claim not supported", in place of a card with text

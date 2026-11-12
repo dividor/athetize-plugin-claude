@@ -1,0 +1,51 @@
+name: Release
+
+# Pushing a tag such as v0.8.8 publishes a GitHub release with the plugin zip that people
+# upload in Claude (Customize, Plugins, Add, Upload plugin). The README links to the newest
+# release's zip, so its address never changes.
+on:
+  push:
+    tags: [ 'v*' ]
+
+permissions: {}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+
+      # Fails if the tag and plugin.json disagree, or the changelog has no section for it.
+      - name: Build the plugin zip and release notes
+        run: |
+          python tools/release/build_plugin_zip.py --out athetize.zip \
+            --expect-version "${GITHUB_REF_NAME#v}" --notes-out release-notes.md
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      # The zip, unpacked, must pass the same checks as the plugin folder in the repository.
+      - name: Validate the unpacked zip
+        run: |
+          mkdir -p "$RUNNER_TEMP/unpacked"
+          unzip -q athetize.zip -d "$RUNNER_TEMP/unpacked"
+          claude plugin validate --strict --profile directory "$RUNNER_TEMP/unpacked/athetize"
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" athetize.zip \
+            --verify-tag --title "Athetize $GITHUB_REF_NAME" --notes-file release-notes.md
