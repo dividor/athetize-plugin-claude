@@ -94,7 +94,7 @@ The Sources tab shows where each source's text came from and lets you add the mi
 
 The Word copy, open in Microsoft Word:
 
-![The Word copy: tracked changes with a comment explaining each one](docs/images/word-export.png)
+![The Word copy: tracked changes with a comment explaining each one](docs/images/word-copy-in-word.png)
 
 ## What it runs, sends and fetches
 
