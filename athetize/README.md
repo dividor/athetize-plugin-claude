@@ -6,9 +6,13 @@ Screenshots, a sample paper to try it on and the full documentation are in the [
 
 ## Install
 
+In Claude Code:
+
 ```
 /plugin install athetize --marketplace dividor/athetize-plugin-claude
 ```
+
+In the Claude desktop app or claude.ai, open Customize, Plugins, Add. Then choose Add marketplace and enter `dividor/athetize-plugin-claude`, or choose Upload plugin and pick [`athetize.zip`](https://github.com/dividor/athetize-plugin-claude/releases/latest/download/athetize.zip) from the latest release.
 
 ## Use
 

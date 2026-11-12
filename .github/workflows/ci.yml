@@ -110,6 +110,20 @@ jobs:
           claude plugin validate --strict --profile directory athetize
           claude plugin validate --strict .
 
+      # The zip people upload in Claude, built as a release builds it and checked unpacked.
+      - name: Build and validate the plugin zip
+        run: |
+          python3 tools/release/build_plugin_zip.py --out athetize.zip
+          mkdir -p "$RUNNER_TEMP/unpacked"
+          unzip -q athetize.zip -d "$RUNNER_TEMP/unpacked"
+          claude plugin validate --strict --profile directory "$RUNNER_TEMP/unpacked/athetize"
+
+      - name: Upload the plugin zip
+        uses: actions/upload-artifact@v7
+        with:
+          name: athetize-plugin-zip
+          path: athetize.zip
+
   security-scan:
     runs-on: ubuntu-latest
     needs: code-quality
