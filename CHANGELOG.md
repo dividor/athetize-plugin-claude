@@ -9,6 +9,11 @@ All notable changes to Athetize will be documented in this file.
 - The social preview image shows two result labels, "Claim supported" and "Claim not supported", in place of a card with text
 - The privacy policy says that a missing Python package is installed from PyPI only after the person agrees, and its summary no longer says "Nothing is kept" just before saying where results are written
 
+## [0.8.7] - 2026-11-11
+
+### Fixed
+- A paper title too long for one line wrapped into two lines of equal length, so its first line used little more than half the page width. The title now wraps normally and fills the width
+
 ## [0.8.6] - 2026-11-11
 
 ### Fixed
