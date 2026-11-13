@@ -21,10 +21,9 @@ On Claude Code older than 2.1.275, use two steps: `/plugin marketplace add divid
 
 **Claude desktop app (Cowork) and claude.ai**
 
-No terminal is needed. Open **Customize**, then **Plugins**, then **Add**, and choose one:
+Download [`athetize.zip`](https://github.com/dividor/athetize-plugin-claude/releases/latest/download/athetize.zip), then go to **Customize > Plugins > Add > Upload plugin** and pick it.
 
-- **Add marketplace** and enter `dividor/athetize-plugin-claude`, then install Athetize Fact Checker. Turn on **Sync automatically** to get each new version.
-- **Upload plugin** and pick [`athetize.zip`](https://github.com/dividor/athetize-plugin-claude/releases/latest/download/athetize.zip) from the latest release. An uploaded copy does not update itself: upload the new zip for a new version.
+An uploaded copy does not update itself. To get updates automatically, choose **Add marketplace** instead of Upload plugin, enter `dividor/athetize-plugin-claude`, and turn on **Sync automatically**.
 
 An organisation admin can add it for everyone under Organization settings, Plugins & skills.
 
@@ -54,6 +53,10 @@ Athetize reads the paper (Word, PDF, Markdown, LaTeX or text), downloads open-ac
 
 - `report.html`: your paper with every claim highlighted, the evidence behind each result, and a Sources tab.
 - A Word copy with each suggested edit as a tracked change and a comment that says why, for Word manuscripts.
+
+## How it works
+
+![How Athetize checks a paper: find the claims, look up each reference and flag retractions, download open-access sources, ask you for the rest, check each claim, build the report](docs/images/how-it-works.png)
 
 ## Example prompts
 
