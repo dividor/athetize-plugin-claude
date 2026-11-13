@@ -21,10 +21,9 @@ On Claude Code older than 2.1.275, use two steps: `/plugin marketplace add divid
 
 **Claude desktop app (Cowork) and claude.ai**
 
-No terminal is needed. Open **Customize**, then **Plugins**, then **Add**, and choose one:
+Download [`athetize.zip`](https://github.com/dividor/athetize-plugin-claude/releases/latest/download/athetize.zip), then go to **Customize > Plugins > Add > Upload plugin** and pick it.
 
-- **Add marketplace** and enter `dividor/athetize-plugin-claude`, then install Athetize Fact Checker. Turn on **Sync automatically** to get each new version.
-- **Upload plugin** and pick [`athetize.zip`](https://github.com/dividor/athetize-plugin-claude/releases/latest/download/athetize.zip) from the latest release. An uploaded copy does not update itself: upload the new zip for a new version.
+An uploaded copy does not update itself. To get updates automatically, choose **Add marketplace** instead of Upload plugin, enter `dividor/athetize-plugin-claude`, and turn on **Sync automatically**.
 
 An organisation admin can add it for everyone under Organization settings, Plugins & skills.
 

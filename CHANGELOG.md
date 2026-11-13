@@ -4,8 +4,13 @@ All notable changes to Athetize will be documented in this file.
 
 ## [Unreleased]
 
+## [0.8.11] - 2026-11-12
+
 ### Added
 - A diagram in the README of the steps a check goes through: finding the claims, looking up references and flagging retractions, downloading open-access sources, asking for the rest, checking each claim and building the report
+
+### Changed
+- Shorter install steps for the desktop app and claude.ai in both READMEs: download the zip, then Customize > Plugins > Add > Upload plugin, with Add marketplace given as the way to get updates automatically
 
 ## [0.8.10] - 2026-11-12
 

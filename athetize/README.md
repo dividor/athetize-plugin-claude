@@ -12,7 +12,7 @@ In Claude Code:
 /plugin install athetize --marketplace dividor/athetize-plugin-claude
 ```
 
-In the Claude desktop app or claude.ai, open Customize, Plugins, Add. Then choose Add marketplace and enter `dividor/athetize-plugin-claude`, or choose Upload plugin and pick [`athetize.zip`](https://github.com/dividor/athetize-plugin-claude/releases/latest/download/athetize.zip) from the latest release.
+In the Claude desktop app or claude.ai, download [`athetize.zip`](https://github.com/dividor/athetize-plugin-claude/releases/latest/download/athetize.zip), then go to Customize > Plugins > Add > Upload plugin and pick it. To get updates automatically, choose Add marketplace instead and enter `dividor/athetize-plugin-claude`.
 
 ## Use
 
